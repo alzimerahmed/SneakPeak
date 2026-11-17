@@ -1,0 +1,13 @@
+# Line-ending sensitive files — always LF (Xcode, shell, CI)
+*.sh text eol=lf
+*.rb text eol=lf
+*.plist text eol=lf
+*.entitlements text eol=lf
+*.pbxproj text eol=lf
+*.xcscheme text eol=lf
+*.xcconfig text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.swift text eol=lf
+*.h text eol=lf
+*.md text eol=lf
