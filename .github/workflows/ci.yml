@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build-test:
     name: Build & Test (macOS, unsigned)
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 90
     steps:
       - name: Checkout
@@ -22,8 +22,8 @@ jobs:
       - name: Select Xcode 26 (iOS 26 SDK required by source)
         run: |
           ls /Applications | grep Xcode || true
-          # 26.2+ hits a dyld/MediaToolbox mismatch on macOS 15 runner images — pin 26.1
-          LATEST=$(ls -d /Applications/Xcode_26.1.app 2>/dev/null || ls -d /Applications/Xcode_26.0.app 2>/dev/null || ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          # macOS 26 runner image matches Xcode 26 private frameworks (dyld MediaToolbox fix)
+          LATEST=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
           echo "Selecting $LATEST"
           sudo xcode-select -s "$LATEST"
 
