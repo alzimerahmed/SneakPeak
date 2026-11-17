@@ -1482,8 +1482,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kean/Nuke";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.8.0;
+				kind = exactVersion;
+				version = 12.8.0;
 			};
 		};
 		378CF2FF2EF21783002C1CD7 /* XCRemoteSwiftPackageReference "MPVKit" */ = {
