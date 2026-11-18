@@ -21156,7 +21156,230 @@
     },
     "SneakPeak can only open web links." : {
 
+    },
+    "diagnostics.title" : {
+    "comment" : "G3 diagnostics screen title",
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Connection Diagnostics"
+        }
+      }
     }
+  },
+    "diagnostics.section" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Diagnostics"
+        }
+      }
+    }
+  },
+    "diagnostics.section.subtitle" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Latency and capabilities of your remote servers"
+        }
+      }
+    }
+  },
+    "diagnostics.probeAgain" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Probe Again"
+        }
+      }
+    }
+  },
+    "diagnostics.empty.title" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "No Servers"
+        }
+      }
+    }
+  },
+    "diagnostics.empty.description" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Add a remote server to see its connection health here."
+        }
+      }
+    }
+  },
+    "diagnostics.state.unknown" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Not probed yet"
+        }
+      }
+    }
+  },
+    "diagnostics.state.probing" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Probing…"
+        }
+      }
+    }
+  },
+    "diagnostics.state.healthy %@" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Healthy (%@)"
+        }
+      }
+    }
+  },
+    "diagnostics.state.degraded %@" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Degraded (%@)"
+        }
+      }
+    }
+  },
+    "diagnostics.state.unreachable %@" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Unreachable: %@"
+        }
+      }
+    }
+  },
+    "diagnostics.latency.ms %lld" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "%lld ms"
+        }
+      }
+    }
+  },
+    "diagnostics.capabilities %@" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Capabilities: %@"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.feed" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Feed"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.accounts" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Accounts"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.searchFilters" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Search filters"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.suggestions" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Suggestions"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.popular" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Popular"
+        }
+      }
+    }
+  },
+    "diagnostics.cap.proxying" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Video proxying"
+        }
+      }
+    }
+  },
+    "diagnostics.row.a11y %@ %@" : {
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "%1$@: %2$@"
+        }
+      }
+    }
+  },
+    "toast.player.formatFallback.title" : {
+    "comment" : "Toast title when a codec/format failure triggers a fallback stream",
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Playback Failed — Trying Another Format"
+        }
+      }
+    }
+  },
+    "toast.player.formatFallback.subtitle %@" : {
+    "comment" : "Toast subtitle naming the fallback stream quality",
+    "localizations" : {
+      "en" : {
+        "stringUnit" : {
+          "state" : "translated",
+          "value" : "Switched to %@"
+        }
+      }
+    }
+  }
   },
   "version" : "1.0"
 }
