@@ -64,10 +64,10 @@ jobs:
           CODE_SIGNING_ALLOWED=YES
           test-without-building
           -only-testing:SneakPeakTests
-          -skip-testing:SneakPeakTests/CredentialIdentityScopeTests
-          -skip-testing:SneakPeakTests/CredentialReplacementTests
-          -skip-testing:SneakPeakTests/LegacyCredentialAdoptionTests
-          -skip-testing:SneakPeakTests/AccountsManagerTests/unreachableStatusExpires()
+          '-skip-testing:SneakPeakTests/CredentialIdentityScopeTests'
+          '-skip-testing:SneakPeakTests/CredentialReplacementTests'
+          '-skip-testing:SneakPeakTests/LegacyCredentialAdoptionTests'
+          '-skip-testing:SneakPeakTests/AccountsManagerTests/unreachableStatusExpires()'
 
       - name: Dump crash info on failure
         if: failure()
