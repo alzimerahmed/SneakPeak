@@ -13,6 +13,8 @@ jobs:
     name: Build & attach artifacts (macOS, unsigned)
     runs-on: macos-26
     timeout-minutes: 90
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
