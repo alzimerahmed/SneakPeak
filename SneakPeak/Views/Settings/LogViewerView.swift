@@ -106,7 +106,7 @@ struct LogViewerView: View {
     #if os(macOS)
     private func showMacOSSavePanel() {
         let panel = NSSavePanel()
-        panel.nameFieldStringValue = "Sonic Wave Logs \(Date.now.formatted(.iso8601.year().month().day())).txt"
+        panel.nameFieldStringValue = "SneakPeak Logs \(Date.now.formatted(.iso8601.year().month().day())).txt"
         panel.allowedContentTypes = [.plainText]
 
         if panel.runModal() == .OK, let url = panel.url {

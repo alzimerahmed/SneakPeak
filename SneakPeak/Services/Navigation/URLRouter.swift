@@ -14,7 +14,7 @@ struct URLRouter: Sendable {
 
     /// Route a URL only if we are *confident* the app can handle it natively —
     /// YouTube/PeerTube video/channel/playlist, direct media (mp4/m3u8/etc),
-    /// or the custom `sonicwave://` scheme. Unlike `route(_:)` this deliberately
+    /// or the custom `sneakpeak://` scheme. Unlike `route(_:)` this deliberately
     /// skips the `.externalVideo` yt-dlp fallback, which matches almost any
     /// http/https URL and is therefore unsafe to trigger blindly after
     /// resolving a URL shortener.
@@ -26,12 +26,12 @@ struct URLRouter: Sendable {
 
     /// Route a URL to a navigation destination.
     func route(_ url: URL) -> NavigationDestination? {
-        // Resolve sonicwave://open?url=… wrappers up front so every caller gets the
+        // Resolve sneakpeak://open?url=… wrappers up front so every caller gets the
         // inner URL intact (including its own `&t=` / `&list=` query items).
         let url = unwrapped(url)
 
         // Try custom scheme first
-        if url.scheme?.lowercased() == "sonicwave" {
+        if url.scheme?.lowercased() == "sneakpeak" {
             return parseCustomScheme(url)
         }
 
@@ -80,7 +80,7 @@ struct URLRouter: Sendable {
         }
 
         // Fallback: Try external URL extraction for any http/https URL
-        // This will be handled by Sonic Wave Server using yt-dlp
+        // This will be handled by SneakPeak Server using yt-dlp
         if isExternalVideoURL(url) {
             return .externalVideo(url)
         }
@@ -125,7 +125,7 @@ struct URLRouter: Sendable {
 
     // MARK: - Wrapper Unwrapping
 
-    /// Resolve a `sonicwave://open?url={encoded_url}` wrapper (share extension) to the inner URL.
+    /// Resolve a `sneakpeak://open?url={encoded_url}` wrapper (share extension) to the inner URL.
     /// Returns the input unchanged for any other URL. The wrapper's query holds the full
     /// original link, so timestamp parsing must run against the unwrapped URL.
     ///
@@ -133,7 +133,7 @@ struct URLRouter: Sendable {
     /// intact - URLComponents would split the inner URL's own query into separate wrapper
     /// items (losing e.g. `&t=120`), so take the raw remainder after `?url=` instead.
     func unwrapped(_ url: URL) -> URL {
-        guard url.scheme?.lowercased() == "sonicwave", url.host == "open",
+        guard url.scheme?.lowercased() == "sneakpeak", url.host == "open",
               let range = url.absoluteString.range(of: "?url=") else {
             return url
         }
@@ -143,7 +143,7 @@ struct URLRouter: Sendable {
             return url
         }
         // Unwrap once more in case the wrapper was itself wrapped
-        if innerURL.scheme?.lowercased() == "sonicwave", innerURL.host == "open", innerURL != url {
+        if innerURL.scheme?.lowercased() == "sneakpeak", innerURL.host == "open", innerURL != url {
             return unwrapped(innerURL)
         }
         return innerURL
@@ -210,7 +210,7 @@ struct URLRouter: Sendable {
 
     // MARK: - Custom Scheme
 
-    /// Parse sonicwave:// scheme URLs.
+    /// Parse sneakpeak:// scheme URLs.
     private func parseCustomScheme(_ url: URL) -> NavigationDestination? {
         guard let host = url.host?.lowercased() else { return parseLegacyScheme(url) }
 
@@ -218,7 +218,7 @@ struct URLRouter: Sendable {
 
         switch host {
         case "video":
-            // sonicwave://video/{videoId}?source={source}&instance={url}
+            // sneakpeak://video/{videoId}?source={source}&instance={url}
             let videoID = url.lastPathComponent
             guard !videoID.isEmpty else { return nil }
 
@@ -233,7 +233,7 @@ struct URLRouter: Sendable {
             return .video(.id(.global(videoID)))
 
         case "channel":
-            // sonicwave://channel/{channelId}?source={source}&instance={url}
+            // sneakpeak://channel/{channelId}?source={source}&instance={url}
             let channelID = url.lastPathComponent
             guard !channelID.isEmpty else { return nil }
 
@@ -250,9 +250,9 @@ struct URLRouter: Sendable {
             return .channel(channelID, source)
 
         case "playlist":
-            // sonicwave://playlist/{playlistId}?source={source}&instance={url}
+            // sneakpeak://playlist/{playlistId}?source={source}&instance={url}
             let playlistID = url.lastPathComponent
-            // sonicwave://playlist?list=… is the 1.x form
+            // sneakpeak://playlist?list=… is the 1.x form
             guard !playlistID.isEmpty, playlistID != "/" else { return parseLegacyScheme(url) }
 
             let sourceParam = components?.queryItems?.first(where: { $0.name == "source" })?.value
@@ -267,7 +267,7 @@ struct URLRouter: Sendable {
             return .playlist(.remote(PlaylistID(source: source, playlistID: playlistID), instance: nil))
 
         case "search":
-            // sonicwave://search?q={query}
+            // sneakpeak://search?q={query}
             guard let query = components?.queryItems?.first(where: { $0.name == "q" })?.value,
                   !query.isEmpty else {
                 return nil
@@ -275,69 +275,69 @@ struct URLRouter: Sendable {
             return .search(query)
 
         case "playlists":
-            // sonicwave://playlists
+            // sneakpeak://playlists
             return .playlists
 
         case "bookmarks":
-            // sonicwave://bookmarks
+            // sneakpeak://bookmarks
             return .bookmarks
 
         case "history":
-            // sonicwave://history
+            // sneakpeak://history
             return .history
 
         case "downloads":
-            // sonicwave://downloads
+            // sneakpeak://downloads
             return .downloads
 
         case "channels":
-            // sonicwave://channels (manage subscribed channels)
+            // sneakpeak://channels (manage subscribed channels)
             return .manageChannels
 
         case "subscriptions":
-            // sonicwave://subscriptions
+            // sneakpeak://subscriptions
             return .subscriptionsFeed
 
         case "continue-watching":
-            // sonicwave://continue-watching
+            // sneakpeak://continue-watching
             return .continueWatching
 
         case "settings":
-            // sonicwave://settings
+            // sneakpeak://settings
             return .settings
 
         case "open":
-            // sonicwave://open?url={encoded_url} - from share extension. `route()` unwraps
+            // sneakpeak://open?url={encoded_url} - from share extension. `route()` unwraps
             // well-formed wrappers before getting here; this is a wrapper with no
             // usable inner URL.
             return nil
 
         default:
-            // Action hosts (sonicwave://play, sonicwave://player/…) are LinkActionParser's
+            // Action hosts (sneakpeak://play, sneakpeak://player/…) are LinkActionParser's
             if LinkActionParser.hosts.contains(host) { return nil }
             return parseLegacyScheme(url)
         }
     }
 
-    /// SneakPeak 1.x accepted any web link with its scheme swapped for `sonicwave://`
-    /// (`sonicwave://youtube.com/watch?v=…`, `sonicwave://https://youtu.be/…`) and bare
-    /// paths (`sonicwave://watch?v=…`). Shortcuts and automations built for 1.x still
+    /// SneakPeak 1.x accepted any web link with its scheme swapped for `sneakpeak://`
+    /// (`sneakpeak://youtube.com/watch?v=…`, `sneakpeak://https://youtu.be/…`) and bare
+    /// paths (`sneakpeak://watch?v=…`). Shortcuts and automations built for 1.x still
     /// send these, so rewrite them to https and route them as web links.
     private func parseLegacyScheme(_ url: URL) -> NavigationDestination? {
         let absolute = url.absoluteString
         guard let separator = absolute.range(of: "://") else { return nil }
         var remainder = String(absolute[separator.upperBound...])
 
-        // sonicwave://https://… — the original URL was appended whole
+        // sneakpeak://https://… — the original URL was appended whole
         if remainder.lowercased().hasPrefix("https://") || remainder.lowercased().hasPrefix("http://") {
             return routeLegacyWebURL(remainder)
         }
-        // sonicwave://https//… — some URL encoders drop the colon
+        // sneakpeak://https//… — some URL encoders drop the colon
         for prefix in ["https//", "http//"] where remainder.lowercased().hasPrefix(prefix) {
             remainder = String(remainder.dropFirst(prefix.count))
         }
 
-        // sonicwave://watch?v=…, sonicwave://shorts/…, sonicwave://playlist?list=… — bare YouTube paths
+        // sneakpeak://watch?v=…, sneakpeak://shorts/…, sneakpeak://playlist?list=… — bare YouTube paths
         let host = remainder.prefix { $0 != "/" && $0 != "?" && $0 != "#" }
         if !host.contains(".") {
             return routeLegacyWebURL("https://www.youtube.com/\(remainder)")
@@ -346,8 +346,8 @@ struct URLRouter: Sendable {
     }
 
     /// Only accept rewritten legacy links that resolve to something SneakPeak handles
-    /// natively — never the yt-dlp catch-all, so `sonicwave://anything` stays a no-op.
-    /// PeerTube-shaped paths (`sonicwave://host.tld/w/{id}`) pass too, as they do as web links.
+    /// natively — never the yt-dlp catch-all, so `sneakpeak://anything` stays a no-op.
+    /// PeerTube-shaped paths (`sneakpeak://host.tld/w/{id}`) pass too, as they do as web links.
     private func routeLegacyWebURL(_ string: String) -> NavigationDestination? {
         guard let webURL = URL(string: string), isHTTPURL(webURL) else { return nil }
         return routeConfidently(webURL)

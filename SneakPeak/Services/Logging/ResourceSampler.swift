@@ -232,7 +232,7 @@ final class ResourceSampler {
         if name == "main" { return "ui" }
         // mpv names its threads after their role ("core", "demux", "vo", …).
         if ["core", "demux", "vo", "ao", "cache", "dec"].contains(lower)
-            || ["mpv", "stream.sonicwave.mpv", "lavf", "ffmpeg"].contains(where: lower.hasPrefix) {
+            || ["mpv", "stream.sneakpeak.mpv", "lavf", "ffmpeg"].contains(where: lower.hasPrefix) {
             return "playback"
         }
         if lower.contains("auremoteio") || lower.contains("audio") || lower.contains("aqclient") {
@@ -247,8 +247,8 @@ final class ResourceSampler {
         if lower.contains("cloudkit") {
             return "cloudkit"
         }
-        if lower.hasPrefix("stream.sonicwave.diagnostics") || lower.hasPrefix("stream.sonicwave.logfile")
-            || lower.hasPrefix("stream.sonicwave.performance") {
+        if lower.hasPrefix("stream.sneakpeak.diagnostics") || lower.hasPrefix("stream.sneakpeak.logfile")
+            || lower.hasPrefix("stream.sneakpeak.performance") {
             return "logging"
         }
         return "other"

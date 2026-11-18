@@ -14,7 +14,7 @@ import Foundation
 /// read the selection an upgrading install persisted, and
 /// `DataContext.init(legacy:)` can map it onto a context. Do not add members.
 enum SubscriptionAccountType: String, Codable, Sendable, Equatable, CaseIterable {
-    /// Local subscriptions synced via iCloud (requires Sonic Wave Server for feed).
+    /// Local subscriptions synced via iCloud (requires SneakPeak Server for feed).
     case local
 
     /// Subscriptions managed by an Invidious instance account.

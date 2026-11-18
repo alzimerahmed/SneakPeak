@@ -133,7 +133,7 @@ struct SubscriptionDestinationRoutingTests {
         let accounts = AccountsManager(
             identityScope: CredentialIdentityScope(fixedScope: "identity-A"),
             instancesManager: instances,
-            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
         let first = accounts.addAccount(instanceID: made[0].id)
         let second = accounts.addAccount(instanceID: made[1].id)

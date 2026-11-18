@@ -75,14 +75,14 @@ final class BackgroundFeedRefresher {
     // MARK: - Local Account Refresh
 
     /// Performs background refresh for local (SneakPeak/iCloud) subscription account.
-    /// Requires Sonic Wave Server - uses stateless feed endpoint for efficient single-request fetching.
+    /// Requires SneakPeak Server - uses stateless feed endpoint for efficient single-request fetching.
     private func performLocalAccountRefresh() async {
         guard let appEnvironment else { return }
 
-        // Require Sonic Wave Server for local account background refresh
+        // Require SneakPeak Server for local account background refresh
         guard let yatteeServer = appEnvironment.instancesManager.instances
             .first(where: { $0.type == .yatteeServer && $0.isEnabled }) else {
-            LoggingService.shared.debug("Background refresh requires Sonic Wave Server for local subscriptions", category: .notifications)
+            LoggingService.shared.debug("Background refresh requires SneakPeak Server for local subscriptions", category: .notifications)
             return
         }
 
@@ -108,7 +108,7 @@ final class BackgroundFeedRefresher {
             return
         }
 
-        LoggingService.shared.debug("Fetching feed from Sonic Wave Server: \(yatteeServer.url)", category: .notifications)
+        LoggingService.shared.debug("Fetching feed from SneakPeak Server: \(yatteeServer.url)", category: .notifications)
 
         // Convert subscriptions to channel requests
         let channelRequests = notifiableSubscriptions.map { subscription in

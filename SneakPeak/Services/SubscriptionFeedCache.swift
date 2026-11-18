@@ -40,17 +40,17 @@ enum FeedLoadState: Equatable {
     /// Whether a feed left in this state should keep asking again on its own.
     ///
     /// A network failure is its own reason to try again. `yatteeServerRequired`
-    /// usually is not — an account that genuinely needs a Sonic Wave Server goes on
+    /// usually is not — an account that genuinely needs a SneakPeak Server goes on
     /// needing one, and a timer there would never end and never change
     /// anything. The exception is the local fallback standing in for a server
-    /// that merely could not be reached: the feed is asking for a Sonic Wave Server
+    /// that merely could not be reached: the feed is asking for a SneakPeak Server
     /// only because reads moved to local data, and they move back the moment
     /// the server answers again — silently, on a status that expires with
     /// nothing on this screen watching for it.
     ///
     /// - Parameter unavailability: why the selected context is not the one
     ///   answering, or `nil` when it is — local data selected by the user is
-    ///   never unavailable, so its Sonic Wave Server request is the real answer.
+    ///   never unavailable, so its SneakPeak Server request is the real answer.
     func warrantsPeriodicRetry(unavailability: DataContextUnavailability?) -> Bool {
         switch self {
         case .error(.networkError):
@@ -72,7 +72,7 @@ enum FeedLoadState: Equatable {
         /// Whether a context banner, when one is up, already answers for this.
         ///
         /// A selected account that cannot be used reads local data, and the
-        /// local feed then asks for the Sonic Wave Server it has no reason to have
+        /// local feed then asks for the SneakPeak Server it has no reason to have
         /// — "add a subscriptions account in Settings" under a banner saying
         /// *this* account needs signing in again is two answers to one
         /// question. These two are the account the banner is already talking
@@ -91,7 +91,7 @@ enum FeedLoadState: Equatable {
 
 /// Subscription feed cache with disk persistence.
 /// Routes feed fetching based on the selected subscription account type:
-/// - Local accounts: Use Sonic Wave Server (required)
+/// - Local accounts: Use SneakPeak Server (required)
 /// - Invidious accounts: Use Invidious /api/v1/auth/feed endpoint
 @MainActor
 @Observable
@@ -379,7 +379,7 @@ final class SubscriptionFeedCache {
 
     /// Refreshes the feed from network.
     /// Routes based on subscription account type:
-    /// - Local: Requires Sonic Wave Server
+    /// - Local: Requires SneakPeak Server
     /// - Invidious: Uses authenticated feed endpoint
     ///
     /// Note: This method uses a detached task internally to prevent SwiftUI from
@@ -428,7 +428,7 @@ final class SubscriptionFeedCache {
         }.value
     }
 
-    /// Refreshes feed for local account using Sonic Wave Server.
+    /// Refreshes feed for local account using SneakPeak Server.
     /// Falls back to any configured Invidious or Piped instance when no server
     /// is set up: both serve channel videos without a login, so local
     /// subscriptions work with no account at all (G1).
@@ -436,7 +436,7 @@ final class SubscriptionFeedCache {
         if let serverInstance = appEnvironment.instancesManager.instances.first(where: {
             $0.type == .yatteeServer && $0.isEnabled
         }) {
-            LoggingService.shared.info("Refreshing feed using Sonic Wave Server: \(serverInstance.url.absoluteString)", category: .general)
+            LoggingService.shared.info("Refreshing feed using SneakPeak Server: \(serverInstance.url.absoluteString)", category: .general)
             await refreshFromStatelessServer(instance: serverInstance, using: appEnvironment, generation: generation)
             return
         }
@@ -466,7 +466,7 @@ final class SubscriptionFeedCache {
             $0.type == .piped && $0.isEnabled
         }) else {
             LoggingService.shared.warning(
-                "Local subscriptions have no backend to fetch from (no Sonic Wave Server, Invidious or Piped instance)",
+                "Local subscriptions have no backend to fetch from (no SneakPeak Server, Invidious or Piped instance)",
                 category: .general
             )
             feedLoadState = .error(.noBackendConfigured)
@@ -768,9 +768,9 @@ final class SubscriptionFeedCache {
         isLoading = false
     }
 
-    // MARK: - Sonic Wave Server Feed
+    // MARK: - SneakPeak Server Feed
 
-    /// Refreshes feed from Sonic Wave Server's stateless POST feed API.
+    /// Refreshes feed from SneakPeak Server's stateless POST feed API.
     private func refreshFromStatelessServer(instance: Instance, using appEnvironment: AppEnvironment, generation: Int) async {
         let subscriptions = appEnvironment.dataManager.subscriptions()
         LoggingService.shared.debug("refreshFromStatelessServer: Found \(subscriptions.count) subscriptions", category: .general)
@@ -849,7 +849,7 @@ final class SubscriptionFeedCache {
             }
         } catch {
             LoggingService.shared.error(
-                "Sonic Wave Server feed failed: \(error.localizedDescription)",
+                "SneakPeak Server feed failed: \(error.localizedDescription)",
                 category: .general
             )
             guard generation == accountGeneration else { return }

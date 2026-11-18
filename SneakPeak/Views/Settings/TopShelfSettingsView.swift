@@ -23,7 +23,7 @@ struct TopShelfSettingsView: View {
                 } footer: {
                     Text(String(
                         localized: "settings.topShelf.sections.footer",
-                        defaultValue: "Enabled sections appear in the Apple TV Home top shelf when Sonic Wave is focused."
+                        defaultValue: "Enabled sections appear in the Apple TV Home top shelf when SneakPeak is focused."
                     ))
                 }
             }

@@ -283,7 +283,7 @@ private final class ProcessSampler: @unchecked Sendable {
     /// Process CPU above this while not active is logged as a warning.
     private static let highCPUPercent = 15.0
 
-    private let queue = DispatchQueue(label: "stream.sonicwave.diagnostics", qos: .utility)
+    private let queue = DispatchQueue(label: "stream.sneakpeak.diagnostics", qos: .utility)
     private var timer: DispatchSourceTimer?
     private var isAppActive = true
     private var tick = 0

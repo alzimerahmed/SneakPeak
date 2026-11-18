@@ -720,7 +720,7 @@ final class AppEnvironment {
     /// Call this on app launch to ensure temp directory doesn't accumulate old files.
     private func cleanupAllTempSubtitles() {
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sonicwave-subtitles", isDirectory: true)
+            .appendingPathComponent("sneakpeak-subtitles", isDirectory: true)
         
         do {
             if FileManager.default.fileExists(atPath: tempDir.path) {
@@ -1377,7 +1377,7 @@ final class AppEnvironment {
 
     /// Whether an instance is known to require credentials that are missing from
     /// the Keychain (e.g. after reinstalling the app and importing sources from iCloud).
-    /// - Sonic Wave Server always requires basic auth; other types require it when
+    /// - SneakPeak Server always requires basic auth; other types require it when
     ///   `usesBasicAuth` was recorded.
     /// - Invidious/Piped account logins are checked when `usesAccountLogin` was recorded.
     func needsCredentials(for instance: Instance) -> Bool {

@@ -3,7 +3,7 @@
 //  SneakPeak
 //
 //  Manages HTTP Basic Auth credentials (username/password) stored securely in the Keychain.
-//  Works for any instance type (Invidious, Piped, PeerTube, Sonic Wave Server) — used when an
+//  Works for any instance type (Invidious, Piped, PeerTube, SneakPeak Server) — used when an
 //  instance sits behind a reverse proxy that requires HTTP Basic Auth.
 //
 
@@ -20,7 +20,7 @@ struct BasicAuthCredential: Codable {
 @MainActor
 @Observable
 final class BasicAuthCredentialsManager: InstanceCredentialsManager {
-    private let keychainServiceName = "com.sonicwave.basicauth"
+    private let keychainServiceName = "com.sneakpeak.basicauth"
 
     /// Legacy Keychain service name from when basic auth was Yattee-Server-only.
     /// We migrate items from this service to `keychainServiceName` on init.
@@ -239,7 +239,7 @@ final class BasicAuthCredentialsManager: InstanceCredentialsManager {
     // MARK: - Legacy Migration
 
     /// One-time migration of credentials from the legacy Yattee-Server-only Keychain service
-    /// (`com.sneakpeak.sneakpeakserver`) to the generic basic-auth service (`com.sonicwave.basicauth`).
+    /// (`com.sneakpeak.sneakpeakserver`) to the generic basic-auth service (`com.sneakpeak.basicauth`).
     /// Items are copied (preserving sync attribute) and then deleted from the legacy service.
     private func migrateLegacyKeychainItems() {
         let query: [String: Any] = [

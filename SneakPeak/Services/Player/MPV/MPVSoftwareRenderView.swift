@@ -75,7 +75,7 @@ final class MPVSoftwareRenderView: UIView {
     }
     
     /// Dedicated queue for rendering operations
-    private let renderQueue = DispatchQueue(label: "stream.sonicwave.mpv.software-render", qos: .userInitiated)
+    private let renderQueue = DispatchQueue(label: "stream.sneakpeak.mpv.software-render", qos: .userInitiated)
     
     private var isRecreatingBuffer = false
     

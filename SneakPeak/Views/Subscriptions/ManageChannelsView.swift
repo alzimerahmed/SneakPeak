@@ -274,7 +274,7 @@ struct ManageChannelsView: View {
             await refreshChannels()
         }
         .task {
-            // Fetch missing subscriber counts from Sonic Wave Server (runs after onAppear)
+            // Fetch missing subscriber counts from SneakPeak Server (runs after onAppear)
             await fetchMissingSubscriberCounts()
         }
         .onReceive(NotificationCenter.default.publisher(for: .subscriptionsDidChange)) { _ in
@@ -494,7 +494,7 @@ struct ManageChannelsView: View {
 
     // MARK: - Helpers
 
-    /// Returns channel with optimized avatar URL from Sonic Wave Server when available.
+    /// Returns channel with optimized avatar URL from SneakPeak Server when available.
     private func channelWithOptimizedAvatar(_ channel: Channel) -> Channel {
         let effectiveAvatarURL = AvatarURLBuilder.avatarURL(
             channelID: channel.id.channelID,
@@ -533,7 +533,7 @@ struct ManageChannelsView: View {
     }
 
     /// Fetches subscriber counts for channels that don't have them cached.
-    /// Uses Sonic Wave Server's cached metadata endpoint (no YouTube API calls).
+    /// Uses SneakPeak Server's cached metadata endpoint (no YouTube API calls).
     private func fetchMissingSubscriberCounts() async {
         guard let appEnvironment,
               let yatteeServer = appEnvironment.instancesManager.enabledYatteeServerInstances.first else {

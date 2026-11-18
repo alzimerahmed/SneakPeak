@@ -116,7 +116,7 @@ final class MPVRenderView: UIView {
     private static let continuousResizeWindow: CFTimeInterval = 0.15
 
     /// Dedicated queue for OpenGL rendering (off main thread).
-    private let renderQueue = DispatchQueue(label: "stream.sonicwave.mpv.render", qos: .userInteractive)
+    private let renderQueue = DispatchQueue(label: "stream.sneakpeak.mpv.render", qos: .userInteractive)
 
     /// Lock for thread-safe access to rendering flag.
     private let renderLock = NSLock()

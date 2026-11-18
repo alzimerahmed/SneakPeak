@@ -12,7 +12,7 @@ import Security
 @MainActor
 @Observable
 final class PipedCredentialsManager: InstanceCredentialsManager {
-    private static let keychainServiceName = "com.sonicwave.piped"
+    private static let keychainServiceName = "com.sneakpeak.piped"
 
     /// Tracks which instances have stored tokens (for reactive UI updates)
     private(set) var loggedInInstanceIDs: Set<UUID> = []

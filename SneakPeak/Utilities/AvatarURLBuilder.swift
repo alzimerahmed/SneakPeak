@@ -2,23 +2,23 @@
 //  AvatarURLBuilder.swift
 //  SneakPeak
 //
-//  Utility for constructing channel avatar URLs with Sonic Wave Server fallback.
+//  Utility for constructing channel avatar URLs with SneakPeak Server fallback.
 //
 
 import Foundation
 import Nuke
 
-/// Utility for constructing channel avatar URLs with Sonic Wave Server fallback
+/// Utility for constructing channel avatar URLs with SneakPeak Server fallback
 enum AvatarURLBuilder {
     
-    /// Available avatar sizes on Sonic Wave Server
+    /// Available avatar sizes on SneakPeak Server
     private static let availableSizes = [32, 48, 76, 100, 176, 512]
     
     /// Constructs the effective avatar URL for a channel
     /// - Parameters:
     ///   - channelID: The channel ID
     ///   - directURL: Direct avatar URL if available (from API response)
-    ///   - serverURL: Sonic Wave Server base URL
+    ///   - serverURL: SneakPeak Server base URL
     ///   - size: Desired size in points (will be doubled for retina and rounded to nearest available)
     /// - Returns: URL to use for avatar, or nil if unavailable
     static func avatarURL(
@@ -30,7 +30,7 @@ enum AvatarURLBuilder {
         // Check if this is a YouTube channel (UC prefix or @handle)
         let isYouTubeChannel = channelID.hasPrefix("UC") || channelID.hasPrefix("@")
 
-        // Priority 1: For YouTube channels, prefer Sonic Wave Server (more reliable, avoids stale URLs from iCloud sync)
+        // Priority 1: For YouTube channels, prefer SneakPeak Server (more reliable, avoids stale URLs from iCloud sync)
         if isYouTubeChannel, let serverURL = serverURL {
             return buildServerAvatarURL(serverURL: serverURL, channelID: channelID, size: size)
         }
@@ -48,7 +48,7 @@ enum AvatarURLBuilder {
         return nil
     }
 
-    /// Builds the Sonic Wave Server avatar URL for a channel
+    /// Builds the SneakPeak Server avatar URL for a channel
     private static func buildServerAvatarURL(serverURL: URL, channelID: String, size: Int) -> URL {
         // Calculate retina size and round to nearest available
         let retinaSize = size * 2
@@ -62,15 +62,15 @@ enum AvatarURLBuilder {
             .appendingPathComponent("\(roundedSize).jpg")
     }
 
-    /// Creates an ImageRequest with auth header for Sonic Wave Server avatar URLs
+    /// Creates an ImageRequest with auth header for SneakPeak Server avatar URLs
     /// - Parameters:
     ///   - url: The avatar URL
-    ///   - authHeader: Optional Basic Auth header for Sonic Wave Server
+    ///   - authHeader: Optional Basic Auth header for SneakPeak Server
     /// - Returns: ImageRequest configured with auth if needed, or nil if URL is nil
     static func imageRequest(url: URL?, authHeader: String?) -> ImageRequest? {
         guard let url else { return nil }
         var request = URLRequest(url: url)
-        // Only add auth header for Sonic Wave Server avatar URLs
+        // Only add auth header for SneakPeak Server avatar URLs
         if let authHeader, url.path.contains("/api/v1/channels/") && url.path.contains("/avatar/") {
             request.setValue(authHeader, forHTTPHeaderField: "Authorization")
         }

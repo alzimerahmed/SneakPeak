@@ -18,7 +18,7 @@ import AppKit
 
 enum DescriptionText {
     /// Creates an attributed string with clickable URLs and timestamps.
-    /// Timestamps are converted to `sonicwave-seek://SECONDS` URLs.
+    /// Timestamps are converted to `sneakpeak-seek://SECONDS` URLs.
     static func attributed(_ text: String, linkColor: Color = .accentColor) -> AttributedString {
         var attributedString = AttributedString(text)
 
@@ -57,7 +57,7 @@ enum DescriptionText {
 
                 let timestampString = String(text[range])
                 guard let seconds = parseTimestamp(timestampString),
-                      let url = URL(string: "sonicwave-seek://\(seconds)") else {
+                      let url = URL(string: "sneakpeak-seek://\(seconds)") else {
                     continue
                 }
 
@@ -92,7 +92,7 @@ enum DescriptionText {
     }
 
     /// URL scheme used for seek timestamps.
-    static let seekScheme = "sonicwave-seek"
+    static let seekScheme = "sneakpeak-seek"
 
     /// Extracts the seconds value from a seek URL, if valid.
     static func seekSeconds(from url: URL) -> Int? {

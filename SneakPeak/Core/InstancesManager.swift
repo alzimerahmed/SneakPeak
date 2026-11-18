@@ -233,18 +233,18 @@ final class InstancesManager {
 
     /// Selects an enabled instance appropriate for the given video's content source.
     /// - For PeerTube videos: prefers the exact instance, falls back to any PeerTube instance
-    /// - For YouTube/extracted content: uses YouTube-capable instance (Invidious, Piped, Sonic Wave Server)
+    /// - For YouTube/extracted content: uses YouTube-capable instance (Invidious, Piped, SneakPeak Server)
     func instance(for video: Video) -> Instance? {
         instance(for: video.id.source)
     }
 
     /// Selects the instance to load a remote playlist from: Invidious first for
     /// YouTube (Invidious playlists are Invidious-specific), the playlist's own
-    /// server for federated content, Sonic Wave Server for extracted content.
+    /// server for federated content, SneakPeak Server for extracted content.
     func playlistInstance(for source: ContentSource) -> Instance? {
         switch source {
         case .global:
-            // For global content (YouTube), prefer Invidious instances over Sonic Wave Server
+            // For global content (YouTube), prefer Invidious instances over SneakPeak Server
             // since Invidious playlists (IVPL*) are Invidious-specific
             if let invidiousInstance = enabledInstances.first(where: { $0.type == .invidious }) {
                 return invidiousInstance
@@ -262,15 +262,15 @@ final class InstancesManager {
             }
             return nil
         case .extracted:
-            // For extracted content, use Sonic Wave Server
+            // For extracted content, use SneakPeak Server
             return yatteeServerInstances.first
         }
     }
 
     /// Selects an enabled instance appropriate for the given content source.
     /// - For PeerTube content: prefers the exact instance, falls back to any PeerTube instance
-    /// - For extracted content: requires Sonic Wave Server (only backend with yt-dlp)
-    /// - For YouTube content: uses YouTube-capable instance (Invidious, Piped, Sonic Wave Server)
+    /// - For extracted content: requires SneakPeak Server (only backend with yt-dlp)
+    /// - For YouTube content: uses YouTube-capable instance (Invidious, Piped, SneakPeak Server)
     func instance(for contentSource: ContentSource) -> Instance? {
         switch contentSource {
         case .federated(let provider, let instanceURL) where provider == ContentSource.peertubeProvider:
@@ -278,10 +278,10 @@ final class InstancesManager {
             return enabledInstances.first { $0.url.host == instanceURL.host }
                 ?? enabledInstances.first(where: \.isPeerTubeInstance)
         case .extracted:
-            // Extracted content requires Sonic Wave Server (yt-dlp)
+            // Extracted content requires SneakPeak Server (yt-dlp)
             return yatteeServerInstances.first
         case .global, .federated:
-            // YouTube content - prefer Sonic Wave Server (the active one if it is one),
+            // YouTube content - prefer SneakPeak Server (the active one if it is one),
             // then the active instance, then any other YouTube-capable instance
             let active = activeInstance
             if let active, active.isYatteeServerInstance {
@@ -297,7 +297,7 @@ final class InstancesManager {
         }
     }
 
-    /// Disables all Sonic Wave Server instances except the specified one.
+    /// Disables all SneakPeak Server instances except the specified one.
     func disableOtherYatteeServerInstances(except instanceID: UUID) {
         for instance in enabledYatteeServerInstances where instance.id != instanceID {
             var updated = instance
@@ -353,5 +353,5 @@ final class InstancesManager {
 // MARK: - Notifications
 
 extension Notification.Name {
-    static let instancesDidChange = Notification.Name("stream.sonicwave.instancesDidChange")
+    static let instancesDidChange = Notification.Name("stream.sneakpeak.instancesDidChange")
 }

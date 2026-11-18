@@ -327,7 +327,7 @@
     "+%lld" : {
 
     },
-    "${command} in Sonic Wave" : {
+    "${command} in SneakPeak" : {
 
     },
     "0.5×" : {
@@ -793,10 +793,10 @@
     "Add Video to Queue" : {
 
     },
-    "Adds a video to Sonic Wave's queue, to play next or at the end." : {
+    "Adds a video to SneakPeak's queue, to play next or at the end." : {
 
     },
-    "Adds a video to your Sonic Wave bookmarks." : {
+    "Adds a video to your SneakPeak bookmarks." : {
 
     },
     "alert.ambiguousLink.message %@" : {
@@ -829,12 +829,12 @@
         }
       }
     },
-    "alert.ambiguousLink.tryInSonicWave" : {
+    "alert.ambiguousLink.tryInSneakPeak" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try in Sonic Wave"
+            "value" : "Try in SneakPeak"
           }
         }
       }
@@ -879,12 +879,12 @@
         }
       }
     },
-    "alert.resolvedShortLink.openInSonicWave" : {
+    "alert.resolvedShortLink.openInSneakPeak" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Try in Sonic Wave"
+            "value" : "Try in SneakPeak"
           }
         }
       }
@@ -1210,7 +1210,7 @@
         }
       }
     },
-    "Changes the speed of what's playing in Sonic Wave." : {
+    "Changes the speed of what's playing in SneakPeak." : {
 
     },
     "Channel Link" : {
@@ -3126,7 +3126,7 @@
     "Downloads" : {
 
     },
-    "Downloads a video in Sonic Wave at your preferred download quality." : {
+    "Downloads a video in SneakPeak at your preferred download quality." : {
 
     },
     "downloads.cancel" : {
@@ -3402,7 +3402,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Sonic Wave Server configured.\n\nAdd a Sonic Wave Server instance in Settings to browse external channels."
+            "value" : "No SneakPeak Server configured.\n\nAdd a SneakPeak Server instance in Settings to browse external channels."
           }
         }
       }
@@ -3502,7 +3502,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No Sonic Wave Server configured.\n\nAdd a Sonic Wave Server instance in Settings to play videos from external sites."
+            "value" : "No SneakPeak Server configured.\n\nAdd a SneakPeak Server instance in Settings to play videos from external sites."
           }
         }
       }
@@ -5605,7 +5605,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Welcome to Sonic Wave"
+            "value" : "Welcome to SneakPeak"
           }
         }
       }
@@ -6064,17 +6064,17 @@
       }
     },
     "instances.type.yatteeServer" : {
-      "comment" : "Instance type: Sonic Wave Server",
+      "comment" : "Instance type: SneakPeak Server",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Server"
+            "value" : "SneakPeak Server"
           }
         }
       }
     },
-    "Jumps to a time in what's playing in Sonic Wave, or forward or back by some seconds." : {
+    "Jumps to a time in what's playing in SneakPeak, or forward or back by some seconds." : {
 
     },
     "Link" : {
@@ -7152,7 +7152,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Review accounts from the previous Sonic Wave app and sign in again to add their sources."
+            "value" : "Review accounts from the previous SneakPeak app and sign in again to add their sources."
           }
         }
       }
@@ -7222,7 +7222,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave found accounts and sources from the previous app. Review them to sign in again or add them, or remove anything you do not want to import."
+            "value" : "SneakPeak found accounts and sources from the previous app. Review them to sign in again or add them, or remove anything you do not want to import."
           }
         }
       }
@@ -7322,7 +7322,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add these sources from the previous Sonic Wave app. No sign-in is required."
+            "value" : "Add these sources from the previous SneakPeak app. No sign-in is required."
           }
         }
       }
@@ -7443,7 +7443,7 @@
     "Normal" : {
 
     },
-    "Nothing is playing in Sonic Wave." : {
+    "Nothing is playing in SneakPeak." : {
 
     },
     "notification.action.watch" : {
@@ -7757,12 +7757,12 @@
       }
     },
     "openLink.hint.yatteeServer" : {
-      "comment" : "Footer hint when Sonic Wave Server is enabled",
+      "comment" : "Footer hint when SneakPeak Server is enabled",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Videos, playlists and channels from YouTube and PeerTube, plus hundreds of other sites with Sonic Wave Server"
+            "value" : "Videos, playlists and channels from YouTube and PeerTube, plus hundreds of other sites with SneakPeak Server"
           }
         }
       }
@@ -7828,7 +7828,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Server not configured. Add a Sonic Wave Server instance in Settings to download from external sites."
+            "value" : "SneakPeak Server not configured. Add a SneakPeak Server instance in Settings to download from external sites."
           }
         }
       }
@@ -7955,7 +7955,7 @@
       }
     },
     "openLink.unsupportedYouTubeLink" : {
-      "comment" : "Error for a YouTube link Sonic Wave can't open (feeds, hashtags, posts…)",
+      "comment" : "Error for a YouTube link SneakPeak can't open (feeds, hashtags, posts…)",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -7993,7 +7993,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add a Sonic Wave Server instance in Settings to play or download from external sites."
+            "value" : "Add a SneakPeak Server instance in Settings to play or download from external sites."
           }
         }
       }
@@ -8004,12 +8004,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Server not configured"
+            "value" : "SneakPeak Server not configured"
           }
         }
       }
     },
-    "Opens a section of Sonic Wave." : {
+    "Opens a section of SneakPeak." : {
 
     },
     "panel.belowVideo.info" : {
@@ -10020,7 +10020,7 @@
         }
       }
     },
-    "Plays a YouTube, PeerTube or direct media link in Sonic Wave." : {
+    "Plays a YouTube, PeerTube or direct media link in SneakPeak." : {
 
     },
     "popular.title" : {
@@ -10303,7 +10303,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Device"
+            "value" : "SneakPeak Device"
           }
         }
       }
@@ -10369,7 +10369,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Allow this device to discover and control other Sonic Wave devices on your local network."
+            "value" : "Allow this device to discover and control other SneakPeak devices on your local network."
           }
         }
       }
@@ -10423,7 +10423,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Make sure other devices have Sonic Wave open with Remote Control enabled."
+            "value" : "Make sure other devices have SneakPeak open with Remote Control enabled."
           }
         }
       }
@@ -10562,10 +10562,10 @@
         }
       }
     },
-    "Resumes, pauses, skips or closes what's playing in Sonic Wave." : {
+    "Resumes, pauses, skips or closes what's playing in SneakPeak." : {
 
     },
-    "Returns the title of what's playing in Sonic Wave, or nothing when the player is closed." : {
+    "Returns the title of what's playing in SneakPeak, or nothing when the player is closed." : {
 
     },
     "Saved Videos" : {
@@ -10577,7 +10577,7 @@
     "Search Videos" : {
 
     },
-    "Search Sonic Wave for ${query}" : {
+    "Search SneakPeak for ${query}" : {
 
     },
     "search.bookmarks.placeholder" : {
@@ -11029,7 +11029,7 @@
         }
       }
     },
-    "Searches for videos in Sonic Wave." : {
+    "Searches for videos in SneakPeak." : {
 
     },
     "Seconds" : {
@@ -12416,7 +12416,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Classic"
+            "value" : "SneakPeak Classic"
           }
         }
       }
@@ -12426,7 +12426,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave"
+            "value" : "SneakPeak"
           }
         }
       }
@@ -12446,7 +12446,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave Mascot"
+            "value" : "SneakPeak Mascot"
           }
         }
       }
@@ -12784,7 +12784,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "sonicwave:// links can queue, bookmark, download and subscribe. Leave this off to confirm each one, since any website or app can open these links."
+            "value" : "sneakpeak:// links can queue, bookmark, download and subscribe. Leave this off to confirm each one, since any website or app can open these links."
           }
         }
       }
@@ -14089,7 +14089,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This copy of Sonic Wave was installed without iCloud access, so sync is not available. iCloud sync requires installing the app from the App Store or TestFlight."
+            "value" : "This copy of SneakPeak was installed without iCloud access, so sync is not available. iCloud sync requires installing the app from the App Store or TestFlight."
           }
         }
       }
@@ -14100,7 +14100,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Some synced data was created by a newer version of Sonic Wave. Update the app to see all your data."
+            "value" : "Some synced data was created by a newer version of SneakPeak. Update the app to see all your data."
           }
         }
       }
@@ -14209,7 +14209,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These options are applied automatically by Sonic Wave but can be overwritten"
+            "value" : "These options are applied automatically by SneakPeak but can be overwritten"
           }
         }
       }
@@ -17362,7 +17362,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Enabled sections appear in the Apple TV Home top shelf when Sonic Wave is focused."
+            "value" : "Enabled sections appear in the Apple TV Home top shelf when SneakPeak is focused."
           }
         }
       }
@@ -17424,7 +17424,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Check for and install new versions of Sonic Wave. Beta updates include prereleases."
+            "value" : "Check for and install new versions of SneakPeak. Beta updates include prereleases."
           }
         }
       }
@@ -17544,7 +17544,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "When you tap a bit.ly, tinyurl, t.co, or similar short link in a description or comment, Sonic Wave follows the redirect and opens the destination in-app if it's a supported video, channel, or playlist. Sends a network request to the shortener service."
+            "value" : "When you tap a bit.ly, tinyurl, t.co, or similar short link in a description or comment, SneakPeak follows the redirect and opens the destination in-app if it's a supported video, channel, or playlist. Sends a network request to the shortener service."
           }
         }
       }
@@ -18287,7 +18287,7 @@
       }
     },
     "sources.field.extractors" : {
-      "comment" : "Field label for extractors in Sonic Wave Server info",
+      "comment" : "Field label for extractors in SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18298,7 +18298,7 @@
       }
     },
     "sources.field.ffmpeg" : {
-      "comment" : "Field label for ffmpeg version in Sonic Wave Server info",
+      "comment" : "Field label for ffmpeg version in SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18320,7 +18320,7 @@
       }
     },
     "sources.field.invidiousInstance" : {
-      "comment" : "Field label for Invidious instance in Sonic Wave Server info",
+      "comment" : "Field label for Invidious instance in SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18408,7 +18408,7 @@
       }
     },
     "sources.field.serverVersion" : {
-      "comment" : "Field label for server version in Sonic Wave Server info",
+      "comment" : "Field label for server version in SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18474,7 +18474,7 @@
       }
     },
     "sources.field.ytdlp" : {
-      "comment" : "Field label for yt-dlp version in Sonic Wave Server info",
+      "comment" : "Field label for yt-dlp version in SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -18589,7 +18589,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter the URL of a Sonic Wave Server, Invidious, Piped, or PeerTube instance."
+            "value" : "Enter the URL of a SneakPeak Server, Invidious, Piped, or PeerTube instance."
           }
         }
       }
@@ -18628,12 +18628,12 @@
       }
     },
     "sources.footer.yatteeServerAuth" : {
-      "comment" : "Footer text explaining Sonic Wave Server authentication",
+      "comment" : "Footer text explaining SneakPeak Server authentication",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter your Sonic Wave Server credentials to authenticate."
+            "value" : "Enter your SneakPeak Server credentials to authenticate."
           }
         }
       }
@@ -18749,7 +18749,7 @@
       }
     },
     "sources.header.serverInfo" : {
-      "comment" : "Section header for Sonic Wave Server info",
+      "comment" : "Section header for SneakPeak Server info",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -19145,7 +19145,7 @@
       }
     },
     "sources.yatteeServer.warning.disableOthers" : {
-      "comment" : "Button to disable other Sonic Wave Server instances",
+      "comment" : "Button to disable other SneakPeak Server instances",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -19156,23 +19156,23 @@
       }
     },
     "sources.yatteeServer.warning.message" : {
-      "comment" : "Warning message when enabling a second Sonic Wave Server",
+      "comment" : "Warning message when enabling a second SneakPeak Server",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Only one Sonic Wave Server instance can be active at a time. Would you like to disable the other Sonic Wave Server instance(s)?"
+            "value" : "Only one SneakPeak Server instance can be active at a time. Would you like to disable the other SneakPeak Server instance(s)?"
           }
         }
       }
     },
     "sources.yatteeServer.warning.title" : {
-      "comment" : "Warning title when another Sonic Wave Server is enabled",
+      "comment" : "Warning title when another SneakPeak Server is enabled",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Another Sonic Wave Server is enabled"
+            "value" : "Another SneakPeak Server is enabled"
           }
         }
       }
@@ -19572,7 +19572,7 @@
     "Subscribe to Channel" : {
 
     },
-    "Subscribes to a channel from its link, in the account you're using in Sonic Wave." : {
+    "Subscribes to a channel from its link, in the account you're using in SneakPeak." : {
 
     },
     "Subscription Feed" : {
@@ -19610,7 +19610,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave (iCloud)"
+            "value" : "SneakPeak (iCloud)"
           }
         }
       }
@@ -19620,7 +19620,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonic Wave (This Device)"
+            "value" : "SneakPeak (This Device)"
           }
         }
       }
@@ -19837,7 +19837,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add an Invidious or Piped instance, or a Sonic Wave Server, in Settings to fetch your local subscriptions feed"
+            "value" : "Add an Invidious or Piped instance, or a SneakPeak Server, in Settings to fetch your local subscriptions feed"
           }
         }
       }
@@ -19988,7 +19988,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add an Invidious or Piped instance, or a Sonic Wave Server, in Settings to fetch your local subscriptions feed"
+            "value" : "Add an Invidious or Piped instance, or a SneakPeak Server, in Settings to fetch your local subscriptions feed"
           }
         }
       }
@@ -20418,7 +20418,7 @@
     "Unsubscribe from Channel" : {
 
     },
-    "Unsubscribes from a channel, in the account you're using in Sonic Wave." : {
+    "Unsubscribes from a channel, in the account you're using in SneakPeak." : {
 
     },
     "video.badge.live" : {
@@ -21376,7 +21376,7 @@
         }
       }
     },
-    "Sonic Wave can only open web links." : {
+    "SneakPeak can only open web links." : {
 
     },
     "diagnostics.title" : {

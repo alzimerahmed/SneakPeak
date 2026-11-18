@@ -2,13 +2,13 @@
 //  ExternalVideoView.swift
 //  SneakPeak
 //
-//  Loading view for extracting and playing external site videos via Sonic Wave Server.
+//  Loading view for extracting and playing external site videos via SneakPeak Server.
 //
 
 import SwiftUI
 
 /// View for extracting and playing videos from external sites (non-YouTube/PeerTube).
-/// Uses Sonic Wave Server's yt-dlp integration to extract video information.
+/// Uses SneakPeak Server's yt-dlp integration to extract video information.
 struct ExternalVideoView: View {
     @Environment(\.appEnvironment) private var appEnvironment
     @Environment(\.dismiss) private var dismiss
@@ -61,7 +61,7 @@ struct ExternalVideoView: View {
         errorMessage = nil
 
         // A file mpv can play as-is (debrid/CDN download links with an opaque
-        // path) needs no extraction and no Sonic Wave Server.
+        // path) needs no extraction and no SneakPeak Server.
         if let probe = await DirectMediaProbe.probe(url) {
             let video = DirectMediaHelper.createVideo(from: url, probe: probe)
             let stream = DirectMediaHelper.createStream(from: url, probe: probe)
@@ -72,7 +72,7 @@ struct ExternalVideoView: View {
             return
         }
 
-        // Find a Sonic Wave Server instance
+        // Find a SneakPeak Server instance
         guard let instance = appEnvironment.instancesManager.yatteeServerInstance else {
             errorMessage = String(localized: "externalVideo.noYatteeServer")
             isLoading = false
@@ -123,7 +123,7 @@ struct ExternalVideoView: View {
 // MARK: - InstancesManager Extension
 
 extension InstancesManager {
-    /// Returns the first enabled Sonic Wave Server instance, if any.
+    /// Returns the first enabled SneakPeak Server instance, if any.
     var yatteeServerInstance: Instance? {
         instances.first { $0.type == .yatteeServer && $0.isEnabled }
     }

@@ -13,7 +13,7 @@ import Foundation
 @MainActor
 struct AccountsManagerTests {
     private func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
     }
 
     private func makeManager(
@@ -558,7 +558,7 @@ struct DataContextValidatorTests {
         let accounts = AccountsManager(
             identityScope: CredentialIdentityScope(fixedScope: "identity-A"),
             instancesManager: instances,
-            defaults: defaults ?? UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: defaults ?? UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
         let validator = DataContextValidator(
             accountsManager: accounts,
@@ -603,7 +603,7 @@ struct DataContextValidatorTests {
         instances.add(instance)
         defer { instances.remove(instance) }
 
-        let defaults = UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        let defaults = UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         let (accounts, validator) = makeValidator(instances: instances, defaults: defaults)
         let account = accounts.addAccount(instanceID: instance.id)
         accounts.setStatus(.signedIn, for: account.id)
@@ -678,7 +678,7 @@ struct DataContextValidatorTests {
         let accounts = AccountsManager(
             identityScope: scope,
             instancesManager: instances,
-            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
         let validator = DataContextValidator(
             accountsManager: accounts,
@@ -815,7 +815,7 @@ struct DataContextRepairTests {
         AccountsManager(
             identityScope: CredentialIdentityScope(fixedScope: "identity-A"),
             instancesManager: instances,
-            defaults: defaults ?? UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: defaults ?? UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
     }
 
@@ -1026,7 +1026,7 @@ struct DataContextRepairTests {
         instances.add(instance)
         defer { instances.remove(instance) }
 
-        let defaults = UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        let defaults = UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         let manager = makeManager(instances: instances, defaults: defaults)
         let selected = manager.addAccount(instanceID: instance.id)
         let sibling = manager.addAccount(instanceID: instance.id)
@@ -1072,7 +1072,7 @@ struct DataContextRepairTests {
         instances.add(instance)
         defer { instances.remove(instance) }
 
-        let defaults = UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        let defaults = UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         let manager = makeManager(instances: instances, defaults: defaults)
         let selected = manager.addAccount(instanceID: instance.id)
         let sibling = manager.addAccount(instanceID: instance.id)

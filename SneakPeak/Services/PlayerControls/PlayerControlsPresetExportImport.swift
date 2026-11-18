@@ -63,7 +63,7 @@ enum PlayerControlsPresetExportImport {
     }
 
     /// Generates an export filename for a preset.
-    /// Format: sonicwave-preset-{sanitized-name}-{date}.json
+    /// Format: sneakpeak-preset-{sanitized-name}-{date}.json
     /// - Parameter preset: The preset to generate a filename for.
     /// - Returns: A filename string.
     static func generateExportFilename(for preset: LayoutPreset) -> String {
@@ -79,7 +79,7 @@ enum PlayerControlsPresetExportImport {
             .joined()
             .prefix(20)
 
-        return "sonicwave-preset-\(sanitizedName)-\(dateString).json"
+        return "sneakpeak-preset-\(sanitizedName)-\(dateString).json"
     }
 
     // MARK: - Import

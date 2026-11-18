@@ -1,11 +1,11 @@
-# Sonic Wave — privacy-focused video player for iOS, tvOS and macOS
+# SneakPeak — privacy-focused video player for iOS, tvOS and macOS
 
 <div align="center">
 
 [![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20iPadOS%20%7C%20macOS%20%7C%20tvOS-black?logo=apple)](https://github.com/alzimerahmed/SneakPeak)
 [![Swift](https://img.shields.io/badge/Swift%206-SwiftUI-orange?logo=swift)](https://www.swift.org)
 [![CI](https://github.com/alzimerahmed/SneakPeak/actions/workflows/ci.yml/badge.svg)](https://github.com/alzimerahmed/SneakPeak/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/alzimerahmed/SonicWave?include_prereleases)](https://github.com/alzimerahmed/SneakPeak/releases)
+[![Release](https://img.shields.io/github/v/release/alzimerahmed/SneakPeak?include_prereleases)](https://github.com/alzimerahmed/SneakPeak/releases)
 [![AGPL v3](https://shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
 *Watch from your own sources — Invidious, Piped, PeerTube, self-hosted servers, SMB, WebDAV and local files — without an account.*
@@ -31,12 +31,12 @@
 * Downloads for offline video and audio
 * JSON export/import of all user data (subscriptions, history, bookmarks, playlists, settings)
 * Thumbnail disk cache for fast SMB/WebDAV browsing
-* Automation via the `sonicwave://` URL scheme, x-callback-url, Shortcuts and Siri
+* Automation via the `sneakpeak://` URL scheme, x-callback-url, Shortcuts and Siri
 * tvOS Top Shelf integration and share extension
 
 ## Releases
 
-Download signed-off, CI-built artifacts from the [Releases page](https://github.com/alzimerahmed/SneakPeak/releases). Every release is built and tested by GitHub Actions on a macOS runner — see `.github/workflows/release.yml`.
+Download CI-built artifacts from the [Releases page](https://github.com/alzimerahmed/SneakPeak/releases). Every release is built and tested by GitHub Actions on a macOS runner — see `.github/workflows/release.yml`.
 
 ## Building
 
@@ -44,7 +44,7 @@ Requires Xcode 26 or newer on macOS (the source uses iOS 26 APIs).
 
 ```bash
 git clone https://github.com/alzimerahmed/SneakPeak.git
-open SonicWave.xcodeproj
+open SneakPeak.xcodeproj
 # select the SneakPeak scheme and run
 ```
 
@@ -56,6 +56,6 @@ Fork the repository, create a branch, and open a pull request against `main`. Co
 
 ## License
 
-Sonic Wave is a fork of [Yattee](https://github.com/yattee/yattee) and is shared under the [AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html) license, like upstream. Upstream copyright and attribution are preserved.
+SneakPeak is a fork of [Yattee](https://github.com/yattee/yattee) and is shared under the [AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html) license, like upstream. Upstream copyright and attribution are preserved.
 
-© Alzimer Ahmed and Sonic Wave contributors; © Yattee contributors for upstream code.
+© Alzimer Ahmed and SneakPeak contributors; © Yattee contributors for upstream code.

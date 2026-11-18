@@ -2,7 +2,7 @@
 //  YatteeServerFeedChunkingTests.swift
 //  SneakPeakTests
 //
-//  Tests for chunking and merging of stateless feed requests against Sonic Wave Server,
+//  Tests for chunking and merging of stateless feed requests against SneakPeak Server,
 //  which rejects more than 500 channels per request.
 //
 
@@ -10,7 +10,7 @@ import Testing
 import Foundation
 @testable import SneakPeak
 
-@Suite("Sonic Wave Server Feed Chunking Tests")
+@Suite("SneakPeak Server Feed Chunking Tests")
 struct YatteeServerFeedChunkingTests {
 
     private func video(id: String, published: Int64?) -> ServerFeedVideo {

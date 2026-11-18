@@ -17,7 +17,7 @@ struct AccountSyncTests {
     // MARK: - Fixtures
 
     private static func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
     }
 
     private static func makeMapper() -> CloudKitRecordMapper {

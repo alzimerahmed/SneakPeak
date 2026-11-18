@@ -61,7 +61,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
         }
 
         // Extract expected content length from response headers
-        // Check both Content-Length and X-Expected-Content-Length (used by Sonic Wave Server)
+        // Check both Content-Length and X-Expected-Content-Length (used by SneakPeak Server)
         var expectedBytes: Int64 = 0
         if let httpResponse = downloadTask.response as? HTTPURLResponse {
             let statusCode = httpResponse.statusCode
@@ -88,7 +88,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
             }
 
             // Extract expected size from headers
-            // X-Expected-Content-Length is used by Sonic Wave Server when Content-Length is unavailable
+            // X-Expected-Content-Length is used by SneakPeak Server when Content-Length is unavailable
             if let contentLength = httpResponse.value(forHTTPHeaderField: "Content-Length"),
                let size = Int64(contentLength), size > 0 {
                 expectedBytes = size

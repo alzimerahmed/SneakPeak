@@ -75,7 +75,7 @@ enum URLShortenerResolver {
         request.httpMethod = method
         // A plain browser-ish UA avoids bot-blocking on a couple of services.
         request.setValue(
-            "Mozilla/5.0 (compatible; Sonic Wave URL resolver)",
+            "Mozilla/5.0 (compatible; SneakPeak URL resolver)",
             forHTTPHeaderField: "User-Agent"
         )
 

@@ -386,11 +386,11 @@ struct PeerTubeAPIParsingTests {
 @MainActor
 struct InstanceDetectorParsingTests {
 
-    @Test("Parse Sonic Wave Server info response")
+    @Test("Parse SneakPeak Server info response")
     func parseYatteeServerInfo() throws {
         let json = """
         {
-            "name": "Sonic Wave Server",
+            "name": "SneakPeak Server",
             "version": "1.0.0",
             "description": "A self-hosted video API server"
         }
@@ -398,7 +398,7 @@ struct InstanceDetectorParsingTests {
 
         let decoded = try JSONDecoder().decode(InstanceDetectorModels.YatteeServerInfo.self, from: json)
 
-        #expect(decoded.name == "Sonic Wave Server")
+        #expect(decoded.name == "SneakPeak Server")
         #expect(decoded.version == "1.0.0")
         #expect(decoded.description == "A self-hosted video API server")
     }
@@ -455,17 +455,13 @@ struct InstanceDetectorParsingTests {
         #expect(decoded.s3Enabled == true)
     }
 
-    @Test("Detection logic - Sonic Wave Server identification")
+    @Test("Detection logic - SneakPeak Server identification")
     func yatteeServerIdentification() {
-        // Name contains "sonicwave" (case insensitive); legacy "sneakpeak" accepted too
-        let sonicWaveServer = "Sonic Wave Server"
-        #expect(sonicWaveServer.lowercased().contains("sonic wave") == true)
-
-        let legacyServer = "SneakPeak Server"
-        #expect(legacyServer.lowercased().contains("sneakpeak") == true)
+        // Name contains "sneakpeak" (case insensitive)
+        let yatteeServer = "SneakPeak Server"
+        #expect(yatteeServer.lowercased().contains("sneakpeak") == true)
 
         let otherServer = "Some Other Server"
-        #expect(otherServer.lowercased().contains("sonicwave") == false)
         #expect(otherServer.lowercased().contains("sneakpeak") == false)
     }
 
@@ -725,7 +721,7 @@ struct ContentServiceRoutingTests {
         #expect(instance.isPeerTubeInstance == true)
     }
 
-    @Test("Sonic Wave Server instance routes correctly")
+    @Test("SneakPeak Server instance routes correctly")
     func yatteeServerRouting() {
         let instance = Instance(type: .yatteeServer, url: URL(string: "https://ys.example.com")!)
         #expect(instance.type == .yatteeServer)

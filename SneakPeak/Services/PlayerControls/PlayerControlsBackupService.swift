@@ -14,8 +14,8 @@ actor PlayerControlsBackupService {
     /// URL for the backup file in Application Support.
     private var backupFileURL: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let sonicwaveDir = appSupport.appendingPathComponent("SonicWave", isDirectory: true)
-        return sonicwaveDir.appendingPathComponent("PlayerControlsBackup.json")
+        let sneakpeakDir = appSupport.appendingPathComponent("SneakPeak", isDirectory: true)
+        return sneakpeakDir.appendingPathComponent("PlayerControlsBackup.json")
     }
 
     private let fileManager = FileManager.default

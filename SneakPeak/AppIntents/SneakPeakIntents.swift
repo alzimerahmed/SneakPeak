@@ -3,7 +3,7 @@
 //  SneakPeak
 //
 //  Shortcuts and Siri actions. Each runs the same `LinkAction` as the matching
-//  sonicwave:// link, without the confirmation sheet: the person built the
+//  sneakpeak:// link, without the confirmation sheet: the person built the
 //  shortcut, so no web page can trigger it behind their back.
 //
 //  Intent type names, AppEnum raw values and App Shortcut phrases are stored
@@ -16,7 +16,7 @@ import Foundation
 // MARK: - Running Actions
 
 /// A failure Shortcuts and Siri show with its own message.
-enum SonicWaveIntentError: Error, CustomLocalizedStringResourceConvertible {
+enum SneakPeakIntentError: Error, CustomLocalizedStringResourceConvertible {
     case failed(String)
     case unsupportedLink
 
@@ -25,7 +25,7 @@ enum SonicWaveIntentError: Error, CustomLocalizedStringResourceConvertible {
         case .failed(let message):
             return "\(message)"
         case .unsupportedLink:
-            return "Sonic Wave can only open web links."
+            return "SneakPeak can only open web links."
         }
     }
 }
@@ -39,15 +39,15 @@ extension LinkAction {
         case .success(let values):
             return values
         case .failure(_, let message):
-            throw SonicWaveIntentError.failed(message)
+            throw SneakPeakIntentError.failed(message)
         case .cancelled:
-            throw SonicWaveIntentError.failed(String(localized: "linkAction.error.title", defaultValue: "Couldn't complete the link"))
+            throw SneakPeakIntentError.failed(String(localized: "linkAction.error.title", defaultValue: "Couldn't complete the link"))
         }
     }
 }
 
 private func checkedLink(_ url: URL) throws -> URL {
-    guard LinkActionParser.isAllowedTarget(url) else { throw SonicWaveIntentError.unsupportedLink }
+    guard LinkActionParser.isAllowedTarget(url) else { throw SneakPeakIntentError.unsupportedLink }
     return url
 }
 
@@ -55,7 +55,7 @@ private func checkedLink(_ url: URL) throws -> URL {
 
 struct PlayVideoIntent: AppIntent {
     static let title: LocalizedStringResource = "Play Video"
-    static let description = IntentDescription("Plays a YouTube, PeerTube or direct media link in Sonic Wave.")
+    static let description = IntentDescription("Plays a YouTube, PeerTube or direct media link in SneakPeak.")
     static let openAppWhenRun = true
 
     @Parameter(title: "Link")
@@ -91,7 +91,7 @@ enum QueuePosition: String, AppEnum {
 
 struct AddToQueueIntent: AppIntent {
     static let title: LocalizedStringResource = "Add Video to Queue"
-    static let description = IntentDescription("Adds a video to Sonic Wave's queue, to play next or at the end.")
+    static let description = IntentDescription("Adds a video to SneakPeak's queue, to play next or at the end.")
 
     @Parameter(title: "Link")
     var link: URL
@@ -114,7 +114,7 @@ struct AddToQueueIntent: AppIntent {
 #if !os(tvOS)
 struct DownloadVideoIntent: AppIntent {
     static let title: LocalizedStringResource = "Download Video"
-    static let description = IntentDescription("Downloads a video in Sonic Wave at your preferred download quality.")
+    static let description = IntentDescription("Downloads a video in SneakPeak at your preferred download quality.")
     // The quality picker may need to show
     static let openAppWhenRun = true
 
@@ -134,7 +134,7 @@ struct DownloadVideoIntent: AppIntent {
 
 struct BookmarkVideoIntent: AppIntent {
     static let title: LocalizedStringResource = "Bookmark Video"
-    static let description = IntentDescription("Adds a video to your Sonic Wave bookmarks.")
+    static let description = IntentDescription("Adds a video to your SneakPeak bookmarks.")
 
     @Parameter(title: "Link")
     var link: URL
@@ -153,7 +153,7 @@ struct BookmarkVideoIntent: AppIntent {
 
 struct SubscribeToChannelIntent: AppIntent {
     static let title: LocalizedStringResource = "Subscribe to Channel"
-    static let description = IntentDescription("Subscribes to a channel from its link, in the account you're using in Sonic Wave.")
+    static let description = IntentDescription("Subscribes to a channel from its link, in the account you're using in SneakPeak.")
 
     @Parameter(title: "Channel Link")
     var link: URL
@@ -170,7 +170,7 @@ struct SubscribeToChannelIntent: AppIntent {
 
 struct UnsubscribeFromChannelIntent: AppIntent {
     static let title: LocalizedStringResource = "Unsubscribe from Channel"
-    static let description = IntentDescription("Unsubscribes from a channel, in the account you're using in Sonic Wave.")
+    static let description = IntentDescription("Unsubscribes from a channel, in the account you're using in SneakPeak.")
 
     @Parameter(title: "Channel Link")
     var link: URL
@@ -197,7 +197,7 @@ enum PlayerControlCommand: String, AppEnum {
 
     static let typeDisplayRepresentation: TypeDisplayRepresentation = "Player Command"
     static let caseDisplayRepresentations: [PlayerControlCommand: DisplayRepresentation] = [
-        // Synonyms are what Siri also accepts in "{command} in Sonic Wave"
+        // Synonyms are what Siri also accepts in "{command} in SneakPeak"
         .play: DisplayRepresentation(title: "Resume", synonyms: ["Play", "Continue", "Unpause"]),
         .pause: DisplayRepresentation(title: "Pause", synonyms: ["Stop"]),
         .toggle: DisplayRepresentation(title: "Play/Pause", synonyms: ["Play or Pause", "Toggle Playback"]),
@@ -220,13 +220,13 @@ enum PlayerControlCommand: String, AppEnum {
 
 struct ControlPlayerIntent: AppIntent {
     static let title: LocalizedStringResource = "Control Player"
-    static let description = IntentDescription("Resumes, pauses, skips or closes what's playing in Sonic Wave.")
+    static let description = IntentDescription("Resumes, pauses, skips or closes what's playing in SneakPeak.")
 
     @Parameter(title: "Command", default: .toggle)
     var command: PlayerControlCommand
 
     static var parameterSummary: some ParameterSummary {
-        Summary("\(\.$command) in Sonic Wave")
+        Summary("\(\.$command) in SneakPeak")
     }
 
     func perform() async throws -> some IntentResult {
@@ -250,7 +250,7 @@ enum SeekMode: String, AppEnum {
 
 struct SeekIntent: AppIntent {
     static let title: LocalizedStringResource = "Seek"
-    static let description = IntentDescription("Jumps to a time in what's playing in Sonic Wave, or forward or back by some seconds.")
+    static let description = IntentDescription("Jumps to a time in what's playing in SneakPeak, or forward or back by some seconds.")
 
     @Parameter(title: "Mode", default: .forward)
     var mode: SeekMode
@@ -302,7 +302,7 @@ enum PlaybackSpeed: String, AppEnum {
 
 struct SetPlaybackSpeedIntent: AppIntent {
     static let title: LocalizedStringResource = "Set Playback Speed"
-    static let description = IntentDescription("Changes the speed of what's playing in Sonic Wave.")
+    static let description = IntentDescription("Changes the speed of what's playing in SneakPeak.")
 
     @Parameter(title: "Speed", default: .x1)
     var speed: PlaybackSpeed
@@ -319,12 +319,12 @@ struct SetPlaybackSpeedIntent: AppIntent {
 
 struct GetNowPlayingIntent: AppIntent {
     static let title: LocalizedStringResource = "Get Now Playing"
-    static let description = IntentDescription("Returns the title of what's playing in Sonic Wave, or nothing when the player is closed.")
+    static let description = IntentDescription("Returns the title of what's playing in SneakPeak, or nothing when the player is closed.")
 
     func perform() async throws -> some ReturnsValue<String> & ProvidesDialog {
         let values = try await LinkAction.player(.state).performFromIntent()
         guard let title = values["title"] else {
-            return .result(value: "", dialog: "Nothing is playing in Sonic Wave.")
+            return .result(value: "", dialog: "Nothing is playing in SneakPeak.")
         }
         return .result(value: title, dialog: "\(title)")
     }
@@ -332,7 +332,7 @@ struct GetNowPlayingIntent: AppIntent {
 
 // MARK: - Navigation
 
-enum SonicWaveSection: String, AppEnum {
+enum SneakPeakSection: String, AppEnum {
     case home
     case subscriptions
     case bookmarks
@@ -343,7 +343,7 @@ enum SonicWaveSection: String, AppEnum {
     case settings
 
     static let typeDisplayRepresentation: TypeDisplayRepresentation = "Section"
-    static let caseDisplayRepresentations: [SonicWaveSection: DisplayRepresentation] = [
+    static let caseDisplayRepresentations: [SneakPeakSection: DisplayRepresentation] = [
         .home: "Home",
         .subscriptions: DisplayRepresentation(title: "Subscriptions", synonyms: ["Feed", "Subscription Feed"]),
         .bookmarks: DisplayRepresentation(title: "Bookmarks", synonyms: ["Saved Videos"]),
@@ -370,11 +370,11 @@ enum SonicWaveSection: String, AppEnum {
 
 struct OpenSectionIntent: AppIntent {
     static let title: LocalizedStringResource = "Open Section"
-    static let description = IntentDescription("Opens a section of Sonic Wave.")
+    static let description = IntentDescription("Opens a section of SneakPeak.")
     static let openAppWhenRun = true
 
     @Parameter(title: "Section", default: .subscriptions)
-    var section: SonicWaveSection
+    var section: SneakPeakSection
 
     static var parameterSummary: some ParameterSummary {
         Summary("Open \(\.$section)")
@@ -396,14 +396,14 @@ struct OpenSectionIntent: AppIntent {
 
 struct SearchVideosIntent: AppIntent {
     static let title: LocalizedStringResource = "Search Videos"
-    static let description = IntentDescription("Searches for videos in Sonic Wave.")
+    static let description = IntentDescription("Searches for videos in SneakPeak.")
     static let openAppWhenRun = true
 
     @Parameter(title: "Search For")
     var query: String
 
     static var parameterSummary: some ParameterSummary {
-        Summary("Search Sonic Wave for \(\.$query)")
+        Summary("Search SneakPeak for \(\.$query)")
     }
 
     @MainActor
@@ -417,7 +417,7 @@ struct SearchVideosIntent: AppIntent {
 
 // MARK: - Siri
 
-struct SonicWaveShortcuts: AppShortcutsProvider {
+struct SneakPeakShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: ControlPlayerIntent(),

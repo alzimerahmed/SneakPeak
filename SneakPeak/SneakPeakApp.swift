@@ -1,5 +1,5 @@
 //
-//  SonicWaveApp.swift
+//  SneakPeakApp.swift
 //  SneakPeak
 //
 //  Main application entry point.
@@ -23,7 +23,7 @@ extension URL: @retroactive Identifiable {
 }
 
 @main
-struct SonicWaveApp: App {
+struct SneakPeakApp: App {
     #if os(iOS)
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #elseif os(macOS)
@@ -526,7 +526,7 @@ struct SonicWaveApp: App {
     /// Handle incoming deep link URLs.
     private func handleDeepLink(_ url: URL) {
         let router = URLRouter()
-        // Resolve sonicwave://open?url=… wrappers first so timestamp parsing and
+        // Resolve sneakpeak://open?url=… wrappers first so timestamp parsing and
         // sheet prefill below see the real link, not the wrapper.
         let url = router.unwrapped(url)
         guard let destination = router.route(url) else { return }
@@ -787,7 +787,7 @@ struct SonicWaveApp: App {
         }
 
         guard let instance = appEnvironment.instancesManager.yatteeServerInstance else {
-            // No Sonic Wave Server - fall back to open
+            // No SneakPeak Server - fall back to open
             appEnvironment.navigationCoordinator.navigate(to: .externalVideo(url))
             return
         }
@@ -912,7 +912,7 @@ struct SonicWaveApp: App {
         // Skip known non-video sites
         if isExcludedHost(url) { return }
 
-        // Only prompt if Sonic Wave Server is configured
+        // Only prompt if SneakPeak Server is configured
         guard appEnvironment.instancesManager.yatteeServerInstance != nil else { return }
 
         detectedClipboardURL = url
@@ -936,7 +936,7 @@ struct SonicWaveApp: App {
         // Skip known non-video sites
         if isExcludedHost(url) { return }
 
-        // Only prompt if Sonic Wave Server is configured
+        // Only prompt if SneakPeak Server is configured
         guard appEnvironment.instancesManager.yatteeServerInstance != nil else { return }
 
         detectedClipboardURL = url

@@ -4,7 +4,7 @@
 //
 //  Sheet for entering links: Load shows a single link's video, playlist or
 //  channel screen; Play and Download act on video links directly (YouTube,
-//  PeerTube, direct media, or anything Sonic Wave Server's yt-dlp extracts).
+//  PeerTube, direct media, or anything SneakPeak Server's yt-dlp extracts).
 //  Supports multiple URLs (one per line) with batch processing.
 //
 
@@ -586,7 +586,7 @@ struct OpenLinkFormView: View {
         }
     }
 
-    // MARK: - Sonic Wave Server Warning Section
+    // MARK: - SneakPeak Server Warning Section
 
     @ViewBuilder
     private var yatteeServerWarningSection: some View {

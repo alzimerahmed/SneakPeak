@@ -118,7 +118,7 @@ private struct DefaultOptionsSection: View {
         options.append(("target-trc", "srgb"))
         options.append(("video-sync", "display-vdrop"))
         options.append(("framedrop", "decoder+vo"))
-        options.append(("audio-client-name", "Sonic Wave"))
+        options.append(("audio-client-name", "SneakPeak"))
 
         #if os(macOS)
         options.append(("ao", "avfoundation,coreaudio"))

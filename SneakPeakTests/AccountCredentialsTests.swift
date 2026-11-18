@@ -16,7 +16,7 @@ struct AccountCredentialScopingTests {
     /// A service name unique per test run so parallel runs and leftovers from a
     /// crashed run can never collide in the real Keychain.
     private func makeService() -> String {
-        "com.sonicwave.tests.\(UUID().uuidString)"
+        "com.sneakpeak.tests.\(UUID().uuidString)"
     }
 
     private func makeCredentials(
@@ -34,7 +34,7 @@ struct AccountCredentialScopingTests {
 
     private func makeMarkers() -> CredentialAdoptionMarkerStore {
         CredentialAdoptionMarkerStore(
-            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
     }
 
@@ -136,12 +136,12 @@ struct AccountCredentialScopingTests {
 @MainActor
 struct LegacyCredentialAdoptionTests {
     private func makeService() -> String {
-        "com.sonicwave.tests.\(UUID().uuidString)"
+        "com.sneakpeak.tests.\(UUID().uuidString)"
     }
 
     private func makeMarkers() -> CredentialAdoptionMarkerStore {
         CredentialAdoptionMarkerStore(
-            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
     }
 
@@ -615,12 +615,12 @@ struct LegacyCredentialAdoptionTests {
 @MainActor
 struct CredentialReplacementTests {
     private func makeService() -> String {
-        "com.sonicwave.tests.\(UUID().uuidString)"
+        "com.sneakpeak.tests.\(UUID().uuidString)"
     }
 
     private func makeMarkers() -> CredentialAdoptionMarkerStore {
         CredentialAdoptionMarkerStore(
-            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         )
     }
 
@@ -808,7 +808,7 @@ struct KeychainRefreshStatusPreservationTests {
 @MainActor
 struct CredentialIdentityScopeTests {
     private func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
     }
 
     /// Mutable identity + resolver so a switch can be staged mid-resolution.

@@ -146,7 +146,7 @@ struct MacOSPlayerControlsView: View {
         isFullscreen || hostWindow?.styleMask.contains(.fullScreen) == true
     }
 
-    /// Sonic Wave Server URL used by `ChannelAvatarView` for avatar fallback.
+    /// SneakPeak Server URL used by `ChannelAvatarView` for avatar fallback.
     private var yatteeServerURL: URL? {
         appEnvironment?.instancesManager.yatteeServerInstances.first { $0.isEnabled }?.url
     }

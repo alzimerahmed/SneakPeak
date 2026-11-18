@@ -697,9 +697,9 @@ private final class Harness {
     ///   importer is given, for the failures a live Keychain cannot be made to
     ///   produce on demand.
     init(startingScope: String?, credentialStore substitute: (any AccountCredentialsManager)? = nil) {
-        let defaults = UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
+        let defaults = UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
         // Unique per run so a crashed run's leftovers can never be read back.
-        let service = "com.sonicwave.tests.\(UUID().uuidString)"
+        let service = "com.sneakpeak.tests.\(UUID().uuidString)"
 
         self.defaults = defaults
         self.service = service

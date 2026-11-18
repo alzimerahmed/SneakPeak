@@ -78,7 +78,7 @@ actor InstanceDetector {
         let extraHeaders: [String: String]? = basicAuthHeader.map { ["Authorization": $0] }
 
         // A 401 from a single probe is *not* enough to conclude that credentials are
-        // invalid. Some probe paths (e.g. Sonic Wave Server's `/info`) trigger an HTTP
+        // invalid. Some probe paths (e.g. SneakPeak Server's `/info`) trigger an HTTP
         // redirect on Invidious, and iOS URLSession strips the Authorization header
         // when following redirects, so the redirected request 401s even when the
         // credentials are valid. We instead consider credentials bad only if EVERY
@@ -86,7 +86,7 @@ actor InstanceDetector {
         var sawUnauthorized = false
 
         // Try each detection method in order of specificity.
-        // Check Sonic Wave Server first as it's most specific.
+        // Check SneakPeak Server first as it's most specific.
         do {
             if let result = try await detectYatteeServerWithError(url: url, extraHeaders: extraHeaders) {
                 return .success(result)
@@ -163,7 +163,7 @@ actor InstanceDetector {
 
     // MARK: - Detection Methods
 
-    /// Detects if the instance is a Sonic Wave Server with detailed error reporting.
+    /// Detects if the instance is a SneakPeak Server with detailed error reporting.
     /// Throws `APIError.unauthorized` if the probe receives a 401, so the caller can prompt for credentials.
     private func detectYatteeServerWithError(
         url: URL,
@@ -181,9 +181,9 @@ actor InstanceDetector {
             let response = try JSONDecoder().decode(InstanceDetectorModels.YatteeServerInfo.self, from: rawData)
             LoggingService.shared.debug("[InstanceDetector] Parsed YatteeServerInfo: name=\(response.name ?? "nil")", category: .api)
 
-            // Sonic Wave Server returns a name containing "sonic wave" or "sonicwave"
-            if response.name?.lowercased().contains("sonicwave") == true || response.name?.lowercased().contains("sonic wave") == true || response.name?.lowercased().contains("sneakpeak") == true {
-                // Auth is always required for Sonic Wave Server
+            // SneakPeak Server returns name containing "sneakpeak"
+            if response.name?.lowercased().contains("sneakpeak") == true {
+                // Auth is always required for SneakPeak Server
                 let result = InstanceDetectionResult(
                     type: .yatteeServer,
                     requiresAuth: true

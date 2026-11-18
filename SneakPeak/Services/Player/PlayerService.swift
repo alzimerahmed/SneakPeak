@@ -1611,7 +1611,7 @@ final class PlayerService {
         // Same hash-based directory scheme as SMBClient's subtitle pre-download:
         // media-source video IDs contain slashes, so they can't be path components.
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sonicwave-subtitles", isDirectory: true)
+            .appendingPathComponent("sneakpeak-subtitles", isDirectory: true)
             .appendingPathComponent(String(video.id.id.hashValue), isDirectory: true)
         let destinationURL = tempDir.appendingPathComponent("picked-\(fileName)")
 
@@ -2000,7 +2000,7 @@ final class PlayerService {
 
     // MARK: - Private Methods
 
-    /// Checks if the stream URL goes through Sonic Wave Server's fast download endpoint.
+    /// Checks if the stream URL goes through SneakPeak Server's fast download endpoint.
     /// Fast endpoint streams don't have Content-Length, so MPV can't determine accurate duration.
     /// In this case, we should use the API-provided duration instead.
     private func isFastEndpointStream(_ stream: Stream?) -> Bool {
@@ -3013,7 +3013,7 @@ final class PlayerService {
     /// - Parameter videoID: The video ID whose subtitles to clean up.
     private func cleanupTempSubtitles(for videoID: String) {
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sonicwave-subtitles", isDirectory: true)
+            .appendingPathComponent("sneakpeak-subtitles", isDirectory: true)
             .appendingPathComponent(videoID, isDirectory: true)
 
         do {
@@ -3033,7 +3033,7 @@ final class PlayerService {
     /// Called when stopping playback entirely.
     private func cleanupAllTempSubtitles() {
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sonicwave-subtitles", isDirectory: true)
+            .appendingPathComponent("sneakpeak-subtitles", isDirectory: true)
 
         do {
             if FileManager.default.fileExists(atPath: tempDir.path) {

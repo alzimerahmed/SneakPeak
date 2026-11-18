@@ -85,7 +85,7 @@ final class DataContextValidator {
         switch context {
         case .local:
             // Local data is always present. The feed additionally needs a
-            // Sonic Wave Server, but that is a feed-level concern, not a reason to
+            // SneakPeak Server, but that is a feed-level concern, not a reason to
             // reject the context.
             return .valid
 

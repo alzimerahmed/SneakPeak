@@ -138,15 +138,15 @@ private extension TopShelfSnapshotWriter {
         )
     }
 
-    /// Builds a `sonicwave://video/...` deep link from a Video's ID.
+    /// Builds a `sneakpeak://video/...` deep link from a Video's ID.
     /// Returns nil for source types not round-trippable via the URL scheme (e.g. extracted).
     static func deepLinkURL(for videoID: VideoID) -> String? {
         switch videoID.source {
         case .global:
-            return "sonicwave://video/\(videoID.videoID)"
+            return "sneakpeak://video/\(videoID.videoID)"
         case .federated(_, let instance):
             var components = URLComponents()
-            components.scheme = "sonicwave"
+            components.scheme = "sneakpeak"
             components.host = "video"
             components.path = "/\(videoID.videoID)"
             components.queryItems = [
@@ -169,7 +169,7 @@ private extension TopShelfSnapshotWriter {
         switch sourceRawValue {
         case "global":
             // Only YouTube survives the round-trip; other global providers fall through.
-            return "sonicwave://video/\(videoID)"
+            return "sneakpeak://video/\(videoID)"
         case "federated":
             guard globalProvider == "peertube",
                   let urlStr = instanceURLString,
@@ -177,7 +177,7 @@ private extension TopShelfSnapshotWriter {
                 return nil
             }
             var components = URLComponents()
-            components.scheme = "sonicwave"
+            components.scheme = "sneakpeak"
             components.host = "video"
             components.path = "/\(videoID)"
             components.queryItems = [

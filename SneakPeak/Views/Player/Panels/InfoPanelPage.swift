@@ -70,7 +70,7 @@ struct InfoPanelPage: View {
     private var playerState: PlayerState? { playerService?.state }
     private var videoDetailsState: VideoDetailsLoadState { playerState?.videoDetailsState ?? .idle }
 
-    /// Returns the first enabled Sonic Wave Server instance URL, if any.
+    /// Returns the first enabled SneakPeak Server instance URL, if any.
     private var yatteeServerURL: URL? {
         appEnvironment?.instancesManager.yatteeServerInstances.first { $0.isEnabled }?.url
     }

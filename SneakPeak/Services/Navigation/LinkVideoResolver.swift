@@ -14,7 +14,7 @@ struct LinkVideoResolver {
 
     /// Resolves a link to a playable video with its streams, captions and
     /// storyboards: YouTube/PeerTube through the matching source, direct media
-    /// as-is, anything else through Sonic Wave Server's extraction.
+    /// as-is, anything else through SneakPeak Server's extraction.
     func resolve(_ url: URL) async throws -> (Video, [Stream], [Caption], [Storyboard]) {
         let router = URLRouter()
         let destination = router.route(url)
@@ -53,7 +53,7 @@ struct LinkVideoResolver {
                 let stream = DirectMediaHelper.createStream(from: url, probe: probe)
                 return (video, [stream], [], [])
             }
-            // External URL - use Sonic Wave Server (doesn't support storyboards).
+            // External URL - use SneakPeak Server (doesn't support storyboards).
             // Without one, a YouTube link SneakPeak can't parse (clips, posts) is
             // simply unsupported - asking for a server would mislead.
             guard let instance = appEnvironment.instancesManager.yatteeServerInstance else {

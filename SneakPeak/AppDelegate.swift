@@ -17,7 +17,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // Open the SwiftData stores (TipKit's and the app's) here rather than in
-        // `SonicWaveApp.init()`, which also runs during prewarm launches that iOS
+        // `SneakPeakApp.init()`, which also runs during prewarm launches that iOS
         // suspends before `UIApplicationMain` (0xdead10cc if an SQLite lock is
         // held). The assertion keeps a background launch running until the
         // opens, including any WAL recovery, have finished and released locks.
@@ -42,7 +42,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 // sync) — but the log makes that launch identifiable.
                 + "assertion: \(storeTask != .invalid)"
         )
-        SonicWaveApp.configureTips()
+        SneakPeakApp.configureTips()
         AppEnvironment.shared.dataManager.openStore(trigger: "didFinishLaunching")
         if storeTask != .invalid {
             application.endBackgroundTask(storeTask)

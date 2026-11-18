@@ -51,9 +51,9 @@ jobs:
           APP=$(find ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Build/Products/Release -maxdepth 1 -name '*.app' | head -1)
           echo "APP=$APP"
           cd "$(dirname "$APP")"
-          zip -qry "SonicWave-${GITHUB_REF_NAME}-macOS.zip" "$(basename "$APP")"
+          zip -qry "SneakPeak-${GITHUB_REF_NAME}-macOS.zip" "$(basename "$APP")"
           mkdir -p "$GITHUB_WORKSPACE/artifacts"
-          cp "SonicWave-${GITHUB_REF_NAME}-macOS.zip" "$GITHUB_WORKSPACE/artifacts/"
+          cp "SneakPeak-${GITHUB_REF_NAME}-macOS.zip" "$GITHUB_WORKSPACE/artifacts/"
 
       - name: Create GitHub release and upload artifacts
         env:
@@ -61,6 +61,6 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" \
             --repo "$GITHUB_REPOSITORY" \
-            --title "Sonic Wave $GITHUB_REF_NAME" \
+            --title "SneakPeak $GITHUB_REF_NAME" \
             --generate-notes \
             artifacts/*
