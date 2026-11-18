@@ -182,7 +182,7 @@ actor InstanceDetector {
             LoggingService.shared.debug("[InstanceDetector] Parsed YatteeServerInfo: name=\(response.name ?? "nil")", category: .api)
 
             // Sonic Wave Server returns a name containing "sonic wave" or "sonicwave"
-            if response.name?.lowercased().contains("sonicwave") == true || response.name?.lowercased().contains("sneakpeak") == true {
+            if response.name?.lowercased().contains("sonicwave") == true || response.name?.lowercased().contains("sonic wave") == true || response.name?.lowercased().contains("sneakpeak") == true {
                 // Auth is always required for Sonic Wave Server
                 let result = InstanceDetectionResult(
                     type: .yatteeServer,
