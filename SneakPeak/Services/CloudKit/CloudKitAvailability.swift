@@ -38,7 +38,7 @@ enum CloudKitAvailability {
         guard let task = SecTaskCreateFromSelf(nil),
               let value = SecTaskCopyValuesForEntitlements(
                   task,
-                  ["com.apple.developer.icloud-container-identifiers" as CFString],
+                  ["com.apple.developer.icloud-container-identifiers"] as CFArray,
                   &error
               )
         else { return [] }
