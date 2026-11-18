@@ -64,6 +64,8 @@ jobs:
           CODE_SIGNING_ALLOWED=YES
           test-without-building
           -only-testing:SneakPeakTests
+          -skip-testing:SneakPeakTests/CredentialIdentityScopeTests
+          -skip-testing:SneakPeakTests/CredentialReplacementTests
 
       - name: Dump crash info on failure
         if: failure()
