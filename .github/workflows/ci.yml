@@ -45,6 +45,15 @@ jobs:
           CODE_SIGN_ENTITLEMENTS=
           build-for-testing
 
+      - name: Probe test-host launch (non-fatal diagnosis)
+        run: |
+          APP=$(ls -d ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Build/Products/Debug/SneakPeak.app 2>/dev/null | head -1)
+          echo "APP=$APP"
+          codesign -dv --verbose=2 "$APP" 2>&1 | head -12
+          "$APP/Contents/MacOS/SneakPeak" 2>&1 | head -40 &
+          sleep 8 && kill %1 2>/dev/null || true
+        continue-on-error: true
+
       - name: Test (without building)
         run: >
           xcodebuild -project SneakPeak.xcodeproj
