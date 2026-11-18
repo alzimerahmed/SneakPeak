@@ -457,11 +457,15 @@ struct InstanceDetectorParsingTests {
 
     @Test("Detection logic - Sonic Wave Server identification")
     func yatteeServerIdentification() {
-        // Name contains "sneakpeak" (case insensitive)
-        let yatteeServer = "Sonic Wave Server"
-        #expect(yatteeServer.lowercased().contains("sneakpeak") == true)
+        // Name contains "sonicwave" (case insensitive); legacy "sneakpeak" accepted too
+        let sonicWaveServer = "Sonic Wave Server"
+        #expect(sonicWaveServer.lowercased().contains("sonicwave") == true)
+
+        let legacyServer = "SneakPeak Server"
+        #expect(legacyServer.lowercased().contains("sneakpeak") == true)
 
         let otherServer = "Some Other Server"
+        #expect(otherServer.lowercased().contains("sonicwave") == false)
         #expect(otherServer.lowercased().contains("sneakpeak") == false)
     }
 
