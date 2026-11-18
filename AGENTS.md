@@ -28,7 +28,7 @@ SneakPeak = privacy-focused video player for **iOS + iPadOS + macOS + tvOS** (Sw
 ## Tech Stack & Conventions (do not fight it)
 
 - **Deployment targets:** iOS 18.0 / macOS 15.0 / tvOS 18.0 — newest APIs freely, no availability checks for older OSes.
-- **Swift 6 mode + strict concurrency** — `@MainActor`/Sendable are compiler-enforced, not convention.
+- **Swift 5 language mode + approachable concurrency** (`SWIFT_APPROACHABLE_CONCURRENCY=YES`) — write Sendable-correct code; Xcode 26 toolchain required (source uses iOS 26 APIs).
 - **Build configurations:** `Debug`, `Release` (App Store/TestFlight, **must stay Sparkle-free**), `Release-DeveloperID` (Sparkle auto-update, GitHub Releases + Homebrew cask). All Sparkle code wrapped in `#if SPARKLE`.
 - **Lint:** `periphery scan` (dead code) — config `.periphery.yml`.
 - **Localization:** `Localizable.xcstrings` exists; upstream used Weblate (`weblate-credits.json`).
@@ -39,10 +39,11 @@ SneakPeak = privacy-focused video player for **iOS + iPadOS + macOS + tvOS** (Sw
 
 ```bash
 # CI only — .github/workflows/ci.yml (push to main, PRs to main):
-#   macos runner (Xcode 16.x) → xcodebuild -resolvePackageDependencies
-#   → xcodebuild -project SneakPeak.xcodeproj -scheme SneakPeak -configuration Debug
-#       -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build-for-testing
+#   macos-26 runner, Xcode 26 (iOS 26 SDK required — source uses iOS 26 APIs)
+#   → xcodebuild -resolvePackageDependencies
+#   → build-for-testing (Debug, macOS destination, ad-hoc signed, no entitlements)
 #   → test-without-building -only-testing:SneakPeakTests
+#     (skips entitlement-dependent suites — see ci.yml for the -skip-testing list)
 ```
 
 **Remote-first verification (mandatory):** this workspace is **Windows — we do NOT build or test locally.** No Xcode here; local work is edit-only + static review. Push and let GitHub Actions verify — a CI green check counts as the gate.
