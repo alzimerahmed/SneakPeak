@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Security
 
 /// Sideloaded installs (AltStore, SideStore, Sideloadly, …) are re-signed by a
 /// team that cannot register `iCloud.com.alzimerahmed.SneakPeak` (container IDs are
@@ -20,11 +21,29 @@ enum CloudKitAvailability {
     /// correct entitlements and are treated as available.
     static let isAvailable: Bool = {
         guard let entitlements = embeddedProvisioningEntitlements() else {
-            return true
+            // No embedded profile: verify the task's actual signing
+            // entitlements instead of assuming they are present. Ad-hoc or
+            // unsigned builds (CI test hosts) carry none and would trap in
+            // CKContainer(identifier:) if we assumed availability.
+            return taskEntitledContainers().contains(AppIdentifiers.iCloudContainer)
         }
         let containers = entitlements["com.apple.developer.icloud-container-identifiers"] as? [String] ?? []
         return containers.contains(AppIdentifiers.iCloudContainer)
     }()
+
+    /// Reads the process's signing entitlements for the iCloud container
+    /// identifier list, independent of provisioning profiles.
+    private static func taskEntitledContainers() -> [String] {
+        var error: Unmanaged<CFError>?
+        guard let task = SecTaskCreateFromSelf(nil),
+              let value = SecTaskCopyValuesForEntitlements(
+                  task,
+                  ["com.apple.developer.icloud-container-identifiers" as CFString],
+                  &error
+              )
+        else { return [] }
+        return value["com.apple.developer.icloud-container-identifiers" as CFString] as? [String] ?? []
+    }
 
     /// Extracts the entitlements dictionary from the embedded provisioning
     /// profile — a CMS blob wrapping an XML property list.
