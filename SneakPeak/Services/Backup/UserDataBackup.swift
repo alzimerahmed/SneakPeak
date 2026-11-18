@@ -8,6 +8,7 @@
 //
 
 import Foundation
+import SwiftData
 
 // MARK: - JSON Value
 
@@ -31,7 +32,8 @@ enum JSONValue: Codable, Hashable, Sendable {
             // would also pass `as? Bool` for 0/1).
             if CFGetTypeID(number) == CFBooleanGetTypeID() {
                 self = .bool(number.boolValue)
-            } else if number.denominator == 1 {
+            } else if number.doubleValue.truncatingRemainder(dividingBy: 1) == 0,
+                      abs(number.doubleValue) <= Double(Int.max) {
                 self = .int(number.intValue)
             } else {
                 self = .double(number.doubleValue)
@@ -473,7 +475,7 @@ final class UserDataBackupService {
             ).recordNameSuffix
         }
 
-        let existingSubscriptionKeys = Set(
+        var existingSubscriptionKeys = Set(
             dataManager.subscriptions().map {
                 "\($0.channelID)|\(scopeSuffix($0.sourceRawValue, $0.providerName, $0.instanceURLString, nil))"
             }
@@ -508,7 +510,7 @@ final class UserDataBackupService {
             dataManager.save()
         }
 
-        let existingWatchKeys = Set(
+        var existingWatchKeys = Set(
             dataManager.allWatchEntries().map {
                 "\($0.videoID)|\(scopeSuffix($0.sourceRawValue, $0.globalProvider, $0.instanceURLString, $0.externalExtractor))"
             }
@@ -531,7 +533,7 @@ final class UserDataBackupService {
             TopShelfSnapshotWriter.writeContinueWatching(dataManager: dataManager)
         }
 
-        let existingBookmarkKeys = Set(
+        var existingBookmarkKeys = Set(
             dataManager.allBookmarks().map {
                 "\($0.videoID)|\(scopeSuffix($0.sourceRawValue, $0.globalProvider, $0.instanceURLString, $0.externalExtractor))"
             }
@@ -555,7 +557,7 @@ final class UserDataBackupService {
             TopShelfSnapshotWriter.writeBookmarks(dataManager: dataManager)
         }
 
-        let existingPlaylistIDs = Set(dataManager.playlists().map(\.id))
+        var existingPlaylistIDs = Set(dataManager.playlists().map(\.id))
         for export in backup.playlists {
             // Skip playlists that already exist (same id) so re-importing a
             // backup never duplicates playlists or their items.
