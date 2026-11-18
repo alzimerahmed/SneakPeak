@@ -178,10 +178,16 @@ final class RemoteControlCoordinator {
 
     // MARK: - Lifecycle
 
+    /// Effective incognito state: the global setting or a one-off incognito
+    /// playback session. Remote control must be invisible in both cases.
+    private var isEffectivelyIncognito: Bool {
+        settingsManager?.incognitoModeEnabled == true || playerService?.isIncognitoSession == true
+    }
+
     /// Start remote control services (discovery + hosting).
     /// Does nothing if incognito mode is enabled - remote control is completely disabled in incognito.
     private func start() {
-        let isIncognito = settingsManager?.incognitoModeEnabled ?? false
+        let isIncognito = isEffectivelyIncognito
         
         // Remote control is completely disabled in incognito mode
         if isIncognito {
@@ -231,11 +237,14 @@ final class RemoteControlCoordinator {
         incognitoObserverTask = Task { [weak self] in
             guard let settings = self?.settingsManager else { return }
             while !Task.isCancelled {
-                let wasIncognito = settings.incognitoModeEnabled
-                await observationChange { _ = settings.incognitoModeEnabled }
+                let wasIncognito = self?.isEffectivelyIncognito ?? false
+                await observationChange {
+                    _ = settings.incognitoModeEnabled
+                    _ = self?.playerService?.isIncognitoSession
+                }
                 guard let self, !Task.isCancelled else { break }
 
-                let isIncognito = settings.incognitoModeEnabled
+                let isIncognito = self.isEffectivelyIncognito
                 if isIncognito != wasIncognito {
                     self.handleIncognitoModeChanged(isIncognito: isIncognito)
                 }
@@ -260,7 +269,7 @@ final class RemoteControlCoordinator {
 
         switch phase {
         case .active:
-            let isIncognito = settingsManager?.incognitoModeEnabled ?? false
+            let isIncognito = isEffectivelyIncognito
             rcLog("LIFECYCLE", "App became active - refreshing services", details: "incognito=\(isIncognito)")
             if !isIncognito {
                 networkService.refreshServices()
@@ -270,7 +279,7 @@ final class RemoteControlCoordinator {
         case .background:
             #if os(iOS) || os(tvOS)
             let hideWhenBackgrounded = settingsManager?.remoteControlHideWhenBackgrounded ?? true
-            let isIncognito = settingsManager?.incognitoModeEnabled ?? false
+            let isIncognito = isEffectivelyIncognito
             // Only stop hosting if we were actually hosting (not incognito)
             if hideWhenBackgrounded && !isIncognito {
                 rcLog("LIFECYCLE", "App entering background - stopping hosting to hide from remote devices")
@@ -501,7 +510,7 @@ final class RemoteControlCoordinator {
             // State updates are responses, not control
         } else if case .requestState = message.command {
             // Don't respond to state requests in incognito mode - device should be invisible
-            let isIncognito = settingsManager?.incognitoModeEnabled ?? false
+            let isIncognito = isEffectivelyIncognito
             guard !isIncognito else {
                 rcLog("HANDLE", "[\(senderName)] Ignoring state request (incognito mode)")
                 return
@@ -985,7 +994,7 @@ final class RemoteControlCoordinator {
                 guard let self, !Task.isCancelled else { break }
 
                 // Don't broadcast state in incognito mode - device should be invisible
-                let isIncognito = self.settingsManager?.incognitoModeEnabled ?? false
+                let isIncognito = self.isEffectivelyIncognito
                 guard !isIncognito else { continue }
 
                 let state = self.currentRemoteState()

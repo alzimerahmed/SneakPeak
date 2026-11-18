@@ -65,6 +65,7 @@ final class HandoffManager {
 
     private var currentActivity: NSUserActivity?
     private weak var playerState: PlayerState?
+    private weak var playerService: PlayerService?
     private weak var settingsManager: SettingsManager?
 
     // MARK: - Initialization
@@ -73,6 +74,10 @@ final class HandoffManager {
 
     func setPlayerState(_ state: PlayerState) {
         self.playerState = state
+    }
+
+    func setPlayerService(_ service: PlayerService) {
+        self.playerService = service
     }
 
     func setSettingsManager(_ settings: SettingsManager) {
@@ -89,8 +94,9 @@ final class HandoffManager {
             return
         }
 
-        // Disable Handoff when incognito mode is active to preserve privacy
-        guard settingsManager?.incognitoModeEnabled != true else {
+        // Disable Handoff when incognito mode is active to preserve privacy —
+        // either the global setting or a one-off incognito playback session.
+        guard playerService?.isIncognito != true else {
             invalidateCurrentActivity()
             return
         }

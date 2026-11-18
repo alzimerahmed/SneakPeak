@@ -461,6 +461,7 @@ final class AppEnvironment {
         // Initialize Handoff Manager
         let handoff = HandoffManager()
         handoff.setPlayerState(player.state)
+        handoff.setPlayerService(player)
         handoff.setSettingsManager(settings)
         self.handoffManager = handoff
         self.navigationCoordinator.setHandoffManager(handoff)
