@@ -17,6 +17,7 @@ struct PrivacyCoreTests {
 
     // MARK: - G1: Local subscriptions without an account
 
+    @MainActor
     @Suite("Local Subscriptions")
     struct LocalSubscriptionTests {
 
@@ -70,6 +71,7 @@ struct PrivacyCoreTests {
 
     // MARK: - G1: Feed merge helper
 
+    @MainActor
     @Suite("Local Feed Merge")
     struct LocalFeedMergeTests {
 
@@ -140,6 +142,7 @@ struct PrivacyCoreTests {
 
     // MARK: - G2: Resume everywhere (file sources)
 
+    @MainActor
     @Suite("Resume Everywhere")
     struct ResumeEverywhereTests {
 
@@ -157,7 +160,7 @@ struct PrivacyCoreTests {
         @Test("File-source progress round trip")
         func fileSourceProgressRoundTrip() async throws {
             let manager = try DataManager(inMemory: true)
-            let video = mediaFileVideo("Movie.mp4")
+            let video = mediaFileVideo(name: "Movie.mp4")
 
             manager.updateWatchProgressLocal(for: video, seconds: 420, duration: 1_000)
 
@@ -173,7 +176,7 @@ struct PrivacyCoreTests {
             // on the same video ID string. Inserted directly — the progress
             // write path keys on the ID alone, so these represent entries
             // that arrived through different routes (e.g. sync).
-            let fileVideo = mediaFileVideo("Movie.mp4")
+            let fileVideo = mediaFileVideo(name: "Movie.mp4")
             let globalVideo = Video(
                 id: .global(fileVideo.id.videoID),
                 title: "Same ID, different scope",
@@ -206,7 +209,7 @@ struct PrivacyCoreTests {
         @Test("No progress returns nil for an unwatched video")
         func unwatchedReturnsNil() async throws {
             let manager = try DataManager(inMemory: true)
-            #expect(manager.watchProgress(for: mediaFileVideo("NeverWatched.mp4")) == nil)
+            #expect(manager.watchProgress(for: mediaFileVideo(name: "NeverWatched.mp4")) == nil)
         }
     }
 }
