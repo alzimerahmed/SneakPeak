@@ -15,7 +15,7 @@ struct AboutView: View {
         SettingsFormContainer {
             #if !os(tvOS)
             SettingsFormSection("settings.about.community") {
-                communityLink("GitHub", icon: "github", url: "https://github.com/alzimerahmed/SneakPeak")
+                communityLink("GitHub", icon: "github", url: "https://github.com/alzimerahmed/SonicWave")
             }
             #endif
 

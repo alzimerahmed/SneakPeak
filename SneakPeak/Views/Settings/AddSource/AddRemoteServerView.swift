@@ -2,7 +2,7 @@
 //  AddRemoteServerView.swift
 //  SneakPeak
 //
-//  View for adding a remote server (Invidious, Piped, PeerTube, SneakPeak Server) as a source.
+//  View for adding a remote server (Invidious, Piped, PeerTube, Sonic Wave Server) as a source.
 //
 
 import SwiftUI
@@ -61,14 +61,14 @@ struct AddRemoteServerView: View {
     @State private var allowInvalidCertificates = false
     @State private var showSSLToggle = false
 
-    // HTTP Basic Auth credentials. Required for SneakPeak Server, optional for any other
+    // HTTP Basic Auth credentials. Required for Sonic Wave Server, optional for any other
     // instance type that sits behind a reverse proxy requiring HTTP Basic Auth.
     @State private var basicAuthUsername = ""
     @State private var basicAuthPassword = ""
     @State private var isValidatingCredentials = false
     @State private var credentialValidationError: String?
 
-    // SneakPeak Server warning dialog
+    // Sonic Wave Server warning dialog
     @State private var showingYatteeServerWarning = false
     @State private var pendingYatteeServerInstance: Instance?
 
@@ -129,7 +129,7 @@ struct AddRemoteServerView: View {
         // failed detection while every tap only re-runs the detection that just failed.
         guard let detectedType else { return false }
 
-        // For detected SneakPeak Server, require credentials
+        // For detected Sonic Wave Server, require credentials
         if detectedType == .yatteeServer {
             return !basicAuthUsername.isEmpty && !basicAuthPassword.isEmpty
         }
@@ -500,7 +500,7 @@ struct AddRemoteServerView: View {
         }
 
         // HTTP Basic Auth credentials.
-        // Required for SneakPeak Server (always shown). Optional for types that can sit
+        // Required for Sonic Wave Server (always shown). Optional for types that can sit
         // behind a basic-auth proxy — show only when credentials were already provided
         // (e.g., via the basic-auth-required retry path), so we don't clutter the form
         // for the normal "no proxy" case.
@@ -801,7 +801,7 @@ struct AddRemoteServerView: View {
                     self.detectedType = detectionResult.type
                     self.detectionResult = detectionResult
 
-                    // For SneakPeak Server, show auth fields instead of auto-adding
+                    // For Sonic Wave Server, show auth fields instead of auto-adding
                     if detectionResult.type == .yatteeServer {
                         withAnimation {
                             self.uiState = .detected(detectionResult.type)
@@ -834,7 +834,7 @@ struct AddRemoteServerView: View {
     }
 
     private func addServer(type: InstanceType, url: URL, appEnvironment: AppEnvironment) {
-        // For SneakPeak Server, always validate credentials first
+        // For Sonic Wave Server, always validate credentials first
         if type == .yatteeServer {
             guard !basicAuthUsername.isEmpty, !basicAuthPassword.isEmpty else {
                 credentialValidationError = String(localized: "sources.error.credentialsRequired")
@@ -949,7 +949,7 @@ struct AddRemoteServerView: View {
     }
 }
 
-// MARK: - SneakPeak Server Validation Response
+// MARK: - Sonic Wave Server Validation Response
 
 private struct YatteeServerInfoValidation: Decodable {
     let name: String?

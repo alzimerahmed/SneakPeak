@@ -216,7 +216,7 @@ enum SubscriptionImportExport {
         <?xml version="1.0" encoding="UTF-8"?>
         <opml version="1.0">
           <head>
-            <title>SneakPeak Subscriptions</title>
+            <title>Sonic Wave Subscriptions</title>
             <dateCreated>\(dateCreated)</dateCreated>
           </head>
           <body>
@@ -257,7 +257,7 @@ enum SubscriptionImportExport {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateString = dateFormatter.string(from: Date())
-        return "sneakpeak-subscriptions-\(dateString).\(format.fileExtension)"
+        return "sonicwave-subscriptions-\(dateString).\(format.fileExtension)"
     }
 }
 

@@ -163,7 +163,7 @@ struct VideoInfoView: View {
     private var downloadManager: DownloadManager? { appEnvironment?.downloadManager }
     #endif
 
-    /// Returns the first enabled SneakPeak Server instance URL, if any.
+    /// Returns the first enabled Sonic Wave Server instance URL, if any.
     private var yatteeServerURL: URL? {
         instancesManager?.yatteeServerInstances.first { $0.isEnabled }?.url
     }

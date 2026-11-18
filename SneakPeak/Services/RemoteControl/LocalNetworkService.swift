@@ -39,7 +39,7 @@ final class LocalNetworkService {
     // MARK: - Configuration
 
     /// Bonjour service type for SneakPeak remote control.
-    static let serviceType = "_sneakpeak._tcp"
+    static let serviceType = "_sonicwave._tcp"
 
     /// This device's unique identifier.
     let deviceID: String
@@ -75,7 +75,7 @@ final class LocalNetworkService {
     private var incomingConnections: [String: NWConnection] = [:]  // Incoming connections (by sender device ID)
     private var pendingConnections: [NWConnection] = []  // Incoming connections not yet identified
 
-    private let queue = DispatchQueue(label: "stream.sneakpeak.remotecontrol")
+    private let queue = DispatchQueue(label: "stream.sonicwave.remotecontrol")
 
     // MARK: - Logging Helpers
 
@@ -120,7 +120,7 @@ final class LocalNetworkService {
         #elseif os(tvOS)
         return "Apple TV"
         #else
-        return "SneakPeak Device"
+        return "Sonic Wave Device"
         #endif
     }
 

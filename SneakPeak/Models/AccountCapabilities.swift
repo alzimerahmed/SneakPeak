@@ -10,7 +10,7 @@ import Foundation
 /// What server-side features an account supports.
 ///
 /// Call sites ask for capabilities rather than switching on `instance.type`, so
-/// adding a backend — the planned per-user SneakPeak Server accounts, say — means
+/// adding a backend — the planned per-user Sonic Wave Server accounts, say — means
 /// adding one row in ``InstanceType/accountCapabilities`` instead of hunting
 /// down every `case .invidious` in the app.
 struct AccountCapabilities: Hashable, Sendable {

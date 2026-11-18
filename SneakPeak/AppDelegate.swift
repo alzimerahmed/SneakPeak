@@ -17,7 +17,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         // Open the SwiftData stores (TipKit's and the app's) here rather than in
-        // `SneakPeakApp.init()`, which also runs during prewarm launches that iOS
+        // `SonicWaveApp.init()`, which also runs during prewarm launches that iOS
         // suspends before `UIApplicationMain` (0xdead10cc if an SQLite lock is
         // held). The assertion keeps a background launch running until the
         // opens, including any WAL recovery, have finished and released locks.
@@ -42,7 +42,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 // sync) — but the log makes that launch identifiable.
                 + "assertion: \(storeTask != .invalid)"
         )
-        SneakPeakApp.configureTips()
+        SonicWaveApp.configureTips()
         AppEnvironment.shared.dataManager.openStore(trigger: "didFinishLaunching")
         if storeTask != .invalid {
             application.endBackgroundTask(storeTask)
@@ -111,11 +111,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         LoggingService.shared.logCloudKit("Requesting remote notification registration...")
         NSApplication.shared.registerForRemoteNotifications()
-
-        if let rawValue = UserDefaults.standard.string(forKey: "appIcon"),
-           let icon = AppIcon(rawValue: rawValue) {
-            SettingsManager.applyMacAppIcon(icon)
-        }
     }
 
     func application(_ application: NSApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {

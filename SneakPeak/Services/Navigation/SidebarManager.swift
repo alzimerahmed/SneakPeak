@@ -396,13 +396,13 @@ final class SidebarManager {
 
     // MARK: - Channel Data Access
 
-    /// SneakPeak Server URL for avatar fallback
+    /// Sonic Wave Server URL for avatar fallback
     private var yatteeServerURL: URL? {
         instancesManager?.enabledYatteeServerInstances.first?.url
     }
 
     /// Returns avatar URL for a channel sidebar item.
-    /// Uses AvatarURLBuilder for SneakPeak Server fallback when direct URL is unavailable.
+    /// Uses AvatarURLBuilder for Sonic Wave Server fallback when direct URL is unavailable.
     /// Uses cached subscriptions to avoid repeated DB queries during layout.
     func avatarURL(for item: SidebarItem) -> URL? {
         guard case .channel(let channelID, _, _) = item else { return nil }

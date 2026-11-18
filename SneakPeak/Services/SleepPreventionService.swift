@@ -36,7 +36,7 @@ final class SleepPreventionService {
         #if os(iOS) || os(tvOS)
         UIApplication.shared.isIdleTimerDisabled = true
         #elseif os(macOS)
-        let reason = "SneakPeak video playback" as CFString
+        let reason = "Sonic Wave video playback" as CFString
         IOPMAssertionCreateWithName(
             kIOPMAssertionTypePreventUserIdleDisplaySleep as CFString,
             IOPMAssertionLevel(kIOPMAssertionLevelOn),

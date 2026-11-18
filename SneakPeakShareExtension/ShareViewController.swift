@@ -2,7 +2,7 @@
 //  ShareViewController.swift
 //  SneakPeakShareExtension
 //
-//  Handles shared URLs and opens them in SneakPeak.
+//  Handles shared URLs and opens them in Sonic Wave.
 //
 
 import UIKit
@@ -35,7 +35,7 @@ class ShareViewController: UIViewController {
                     attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { [weak self] item, _ in
                         DispatchQueue.main.async {
                             if let url = item as? URL {
-                                self?.openInSneakPeak(url: url)
+                                self?.openInSonicWave(url: url)
                             } else {
                                 self?.close()
                             }
@@ -49,7 +49,7 @@ class ShareViewController: UIViewController {
                     attachment.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { [weak self] item, _ in
                         DispatchQueue.main.async {
                             if let text = item as? String, let url = self?.extractURL(from: text) {
-                                self?.openInSneakPeak(url: url)
+                                self?.openInSonicWave(url: url)
                             } else {
                                 self?.close()
                             }
@@ -80,14 +80,14 @@ class ShareViewController: UIViewController {
         return nil
     }
 
-    private func openInSneakPeak(url: URL) {
+    private func openInSonicWave(url: URL) {
         guard let encodedURL = url.absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let sneakpeakURL = URL(string: "sneakpeak://open?url=\(encodedURL)") else {
+              let sonicwaveURL = URL(string: "sonicwave://open?url=\(encodedURL)") else {
             close()
             return
         }
 
-        openURLViaApplication(sneakpeakURL)
+        openURLViaApplication(sonicwaveURL)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
             self?.close()

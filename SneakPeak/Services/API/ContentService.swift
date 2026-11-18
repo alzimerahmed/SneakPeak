@@ -557,7 +557,7 @@ actor ContentService: ContentServiceProtocol {
         }
     }
 
-    /// Fetches video details + streams for downloads. For SneakPeak Server this routes
+    /// Fetches video details + streams for downloads. For Sonic Wave Server this routes
     /// through `/proxy/fast/`, which caches the file on disk on the server.
     func videoWithProxyStreamsAndCaptionsAndStoryboards(id: String, instance: Instance) async throws -> (video: Video, streams: [Stream], captions: [Caption], storyboards: [Storyboard]) {
         if instance.type == .yatteeServer {
@@ -569,7 +569,7 @@ actor ContentService: ContentServiceProtocol {
         return result
     }
 
-    /// Fetches video details, streams, and captions in a single API call (Invidious and SneakPeak Server).
+    /// Fetches video details, streams, and captions in a single API call (Invidious and Sonic Wave Server).
     /// For other backends, falls back to separate calls.
     func videoWithStreamsAndCaptions(id: String, instance: Instance) async throws -> (video: Video, streams: [Stream], captions: [Caption]) {
         let result = try await videoWithStreamsAndCaptionsAndStoryboards(id: id, instance: instance)
@@ -577,13 +577,13 @@ actor ContentService: ContentServiceProtocol {
     }
 
     /// Fetches video details, streams, captions, and storyboards in a single API call.
-    /// Storyboards are only available for Invidious and SneakPeak Server instances.
+    /// Storyboards are only available for Invidious and Sonic Wave Server instances.
     func videoWithStreamsAndCaptionsAndStoryboards(id: String, instance: Instance) async throws -> (video: Video, streams: [Stream], captions: [Caption], storyboards: [Storyboard]) {
         switch instance.type {
         case .invidious:
             return try await invidiousAPI(for: instance).videoWithStreamsAndCaptionsAndStoryboards(id: id, instance: instance)
         case .yatteeServer:
-            // When the user has opted into proxying for this SneakPeak Server source,
+            // When the user has opted into proxying for this Sonic Wave Server source,
             // fetch playback streams through the server's /proxy/relay byte-relay
             // (Range-friendly, fast TTFB). When off, leave routing to the server's
             // per-site proxy_streaming flag — the server can still proxy by default,
@@ -622,17 +622,17 @@ actor ContentService: ContentServiceProtocol {
     // MARK: - External URL Extraction
 
     /// Extracts video information from any URL that yt-dlp supports.
-    /// Requires a SneakPeak Server instance.
+    /// Requires a Sonic Wave Server instance.
     ///
     /// - Parameters:
     ///   - url: The URL to extract (e.g., https://vimeo.com/12345)
-    ///   - instance: A SneakPeak Server instance
+    ///   - instance: A Sonic Wave Server instance
     /// - Returns: Tuple of video, streams, and captions
     func extractURL(_ url: URL, instance: Instance) async throws -> (video: Video, streams: [Stream], captions: [Caption]) {
         guard instance.type == .yatteeServer else {
             throw APIError.notSupported
         }
-        // Keyed by link only: callers pick the SneakPeak Server differently, and
+        // Keyed by link only: callers pick the Sonic Wave Server differently, and
         // any server returns equivalent streams within the TTL.
         let key = url.absoluteString
         if let cached = recentExtractions[key], Date().timeIntervalSince(cached.date) < Self.extractionCacheTTL {
@@ -646,13 +646,13 @@ actor ContentService: ContentServiceProtocol {
 
     /// How long an extraction is reused. A link opened from Open Link is
     /// extracted to show its details page, which re-extracts for full details,
-    /// and Play extracts again; all three share one SneakPeak Server request.
+    /// and Play extracts again; all three share one Sonic Wave Server request.
     /// Short, so a retry after a failed stream soon fetches fresh URLs.
     private static let extractionCacheTTL: TimeInterval = 60
     private var recentExtractions: [String: (result: (video: Video, streams: [Stream], captions: [Caption]), date: Date)] = [:]
 
     /// Extracts channel/user videos from any URL that yt-dlp supports.
-    /// Requires a SneakPeak Server instance.
+    /// Requires a Sonic Wave Server instance.
     ///
     /// This works with Vimeo, Dailymotion, SoundCloud, and many other sites.
     /// Note that some sites (like Twitter/X) may not support channel extraction.
@@ -660,7 +660,7 @@ actor ContentService: ContentServiceProtocol {
     /// - Parameters:
     ///   - url: The channel/user URL to extract (e.g., https://vimeo.com/username)
     ///   - page: Page number (1-based)
-    ///   - instance: A SneakPeak Server instance
+    ///   - instance: A Sonic Wave Server instance
     /// - Returns: Tuple of channel, videos list, and optional continuation token for next page
     func extractChannel(url: URL, page: Int = 1, instance: Instance) async throws -> (channel: Channel, videos: [Video], continuation: String?) {
         guard instance.type == .yatteeServer else {
@@ -669,10 +669,10 @@ actor ContentService: ContentServiceProtocol {
         return try await yatteeServerAPI(for: instance).extractChannel(url: url, page: page, instance: instance)
     }
 
-    // MARK: - SneakPeak Server Info
+    // MARK: - Sonic Wave Server Info
 
     /// Fetches server info including version, dependencies, and enabled sites.
-    /// Requires a SneakPeak Server instance.
+    /// Requires a Sonic Wave Server instance.
     func yatteeServerInfo(for instance: Instance) async throws -> InstanceDetectorModels.YatteeServerFullInfo {
         guard instance.type == .yatteeServer else {
             throw APIError.notSupported

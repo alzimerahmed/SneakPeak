@@ -30,9 +30,9 @@ enum NavigationDestination: Hashable {
     case history
     case manageChannels
     case search(String)
-    /// External video URL to be extracted via SneakPeak Server.
+    /// External video URL to be extracted via Sonic Wave Server.
     case externalVideo(URL)
-    /// External channel URL to be extracted via SneakPeak Server.
+    /// External channel URL to be extracted via Sonic Wave Server.
     case externalChannel(URL)
     /// Direct media URL (mp4, m3u8, etc.) to play without extraction.
     case directMedia(URL)
@@ -154,7 +154,7 @@ extension NavigationDestination {
 
 /// What a downloads destination shows on tvOS, which has no downloads.
 ///
-/// Reachable on tvOS through `sneakpeak://downloads`. Without a focusable element
+/// Reachable on tvOS through `sonicwave://downloads`. Without a focusable element
 /// the focus engine has nowhere to land and the remote is stuck, so it carries
 /// a Done that pops it.
 private struct TVDownloadsUnavailableView: View {

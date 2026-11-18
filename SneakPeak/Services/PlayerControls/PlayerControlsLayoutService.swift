@@ -23,8 +23,8 @@ actor PlayerControlsLayoutService {
     /// URL for the presets file in Application Support.
     private var presetsFileURL: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let sneakpeakDir = appSupport.appendingPathComponent("SneakPeak", isDirectory: true)
-        return sneakpeakDir.appendingPathComponent("PlayerControlsPresets.json")
+        let sonicwaveDir = appSupport.appendingPathComponent("SonicWave", isDirectory: true)
+        return sonicwaveDir.appendingPathComponent("PlayerControlsPresets.json")
     }
 
     /// UserDefaults key for active preset ID (per-device, not synced).

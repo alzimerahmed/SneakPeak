@@ -288,7 +288,7 @@ private final class AccountServiceHarness {
         accounts = AccountsManager(
             identityScope: CredentialIdentityScope(fixedScope: "identity-A"),
             instancesManager: instances,
-            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!,
+            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!,
             unreachableRetryInterval: 3600
         )
         account = accounts.addAccount(instanceID: instance.id)

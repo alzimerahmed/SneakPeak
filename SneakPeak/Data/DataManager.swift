@@ -19,7 +19,7 @@ final class DataManager {
     /// The on-disk store lives in the app-group container. Opening it takes an
     /// SQLite lock (and runs WAL recovery after an unclean exit), and iOS kills
     /// an app suspended while holding such a lock with 0xdead10cc. `DataManager`
-    /// is built from `SneakPeakApp.init()`, which also runs during prewarm launches
+    /// is built from `SonicWaveApp.init()`, which also runs during prewarm launches
     /// that the system suspends before `UIApplicationMain`, so the store must not
     /// be opened there. On iOS `AppDelegate` opens it from
     /// `didFinishLaunching` inside a background-task assertion via `openStore`.
@@ -119,7 +119,7 @@ final class DataManager {
 
         #if DEBUG && os(iOS)
         // Enforces the lifecycle boundary in development, before SQLite takes
-        // any lock: anything that touches the store from `SneakPeakApp.init()` /
+        // any lock: anything that touches the store from `SonicWaveApp.init()` /
         // `AppEnvironment.init` would reintroduce the pre-UIApplicationMain
         // open (0xdead10cc).
         if !isInMemory && !Self.didFinishLaunching {
@@ -243,7 +243,7 @@ final class DataManager {
     // MARK: - Subscription Updates
 
     /// Updates subscriber count and verified status for a subscription by channel ID.
-    /// Used to populate cached metadata from SneakPeak Server.
+    /// Used to populate cached metadata from Sonic Wave Server.
     func updateSubscriberCount(for channelID: String, count: Int, isVerified: Bool?) {
         let descriptor = FetchDescriptor<Subscription>(
             predicate: #Predicate { $0.channelID == channelID }

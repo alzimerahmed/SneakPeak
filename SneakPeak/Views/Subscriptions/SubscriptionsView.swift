@@ -221,11 +221,11 @@ struct SubscriptionsView: View {
     /// The failure the feed is currently sitting on, if it is one that trying
     /// again could answer differently.
     ///
-    /// A network error always is. So is the SneakPeak Server the local feed asks
+    /// A network error always is. So is the Sonic Wave Server the local feed asks
     /// for while it is only standing in for an account whose server could not
     /// be reached — that request is not the real answer, and the one that is
     /// comes back on a status expiry nothing here is watching. An account that
-    /// genuinely has no SneakPeak Server never arms this: the unavailability it
+    /// genuinely has no Sonic Wave Server never arms this: the unavailability it
     /// gates on is `nil` for a context the user selected themselves.
     private var feedRetryToken: Int? {
         guard feedCache.feedLoadState.warrantsPeriodicRetry(unavailability: contextUnavailability)
@@ -660,7 +660,7 @@ struct SubscriptionsView: View {
                     )
 
                     if hasYatteeServer {
-                        LoggingService.shared.info("SneakPeak Server detected, forcing feed refresh", category: .general)
+                        LoggingService.shared.info("Sonic Wave Server detected, forcing feed refresh", category: .general)
                         await loadFeed(forceRefresh: true)
                     } else if !cacheValid && !feedCache.isLoading {
                         LoggingService.shared.info("Cache invalid and not loading, refreshing feed", category: .general)
@@ -1590,7 +1590,7 @@ struct SubscriptionsView: View {
         .padding(.vertical, 40)
     }
 
-    /// Empty state shown when SneakPeak Server is required but not configured.
+    /// Empty state shown when Sonic Wave Server is required but not configured.
     private var yatteeServerRequiredView: some View {
         ContentUnavailableView {
             Label(String(localized: "subscriptions.yatteeServerRequired.title"), systemImage: "server.rack")
@@ -1602,7 +1602,7 @@ struct SubscriptionsView: View {
     }
 
     /// Empty state shown when local subscriptions exist but no backend of any
-    /// kind (SneakPeak Server, Invidious or Piped) is configured.
+    /// kind (Sonic Wave Server, Invidious or Piped) is configured.
     private var noBackendConfiguredView: some View {
         ContentUnavailableView {
             Label(String(localized: "subscriptions.noBackendConfigured.title"), systemImage: "globe")

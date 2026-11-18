@@ -10,7 +10,7 @@
 import SwiftUI
 
 extension Notification.Name {
-    static let sneakpeakTVForcePopDetail = Notification.Name("sneakpeakTVForcePopDetail")
+    static let sonicwaveTVForcePopDetail = Notification.Name("sonicwaveTVForcePopDetail")
 }
 
 struct TVSidebarDetailContainer<Content: View>: View {
@@ -69,7 +69,7 @@ struct TVSidebarDetailContainer<Content: View>: View {
                     }
                 }
             }
-            .onReceive(NotificationCenter.default.publisher(for: .sneakpeakTVForcePopDetail)) { _ in
+            .onReceive(NotificationCenter.default.publisher(for: .sonicwaveTVForcePopDetail)) { _ in
                 dismiss()
             }
     }

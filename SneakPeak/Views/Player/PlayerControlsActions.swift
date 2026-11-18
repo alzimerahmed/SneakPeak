@@ -116,7 +116,7 @@ struct PlayerControlsActions {
     /// Whether audio-only (music) mode is enabled
     var isAudioModeEnabled: Bool = false
 
-    /// SneakPeak Server URL for channel avatar fallback
+    /// Sonic Wave Server URL for channel avatar fallback
     let yatteeServerURL: URL?
 
     /// DeArrow branding provider for title replacement

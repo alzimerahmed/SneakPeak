@@ -38,7 +38,7 @@ private struct EditRemoteServerContent: View {
     @State private var frontendURLString: String
 
     // HTTP Basic Auth credentials (for any instance type behind a reverse proxy;
-    // required for SneakPeak Server, optional for Invidious/Piped/PeerTube).
+    // required for Sonic Wave Server, optional for Invidious/Piped/PeerTube).
     @State private var basicAuthUsername: String = ""
     @State private var basicAuthPassword: String = ""
     /// Tracks whether credentials existed when the view loaded, so we can detect
@@ -50,13 +50,13 @@ private struct EditRemoteServerContent: View {
     @State private var loginTarget: AccountLoginTarget?
     @State private var isLoggedIn = false
 
-    // SneakPeak Server validation
+    // Sonic Wave Server validation
     @State private var showingYatteeServerWarning = false
 
     // Delete confirmation
     @State private var showingDeleteConfirmation = false
 
-    // SneakPeak Server info
+    // Sonic Wave Server info
     @State private var serverInfo: InstanceDetectorModels.YatteeServerFullInfo?
     @State private var isLoadingServerInfo = false
     @State private var serverInfoError: String?
@@ -451,7 +451,7 @@ private struct EditRemoteServerContent: View {
     }
 
     private func saveChanges() {
-        // Check if we're enabling a SneakPeak Server instance
+        // Check if we're enabling a Sonic Wave Server instance
         let wasDisabled = !instance.isEnabled
         let willBeEnabled = isEnabled
         let isYatteeServer = instance.type == .yatteeServer
@@ -481,7 +481,7 @@ private struct EditRemoteServerContent: View {
             updated.frontendURL = trimmed.isEmpty ? nil : Instance.normalizeSourceURL(trimmed)
         }
 
-        // Save / clear HTTP Basic Auth credentials. SneakPeak Server never auto-clears
+        // Save / clear HTTP Basic Auth credentials. Sonic Wave Server never auto-clears
         // (credentials are required and the user re-enters to overwrite). Piped never
         // persists them — its session token reuses the same Authorization header.
         if !instance.supportsHTTPBasicAuthProxy {

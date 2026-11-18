@@ -18,7 +18,7 @@ struct CloudKitZoneRecoveryTests {
     /// A named suite outlives the process that made it, so leaving them behind
     /// accumulates one plist per test run in the simulator's preferences.
     private final class TemporaryDefaults {
-        let suiteName = "sneakpeak.tests.\(UUID().uuidString)"
+        let suiteName = "sonicwave.tests.\(UUID().uuidString)"
         let defaults: UserDefaults
 
         init() {

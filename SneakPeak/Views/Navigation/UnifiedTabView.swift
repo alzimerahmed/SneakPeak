@@ -392,7 +392,7 @@ struct UnifiedTabView: View {
             // sub-pages and similar detail screens) to dismiss. Without this,
             // tvOS's sidebarAdaptable TabView leaves the previously-pushed
             // detail visible until the user manually presses Menu.
-            NotificationCenter.default.post(name: .sneakpeakTVForcePopDetail, object: nil)
+            NotificationCenter.default.post(name: .sonicwaveTVForcePopDetail, object: nil)
         }
         .onChange(of: sidebarManager.sortedSourceItems) { _, items in
             leaveRemovedSource(remaining: items)

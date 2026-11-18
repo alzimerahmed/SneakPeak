@@ -4,7 +4,7 @@ import Foundation
 enum AppIdentifiers {
     // MARK: - Base Identifier
 
-    static let bundleIdentifier = "com.alzimerahmed.SneakPeak"
+    static let bundleIdentifier = "com.alzimerahmed.SonicWave"
 
     // MARK: - iCloud
 
@@ -16,7 +16,7 @@ enum AppIdentifiers {
     /// from the `CLOUDKIT_ENV` build setting. Debug builds use Production unless
     /// built with the Debug-CKDev configuration ("SneakPeak (CloudKit Dev)" scheme).
     static var iCloudEnvironment: String {
-        Bundle.main.object(forInfoDictionaryKey: "SneakPeakCloudKitEnvironment") as? String ?? "Production"
+        Bundle.main.object(forInfoDictionaryKey: "SonicWaveCloudKitEnvironment") as? String ?? "Production"
     }
 
     static var isCloudKitDevelopmentEnvironment: Bool {
@@ -37,7 +37,7 @@ enum AppIdentifiers {
 
     // MARK: - URL Sessions
 
-    static let downloadSession = "stream.sneakpeak.downloads"
+    static let downloadSession = "stream.sonicwave.downloads"
 
     // MARK: - Logging
 

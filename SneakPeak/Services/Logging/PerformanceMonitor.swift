@@ -34,7 +34,7 @@ final class PerformanceMonitor: @unchecked Sendable {
     private static let highCPUBackground = 15.0
 
     // Confined to `queue`.
-    private let queue = DispatchQueue(label: "stream.sneakpeak.performance", qos: .utility)
+    private let queue = DispatchQueue(label: "stream.sonicwave.performance", qos: .utility)
     private var sampler: ResourceSampler?
     private var timer: DispatchSourceTimer?
     private var period: Period?

@@ -12,8 +12,8 @@ import Security
 @MainActor
 @Observable
 final class InvidiousCredentialsManager: InstanceCredentialsManager {
-    private static let keychainServiceName = "com.sneakpeak.invidious"
-    private let thumbnailCacheKey = "com.sneakpeak.invidious.channelThumbnails"
+    private static let keychainServiceName = "com.sonicwave.invidious"
+    private let thumbnailCacheKey = "com.sonicwave.invidious.channelThumbnails"
 
     /// Tracks which instances have stored sessions (for reactive UI updates)
     private(set) var loggedInInstanceIDs: Set<UUID> = []

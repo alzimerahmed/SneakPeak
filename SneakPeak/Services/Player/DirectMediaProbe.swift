@@ -3,7 +3,7 @@
 //  SneakPeak
 //
 //  Decides whether an arbitrary http(s) URL serves a media file mpv can play
-//  as-is, so the app can skip SneakPeak Server extraction for debrid/CDN download
+//  as-is, so the app can skip Sonic Wave Server extraction for debrid/CDN download
 //  links whose path is an opaque ID (TorBox, Real-Debrid, presigned S3, …).
 //
 
@@ -29,7 +29,7 @@ enum DirectMediaProbe {
 
     /// Asks the server what it serves at `url` and returns a result when it is
     /// something mpv can play directly. `nil` means "not obviously media",
-    /// e.g. an HTML page, and the caller should try SneakPeak Server instead.
+    /// e.g. an HTML page, and the caller should try Sonic Wave Server instead.
     static func probe(_ url: URL, session: URLSession = .shared) async -> DirectMediaProbeResult? {
         guard let scheme = url.scheme?.lowercased(), scheme == "http" || scheme == "https" else {
             return nil

@@ -260,7 +260,7 @@ final class LoggingService: Sendable {
     /// Includes the previous app session read back from disk, so logs survive
     /// the app being killed (e.g. swiped away while the phone was hot).
     func exportLogs() -> String {
-        let header = "SneakPeak Logs - Exported \(Date().formatted())\n"
+        let header = "Sonic Wave Logs - Exported \(Date().formatted())\n"
         let separator = String(repeating: "=", count: 60) + "\n"
 
         let logLines = entries.reversed().map { entry in

@@ -24,7 +24,7 @@ final class ConnectivityMonitor: @unchecked Sendable {
     private(set) var isConstrained: Bool = false
 
     private let monitor = NWPathMonitor()
-    private let queue = DispatchQueue(label: "stream.sneakpeak.connectivity")
+    private let queue = DispatchQueue(label: "stream.sonicwave.connectivity")
 
     // MARK: - Lifecycle
 
@@ -69,5 +69,5 @@ final class ConnectivityMonitor: @unchecked Sendable {
 
 extension Notification.Name {
     /// Posted when the device goes from offline to online.
-    static let connectivityDidReturn = Notification.Name("stream.sneakpeak.connectivityDidReturn")
+    static let connectivityDidReturn = Notification.Name("stream.sonicwave.connectivityDidReturn")
 }

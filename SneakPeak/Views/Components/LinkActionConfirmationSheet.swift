@@ -3,7 +3,7 @@
 //  SneakPeak
 //
 //  Asks before a URL scheme action changes saved state. Any web page can open
-//  a sneakpeak:// link, so queueing, bookmarking, downloading and subscribing
+//  a sonicwave:// link, so queueing, bookmarking, downloading and subscribing
 //  wait for the user unless Settings allows them to run on their own.
 //
 

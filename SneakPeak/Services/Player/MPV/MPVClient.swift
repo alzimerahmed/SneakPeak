@@ -141,7 +141,7 @@ final class MPVClient: @unchecked Sendable {
 
     private var mpv: OpaquePointer?
     private var renderContext: OpaquePointer?
-    private let mpvQueue = DispatchQueue(label: "stream.sneakpeak.mpv.client", qos: .userInteractive)
+    private let mpvQueue = DispatchQueue(label: "stream.sonicwave.mpv.client", qos: .userInteractive)
 
     /// Protects `renderContext` lifecycle vs use. Render-context calls are
     /// thread-safe relative to the client API per libmpv docs, so they must NOT
@@ -153,7 +153,7 @@ final class MPVClient: @unchecked Sendable {
     /// Serial queue for render-update callback dispatch. Deliberately separate
     /// from `mpvQueue` so frame-ready notifications are never delayed behind
     /// property/command work.
-    private let renderEventQueue = DispatchQueue(label: "stream.sneakpeak.mpv.render-events", qos: .userInteractive)
+    private let renderEventQueue = DispatchQueue(label: "stream.sonicwave.mpv.render-events", qos: .userInteractive)
     private var isDestroyed = false
 
     #if os(macOS)
@@ -525,7 +525,7 @@ final class MPVClient: @unchecked Sendable {
         setOptionSync("framedrop", "decoder+vo")
 
         // Audio
-        setOptionSync("audio-client-name", "SneakPeak")
+        setOptionSync("audio-client-name", "Sonic Wave")
         // Prefer avfoundation (AVSampleBufferAudioRenderer) everywhere: it is the
         // system media path, so it gets Spatial Audio / "Spatialize Stereo" and
         // head tracking, which audiounit/coreaudio output never does.
@@ -1481,7 +1481,7 @@ final class MPVClient: @unchecked Sendable {
         let thread = Thread { [weak self] in
             self?.runEventLoop()
         }
-        thread.name = "stream.sneakpeak.mpv.events"
+        thread.name = "stream.sonicwave.mpv.events"
         thread.qualityOfService = .userInitiated
         thread.start()
     }

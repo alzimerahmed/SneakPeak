@@ -2,7 +2,7 @@
 //  ChannelAvatarView.swift
 //  SneakPeak
 //
-//  Channel avatar that supports loading from SneakPeak Server.
+//  Channel avatar that supports loading from Sonic Wave Server.
 //  When the author doesn't have a thumbnail URL (common with yt-dlp),
 //  this view will attempt to load the avatar from the server's avatar endpoint.
 //
@@ -12,7 +12,7 @@ import NukeUI
 
 // MARK: - Channel Avatar View
 
-/// A channel avatar view that supports loading from SneakPeak Server.
+/// A channel avatar view that supports loading from Sonic Wave Server.
 struct ChannelAvatarView: View {
     let author: Author
     let size: CGFloat
@@ -55,7 +55,7 @@ struct ChannelAvatarView: View {
         .geometryGroup()
     }
 
-    /// Constructs the avatar URL from author's thumbnail or SneakPeak Server.
+    /// Constructs the avatar URL from author's thumbnail or Sonic Wave Server.
     private var avatarURL: URL? {
         // Primary: Use author's thumbnail URL if available
         if let authorURL = author.thumbnailURL {
@@ -66,7 +66,7 @@ struct ChannelAvatarView: View {
             return nil
         }
 
-        // Only use SneakPeak Server fallback for YouTube sources
+        // Only use Sonic Wave Server fallback for YouTube sources
         // Non-YouTube sources (extracted, federated) cannot use the avatar endpoint
         if let source = source {
             switch source {
@@ -79,7 +79,7 @@ struct ChannelAvatarView: View {
             }
         }
 
-        // Construct URL from SneakPeak Server - server handles fetching/caching
+        // Construct URL from Sonic Wave Server - server handles fetching/caching
         let avatarSize = Int(size * 2) // 2x for retina
         let roundedSize = [32, 48, 76, 100, 176, 512].min { abs($0 - avatarSize) < abs($1 - avatarSize) } ?? 176
 

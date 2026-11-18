@@ -29,7 +29,7 @@ struct SubscriptionFeedErrorTests {
 
     // MARK: - Under the banner
 
-    @Test("The SneakPeak Server the fallback asks for stands down under the banner")
+    @Test("The Sonic Wave Server the fallback asks for stands down under the banner")
     func yatteeServerRequiredStandsDownUnderBanner() {
         let state = FeedLoadState.error(.yatteeServerRequired)
 
@@ -68,14 +68,14 @@ struct SubscriptionFeedErrorTests {
         }
     }
 
-    @Test("The SneakPeak Server the unreachable fallback asks for is worth asking again")
+    @Test("The Sonic Wave Server the unreachable fallback asks for is worth asking again")
     func yatteeServerRequiredRetriesWhileUnreachable() {
         let state = FeedLoadState.error(.yatteeServerRequired)
 
         #expect(state.warrantsPeriodicRetry(unavailability: .unreachable))
     }
 
-    @Test("A context that genuinely needs a SneakPeak Server never starts a timer")
+    @Test("A context that genuinely needs a Sonic Wave Server never starts a timer")
     func yatteeServerRequiredDoesNotRetryOtherwise() {
         let state = FeedLoadState.error(.yatteeServerRequired)
         // `nil` is local data the user selected: the request is the real answer.

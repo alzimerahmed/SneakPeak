@@ -83,13 +83,13 @@ struct InstanceBrowseView: View {
         appEnvironment?.settingsManager.listStyle ?? .inset
     }
 
-    /// The first enabled SneakPeak Server instance (for avatar URLs).
+    /// The first enabled Sonic Wave Server instance (for avatar URLs).
     private var yatteeServer: Instance? {
         appEnvironment?.instancesManager.enabledYatteeServerInstances.first
     }
     private var yatteeServerURL: URL? { yatteeServer?.url }
 
-    /// Auth header for avatar loading (uses SneakPeak Server for YouTube channel avatars)
+    /// Auth header for avatar loading (uses Sonic Wave Server for YouTube channel avatars)
     private var avatarAuthHeader: String? {
         guard let server = yatteeServer else { return nil }
         return appEnvironment?.basicAuthCredentialsManager.basicAuthHeader(for: server)

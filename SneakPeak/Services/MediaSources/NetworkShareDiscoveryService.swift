@@ -91,7 +91,7 @@ final class NetworkShareDiscoveryService {
 
     private var browsers: [NWBrowser] = []
     private var discoveryTask: Task<Void, Never>?
-    private let queue = DispatchQueue(label: "stream.sneakpeak.networksharediscovery")
+    private let queue = DispatchQueue(label: "stream.sonicwave.networksharediscovery")
 
     /// Duration to scan before automatically stopping (in seconds).
     private let scanDuration: TimeInterval = 5.0

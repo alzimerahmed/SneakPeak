@@ -19,7 +19,7 @@ final class LogFileStore: @unchecked Sendable {
     /// Stop writing a session once it reaches this size.
     private static let maxSessionBytes = 25 * 1024 * 1024
 
-    private let queue = DispatchQueue(label: "stream.sneakpeak.logfile", qos: .utility)
+    private let queue = DispatchQueue(label: "stream.sonicwave.logfile", qos: .utility)
     private let currentURL: URL
     private let previousURL: URL
     private var handle: FileHandle?

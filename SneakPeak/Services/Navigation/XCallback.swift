@@ -4,7 +4,7 @@
 //
 //  x-callback-url support (https://x-callback-url.com):
 //
-//    sneakpeak://x-callback-url/{verb}?{action parameters}
+//    sonicwave://x-callback-url/{verb}?{action parameters}
 //        &x-success={url}&x-error={url}&x-cancel={url}&x-source={app name}
 //
 //  `{verb}` is any `LinkAction` host (`play`, `queue`, `player/pause`, …).
@@ -32,7 +32,7 @@ struct XCallback: Equatable {
 
     /// Callbacks of an x-callback-url request, or nil for any other URL.
     init?(_ url: URL) {
-        guard url.scheme?.lowercased() == "sneakpeak", url.host?.lowercased() == Self.host else { return nil }
+        guard url.scheme?.lowercased() == "sonicwave", url.host?.lowercased() == Self.host else { return nil }
         let query = LinkActionParser.queryParameters(of: url)
         success = query["x-success"].flatMap(Self.callbackURL)
         error = query["x-error"].flatMap(Self.callbackURL)
@@ -41,14 +41,14 @@ struct XCallback: Equatable {
     }
 
     /// The action an x-callback-url request asks for, written as the plain
-    /// action link: sneakpeak://x-callback-url/player/seek?t=9 → sneakpeak://player/seek?t=9.
+    /// action link: sonicwave://x-callback-url/player/seek?t=9 → sonicwave://player/seek?t=9.
     static func actionURL(from url: URL) -> URL? {
         let path = url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
         guard !path.isEmpty else { return nil }
         let absolute = url.absoluteString
         // Keep the query exactly as sent: it may hold an unencoded link
         let query = absolute.firstIndex(of: "?").map { String(absolute[$0...]) } ?? ""
-        return URL(string: "sneakpeak://\(path)\(query)")
+        return URL(string: "sonicwave://\(path)\(query)")
     }
 
     /// The callback to open for a result, with the result's values appended.

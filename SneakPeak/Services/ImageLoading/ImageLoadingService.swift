@@ -52,7 +52,7 @@ final class ImageLoadingService: Sendable {
 
         // Create data cache
         let dataCache: DataCache? = {
-            let cache = try? DataCache(name: "com.sneakpeak.images")
+            let cache = try? DataCache(name: "com.sonicwave.images")
             cache?.sizeLimit = diskCacheLimit
             return cache
         }()

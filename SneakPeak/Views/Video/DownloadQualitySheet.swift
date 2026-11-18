@@ -329,7 +329,7 @@ struct DownloadQualitySheet: View {
                     return
                 }
 
-                // For SneakPeak Server, always fetch proxy streams for faster LAN downloads
+                // For Sonic Wave Server, always fetch proxy streams for faster LAN downloads
                 // even if playback streams were passed in (those point to YouTube CDN)
                 let isYatteeServer = appEnvironment?.instancesManager.instance(for: video)?.isYatteeServerInstance ?? false
 
@@ -886,7 +886,7 @@ struct DownloadQualitySheet: View {
         errorMessage = nil
 
         do {
-            // For SneakPeak Server, use proxy streams for faster LAN downloads
+            // For Sonic Wave Server, use proxy streams for faster LAN downloads
             // Proxy URLs point to the server instead of YouTube CDN
             let loadedVideo: Video
             let loadedStreams: [Stream]

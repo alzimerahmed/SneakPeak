@@ -18,7 +18,7 @@ final class MediaSourcesManager {
     private let ubiquitousStore = NSUbiquitousKeyValueStore.default
     private let sourcesKey = "configuredMediaSources"
     private let iCloudSourcesKey = "syncedMediaSources"
-    private let keychainServiceName = "com.sneakpeak.mediasources"
+    private let keychainServiceName = "com.sonicwave.mediasources"
 
     // MARK: - Dependencies
 

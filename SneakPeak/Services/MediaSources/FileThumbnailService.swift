@@ -145,7 +145,7 @@ actor FileThumbnailService {
         else { return nil }
 
         let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sneakpeak-thumb-\(UUID().uuidString)")
+            .appendingPathComponent("sonicwave-thumb-\(UUID().uuidString)")
         guard (try? data.write(to: tempURL, options: .atomic)) != nil else { return nil }
         defer { try? FileManager.default.removeItem(at: tempURL) }
 

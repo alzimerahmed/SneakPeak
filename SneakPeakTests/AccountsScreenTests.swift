@@ -16,7 +16,7 @@ import SwiftUI
 @MainActor
 struct OrphanedAccountRemovalTests {
     private func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
     }
 
     private func makeScope() -> CredentialIdentityScope {
@@ -365,7 +365,7 @@ struct DataContextSwitcherGlyphTests {
 @MainActor
 struct DataContextSwitcherLabelTests {
     private func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
     }
 
     private func makeScope() -> CredentialIdentityScope {
@@ -569,7 +569,7 @@ struct DataContextSwitcherLabelTests {
 @MainActor
 struct AccountRenameTests {
     private func makeDefaults() -> UserDefaults {
-        UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!
+        UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!
     }
 
     private func makeScope() -> CredentialIdentityScope {

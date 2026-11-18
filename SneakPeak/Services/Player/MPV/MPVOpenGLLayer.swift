@@ -75,7 +75,7 @@ final class MPVOpenGLLayer: CAOpenGLLayer {
     private weak var mpvClient: MPVClient?
 
     /// Dedicated queue for OpenGL rendering (off main thread).
-    private let renderQueue = DispatchQueue(label: "stream.sneakpeak.mpv.render", qos: .userInteractive)
+    private let renderQueue = DispatchQueue(label: "stream.sonicwave.mpv.render", qos: .userInteractive)
 
     /// CGL context for OpenGL rendering.
     private let cglContext: CGLContextObj

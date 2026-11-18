@@ -157,7 +157,7 @@ actor SMBClient {
         // Use hash of videoID to keep path short (filesystem limits)
         let videoHash = String(videoID.hashValue)
         let tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("sneakpeak-subtitles", isDirectory: true)
+            .appendingPathComponent("sonicwave-subtitles", isDirectory: true)
             .appendingPathComponent(videoHash, isDirectory: true)
         
         try FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)

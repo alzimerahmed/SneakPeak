@@ -944,7 +944,7 @@ extension InvidiousAPI {
     /// - Returns: Streams with YouTube CDN URLs rewritten to go through the instance
     static func proxyStreamsIfNeeded(_ streams: [Stream], instance: Instance) async -> [Stream] {
         guard instance.supportsVideoProxying else { return streams }
-        // SneakPeak Server does proxying server-side via the ?proxy=true query
+        // Sonic Wave Server does proxying server-side via the ?proxy=true query
         // on the videos endpoint (the converter mints signed /proxy/relay
         // URLs). Don't second-guess that here by host-rewriting CDN URLs.
         if instance.type == .yatteeServer { return streams }

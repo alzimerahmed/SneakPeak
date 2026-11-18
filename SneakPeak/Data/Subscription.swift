@@ -53,7 +53,7 @@ final class Subscription {
     /// When the channel's most recent video was published (for sorting).
     var lastVideoPublishedAt: Date?
 
-    // MARK: - Server Sync (SneakPeak Server)
+    // MARK: - Server Sync (Sonic Wave Server)
 
     /// The server's subscription ID (for deletion via server API).
     var serverSubscriptionID: Int?

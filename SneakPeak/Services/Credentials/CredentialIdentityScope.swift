@@ -449,5 +449,5 @@ final class CredentialIdentityScope {
 extension Notification.Name {
     /// Posted when the resolved credential identity scope changes.
     static let credentialIdentityScopeDidChange =
-        Notification.Name("stream.sneakpeak.credentialIdentityScopeDidChange")
+        Notification.Name("stream.sonicwave.credentialIdentityScopeDidChange")
 }

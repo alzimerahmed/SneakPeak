@@ -237,7 +237,6 @@ final class SettingsManager {
 
     // Appearance settings
     var _listStyle: VideoListStyle?
-    var _appIcon: AppIcon?
 
     // Video Swipe Actions
     #if !os(tvOS)
@@ -575,7 +574,6 @@ final class SettingsManager {
         #endif
         _listStyle = nil
         #if os(iOS)
-        _appIcon = nil
         #endif
         #if !os(tvOS)
         _videoSwipeActionOrder = nil

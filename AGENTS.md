@@ -1,14 +1,14 @@
-# SneakPeak — Rules for AI Agents
+# Sonic Wave (SneakPeak code identity) — Rules for AI Agents
 
 ## Project
 
-SneakPeak = privacy-focused video player for **iOS + iPadOS + macOS + tvOS** (Swift), forked from Yattee (upstream: https://github.com/yattee/yattee, base `main` @ v2.0.0, re-swept 2026-11-17). Plays YouTube via **Invidious / Piped / self-hosted Yattee Server**, plus **PeerTube, local files, SMB shares, WebDAV**. Core surfaces: custom **MPV-based player** (H.264/H.265/VP9/AV1, 4K), PiP + background audio, SponsorBlock + DeArrow + Return YouTube Dislike integrations, playback queue/history/resume, chapter navigation, subscriptions, bookmarks/playlists, downloads, iCloud sync, Handoff, tvOS TopShelf, Share extension. Highest-severity defect surfaces: **the MPV player pipeline (`Player`/`MPVController`), multi-source account/session layer (`AccountsManager`, `API`), and iCloud sync (CloudKit-backed `DataManager`, SwiftData)**.
+Sonic Wave = privacy-focused video player for **iOS + iPadOS + macOS + tvOS** (Swift), forked from Yattee (upstream: https://github.com/yattee/yattee, base `main` @ v2.0.0, re-swept 2026-11-17). Plays YouTube via **Invidious / Piped / self-hosted Yattee Server**, plus **PeerTube, local files, SMB shares, WebDAV**. Core surfaces: custom **MPV-based player** (H.264/H.265/VP9/AV1, 4K), PiP + background audio, SponsorBlock + DeArrow + Return YouTube Dislike integrations, playback queue/history/resume, chapter navigation, subscriptions, bookmarks/playlists, downloads, iCloud sync, Handoff, tvOS TopShelf, Share extension. Highest-severity defect surfaces: **the MPV player pipeline (`Player`/`MPVController`), multi-source account/session layer (`AccountsManager`, `API`), and iCloud sync (CloudKit-backed `DataManager`, SwiftData)**.
 
-**Owner:** Alzimer Ahmed <alzimerahmed84@gmail.com> — repo https://github.com/alzimerahmed/SneakPeak (fresh history, no upstream remote).
+**Owner:** Alzimer Ahmed <alzimerahmed84@gmail.com> — repo https://github.com/alzimerahmed/SonicWave (fresh history, no upstream remote).
 
 **License:** AGPL-3.0. Upstream `LICENSE` and copyright headers in existing source files must be preserved — AGPLv3 does not permit stripping attribution. Upstream monetization (FUNDING.yml, PayPal/donation links, Discord community link, AltStore listing, CNAME) was removed in the rebrand sweep — do not restore.
 
-**Scope:** Single `SneakPeak.xcodeproj` — 4 targets: `SneakPeak` app (iOS/macOS/tvOS, SwiftUI multiplatform), `SneakPeakShareExtension`, `SneakPeakTopShelf` (tvOS), `SneakPeakTests`. Bundle IDs `com.alzimerahmed.SneakPeak.*`, URL scheme `sneakpeak://`, app group `group.com.alzimerahmed.SneakPeak.shared`. `YatteeServer*`/`yatteeServer*` type names intentionally retained — they denote the upstream **Yattee Server** backend product, not this app's identity. The `yattee/MPVKit.git` dependency URL is the real MPVKit fork — do not "rebrand" it.
+**Scope:** Single `SneakPeak.xcodeproj` — 4 targets: `SneakPeak` app target (iOS/macOS/tvOS, SwiftUI multiplatform), `SneakPeakShareExtension`, `SneakPeakTopShelf` (tvOS), `SneakPeakTests`. Bundle IDs `com.alzimerahmed.SonicWave.*`, URL scheme `sonicwave://`, app group `group.com.alzimerahmed.SonicWave.shared`. `YatteeServer*`/`yatteeServer*` type names intentionally retained — they denote the upstream **Yattee Server** backend product, not this app's identity. The `yattee/MPVKit.git` dependency URL is the real MPVKit fork — do not "rebrand" it.
 
 ## Ground Truth (read first)
 
@@ -53,13 +53,13 @@ SneakPeak = privacy-focused video player for **iOS + iPadOS + macOS + tvOS** (Sw
 ## Removed on Purpose — Do NOT Re-add
 
 - `.github/FUNDING.yml` (upstream GitHub Sponsors/Patreon/donations), `CNAME` (upstream site domain), `altstore-source.json` (upstream's AltStore listing), `buildServer.json` (local SourceKit state), `DerivedDataReview/` (review artifacts), `fastlane/` + `Gemfile*` (App Store delivery lanes needing certs we don't have), `Yattee2.icon`.
-- Upstream ownership strings replaced: GitHub links → `alzimerahmed/SneakPeak`, support/donation/Discord links removed, `ORGANIZATIONNAME`, LaunchScreen/About copyright.
+- Upstream ownership strings replaced: GitHub links → `alzimerahmed/SonicWave`, support/donation/Discord links removed, `ORGANIZATIONNAME`, LaunchScreen/About copyright.
 - Do NOT remove upstream copyright headers in existing source files or `LICENSE` (AGPLv3 legal requirement), and do NOT remove upstream attribution from README.
-- Upstream `.github/workflows/release.yml` and `update-altstore.yml` removed — they publish upstream artifacts; our CI is `ci.yml` until a SneakPeak release pipeline is designed.
+- Upstream `.github/workflows/release.yml` and `update-altstore.yml` removed — they publish upstream artifacts; our CI is `ci.yml` until the Sonic Wave release pipeline shipped (release.yml added 2026-11-18).
 
 ## Gotchas
 
-- **No local build safety net** — grep all references (`project.pbxproj`, entitlements, `Info.plist`, schemes, URL scheme `sneakpeak://`, app group `group.com.alzimerahmed.SneakPeak.shared`) before deleting or renaming anything.
+- **No local build safety net** — grep all references (`project.pbxproj`, entitlements, `Info.plist`, schemes, URL scheme `sonicwave://`, app group `group.com.alzimerahmed.SonicWave.shared`) before deleting or renaming anything.
 - **MPV vendoring:** MPV comes from the `yattee/MPVKit` package pin — do not "upgrade" it casually; the build assumes those binaries.
 - **`#if SPARKLE` discipline:** adding Sparkle-touching code outside the guard breaks the App Store `Release` config.
 - **tvOS conditionals:** `#if os(tvOS)` blocks diverge silently — test-relevant changes need the tvOS target considered even though CI runs macOS tests only.

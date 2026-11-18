@@ -1231,7 +1231,7 @@ struct ChannelView: View {
         }
     }
 
-    /// Whether the current instance supports channel tabs (Invidious, SneakPeak Server, or Piped - not external channels)
+    /// Whether the current instance supports channel tabs (Invidious, Sonic Wave Server, or Piped - not external channels)
     private var supportsChannelTabs: Bool {
         // External channels only show videos (no tabs)
         guard !isExternalChannel else { return false }
@@ -1241,7 +1241,7 @@ struct ChannelView: View {
         return instance.type == .invidious || instance.type == .yatteeServer || instance.type == .piped
     }
 
-    /// Whether the current instance supports channel search (Invidious or SneakPeak Server, not external channels or Piped)
+    /// Whether the current instance supports channel search (Invidious or Sonic Wave Server, not external channels or Piped)
     private var supportsChannelSearch: Bool {
         // External channels don't support search
         guard !isExternalChannel else { return false }

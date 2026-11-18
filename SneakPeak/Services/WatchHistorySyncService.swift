@@ -234,7 +234,7 @@ extension Notification.Name {
     /// A video was recorded in an account's server-side history. The userInfo
     /// carries which account and which video, so a list showing another
     /// account's history can ignore it.
-    static let serverWatchHistoryDidUpdate = Notification.Name("stream.sneakpeak.serverWatchHistoryDidUpdate")
+    static let serverWatchHistoryDidUpdate = Notification.Name("stream.sonicwave.serverWatchHistoryDidUpdate")
 }
 
 /// The userInfo keys of ``Notification/Name/serverWatchHistoryDidUpdate``.

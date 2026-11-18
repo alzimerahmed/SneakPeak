@@ -32,7 +32,7 @@ final class OpenedLinksViewModel {
     private(set) var links: [OpenedLink]
     private var hasStarted = false
 
-    /// Links resolved at once - extraction on SneakPeak Server is slow, but
+    /// Links resolved at once - extraction on Sonic Wave Server is slow, but
     /// one link at a time would make long lists crawl.
     private static let maxConcurrentResolutions = 4
 

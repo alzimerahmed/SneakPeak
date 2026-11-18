@@ -26,11 +26,11 @@ import AppKit
 
 struct ResolvedLinkPromptsModifier: ViewModifier {
     /// Whether this host should actually present the dialogs right now. Used
-    /// so SneakPeakApp (root) only presents when the expanded player isn't up,
+    /// so SonicWaveApp (root) only presents when the expanded player isn't up,
     /// and ExpandedPlayerSheet only presents when it *is* up.
     let shouldHost: Bool
     /// Passed in explicitly (rather than read from `@Environment`) because
-    /// SneakPeakApp applies this modifier *outside* its `.appEnvironment(…)`
+    /// SonicWaveApp applies this modifier *outside* its `.appEnvironment(…)`
     /// injection, where the environment value isn't set yet. Nil-safe so
     /// ExpandedPlayerSheet (which holds an optional) can pass through.
     let appEnvironment: AppEnvironment?
@@ -43,7 +43,7 @@ struct ResolvedLinkPromptsModifier: ViewModifier {
                 titleVisibility: .visible,
                 presenting: shouldHost ? appEnvironment?.navigationCoordinator.resolvedShortLinkPrompt : nil
             ) { url in
-                Button(String(localized: "alert.resolvedShortLink.openInSneakPeak")) {
+                Button(String(localized: "alert.resolvedShortLink.openInSonicWave")) {
                     NotificationCenter.default.post(name: .openDescriptionLink, object: url)
                 }
                 Button(String(localized: "alert.resolvedShortLink.openInBrowser")) {
@@ -59,7 +59,7 @@ struct ResolvedLinkPromptsModifier: ViewModifier {
                 titleVisibility: .visible,
                 presenting: shouldHost ? appEnvironment?.navigationCoordinator.ambiguousExternalLinkPrompt : nil
             ) { url in
-                Button(String(localized: "alert.ambiguousLink.tryInSneakPeak")) {
+                Button(String(localized: "alert.ambiguousLink.tryInSonicWave")) {
                     NotificationCenter.default.post(name: .openDescriptionLink, object: url)
                 }
                 Button(String(localized: "alert.ambiguousLink.openInBrowser")) {

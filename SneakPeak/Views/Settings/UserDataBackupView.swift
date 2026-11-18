@@ -33,7 +33,7 @@ struct UserDataBackupView: View {
         )
     }
 
-    static let backupUTType = UTType(filenameExtension: "sneakpeak-backup", conformingTo: .json)
+    static let backupUTType = UTType(filenameExtension: "sonicwave-backup", conformingTo: .json)
         ?? UTType.json
 
     var body: some View {
@@ -71,7 +71,7 @@ struct UserDataBackupView: View {
             isPresented: $isExporting,
             document: exportURL.map { BackupDocument(url: $0) },
             contentType: Self.backupUTType,
-            defaultFilename: "SneakPeak-backup-\(Self.dateStamp())"
+            defaultFilename: "SonicWave-backup-\(Self.dateStamp())"
         ) { result in
             if case .failure(let error) = result {
                 toastManager?.showError(
@@ -114,7 +114,7 @@ struct UserDataBackupView: View {
             do {
                 let data = try backupService.exportData()
                 let url = FileManager.default.temporaryDirectory
-                    .appendingPathComponent("SneakPeak-backup-\(Self.dateStamp()).json")
+                    .appendingPathComponent("SonicWave-backup-\(Self.dateStamp()).json")
                 try data.write(to: url, options: .atomic)
                 exportURL = url
                 // Present the exporter only once the file exists — presenting

@@ -197,5 +197,5 @@ struct InstanceIdentityTests {
 /// the app on that device is configured with, and it stays there after the run.
 @MainActor
 func makeTestInstancesManager() -> InstancesManager {
-    InstancesManager(defaults: UserDefaults(suiteName: "sneakpeak.tests.instances.\(UUID().uuidString)")!)
+    InstancesManager(defaults: UserDefaults(suiteName: "sonicwave.tests.instances.\(UUID().uuidString)")!)
 }

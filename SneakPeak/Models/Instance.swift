@@ -2,7 +2,7 @@
 //  Instance.swift
 //  SneakPeak
 //
-//  Represents a backend instance (Invidious, Piped, PeerTube, or SneakPeak Server).
+//  Represents a backend instance (Invidious, Piped, PeerTube, or Sonic Wave Server).
 //
 
 import Foundation
@@ -81,7 +81,7 @@ struct Instance: Identifiable, Codable, Hashable, Sendable {
     /// Whether this instance sits behind an HTTP Basic Auth reverse proxy.
     /// Set when basic auth credentials are stored, so a missing Keychain entry
     /// (e.g. after reinstalling and importing sources from iCloud) can be detected.
-    /// SneakPeak Server always requires basic auth regardless of this flag.
+    /// Sonic Wave Server always requires basic auth regardless of this flag.
     var usesBasicAuth: Bool
 
     /// Whether a pre-revamp single login existed on this instance.
@@ -177,7 +177,7 @@ struct Instance: Identifiable, Codable, Hashable, Sendable {
     /// Base URL of the web watch page for building shareable YouTube links,
     /// when this instance has one: Invidious serves its frontend at the API
     /// URL, Piped needs the separately configured frontend URL (its API host
-    /// has no watch pages), and SneakPeak Server has no web frontend at all.
+    /// has no watch pages), and Sonic Wave Server has no web frontend at all.
     var watchPageBaseURL: URL? {
         switch type {
         case .invidious: return frontendURL ?? url
@@ -200,7 +200,7 @@ struct Instance: Identifiable, Codable, Hashable, Sendable {
         type == .peertube
     }
 
-    /// Whether this instance is a SneakPeak Server instance.
+    /// Whether this instance is a Sonic Wave Server instance.
     var isYatteeServerInstance: Bool {
         type == .yatteeServer
     }

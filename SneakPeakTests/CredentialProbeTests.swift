@@ -58,7 +58,7 @@ private final class ProbeHarness {
         accounts = AccountsManager(
             identityScope: CredentialIdentityScope(fixedScope: "identity-A"),
             instancesManager: instances,
-            defaults: UserDefaults(suiteName: "sneakpeak.tests.\(UUID().uuidString)")!,
+            defaults: UserDefaults(suiteName: "sonicwave.tests.\(UUID().uuidString)")!,
             unreachableRetryInterval: unreachableRetryInterval
         )
         account = accounts.addAccount(instanceID: instance.id)

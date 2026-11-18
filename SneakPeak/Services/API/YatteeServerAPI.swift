@@ -2,14 +2,14 @@
 //  YatteeServerAPI.swift
 //  SneakPeak
 //
-//  SneakPeak Server API implementation for YouTube content.
+//  Sonic Wave Server API implementation for YouTube content.
 //  The SneakPeak server provides an Invidious-compatible API, so this shares
 //  response models with InvidiousAPI but handles unsupported endpoints.
 //
 
 @preconcurrency import Foundation
 
-/// SneakPeak Server API client for fetching YouTube content.
+/// Sonic Wave Server API client for fetching YouTube content.
 /// Uses Invidious-compatible JSON format for responses.
 actor YatteeServerAPI: InstanceAPI {
     private let httpClient: HTTPClient
@@ -217,7 +217,7 @@ actor YatteeServerAPI: InstanceAPI {
             "q": query,
             "page": String(page)
         ])
-        // SneakPeak Server returns {"videos": [...]} wrapper, not a plain array
+        // Sonic Wave Server returns {"videos": [...]} wrapper, not a plain array
         let response: SneakPeakChannelSearchResponse = try await httpClient.fetch(endpoint, baseURL: instance.url)
 
         var items: [ChannelSearchItem] = []
@@ -280,7 +280,7 @@ actor YatteeServerAPI: InstanceAPI {
     ///
     /// - Parameters:
     ///   - url: The URL to extract (e.g., https://vimeo.com/12345)
-    ///   - instance: The SneakPeak Server instance to use for extraction
+    ///   - instance: The Sonic Wave Server instance to use for extraction
     /// - Returns: Tuple of video, streams, and captions
     /// - Throws: `ExtractionError` if extraction fails
     func extractURL(_ url: URL, instance: Instance) async throws -> (video: Video, streams: [Stream], captions: [Caption]) {
@@ -305,7 +305,7 @@ actor YatteeServerAPI: InstanceAPI {
     /// - Parameters:
     ///   - url: The channel/user URL to extract (e.g., https://vimeo.com/username)
     ///   - page: Page number (1-based)
-    ///   - instance: The SneakPeak Server instance to use for extraction
+    ///   - instance: The Sonic Wave Server instance to use for extraction
     /// - Returns: Tuple of channel, videos list, and optional continuation token for next page
     /// - Throws: `HTTPError` if extraction fails (e.g., site doesn't support channel extraction)
     func extractChannel(url: URL, page: Int = 1, instance: Instance) async throws -> (channel: Channel, videos: [Video], continuation: String?) {
@@ -791,7 +791,7 @@ private struct SneakPeakStoryboard: Decodable, Sendable {
     }
 }
 
-/// Recommended video from SneakPeak Server video details response.
+/// Recommended video from Sonic Wave Server video details response.
 private struct SneakPeakRecommendedVideo: Decodable, Sendable {
     let videoId: String
     let title: String

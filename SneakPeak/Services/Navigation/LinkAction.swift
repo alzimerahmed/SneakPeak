@@ -4,19 +4,19 @@
 //
 //  URL scheme actions: links that do something rather than open a screen.
 //
-//    sneakpeak://play?url={link}&t={seconds}
-//    sneakpeak://play-next?url={link}
-//    sneakpeak://queue?url={link}
-//    sneakpeak://download?url={link}
-//    sneakpeak://bookmark?url={link}
-//    sneakpeak://subscribe?url={channel link}
-//    sneakpeak://unsubscribe?url={channel link}
-//    sneakpeak://player/play | pause | toggle | next | previous | close
-//    sneakpeak://player/seek?t={seconds} | seek?by={±seconds}
-//    sneakpeak://player/rate?value={rate}
-//    sneakpeak://player/state  (reports what is playing; for x-callback-url)
+//    sonicwave://play?url={link}&t={seconds}
+//    sonicwave://play-next?url={link}
+//    sonicwave://queue?url={link}
+//    sonicwave://download?url={link}
+//    sonicwave://bookmark?url={link}
+//    sonicwave://subscribe?url={channel link}
+//    sonicwave://unsubscribe?url={channel link}
+//    sonicwave://player/play | pause | toggle | next | previous | close
+//    sonicwave://player/seek?t={seconds} | seek?by={±seconds}
+//    sonicwave://player/rate?value={rate}
+//    sonicwave://player/state  (reports what is playing; for x-callback-url)
 //
-//  Each also works as x-callback-url — sneakpeak://x-callback-url/{verb}?…
+//  Each also works as x-callback-url — sonicwave://x-callback-url/{verb}?…
 //  &x-success=…&x-error=…&x-cancel=… — see `XCallback`.
 //
 //  `url` may be percent-encoded or raw; a raw link keeps its own query
@@ -83,11 +83,11 @@ struct LinkActionParser {
     ]
 
     func parse(_ url: URL) -> LinkAction? {
-        // sneakpeak://x-callback-url/{verb}… is sneakpeak://{verb}… plus callbacks
+        // sonicwave://x-callback-url/{verb}… is sonicwave://{verb}… plus callbacks
         if url.host?.lowercased() == XCallback.host {
             return XCallback.actionURL(from: url).flatMap(parse)
         }
-        guard url.scheme?.lowercased() == "sneakpeak",
+        guard url.scheme?.lowercased() == "sonicwave",
               let host = url.host?.lowercased(), Self.hosts.contains(host) else {
             return nil
         }
@@ -147,7 +147,7 @@ struct LinkActionParser {
         }
     }
 
-    /// The wrapped link: http(s) or a sneakpeak:// screen link, never a local file.
+    /// The wrapped link: http(s) or a sonicwave:// screen link, never a local file.
     private static func targetURL(_ raw: String) -> URL? {
         // A raw link keeps its percent-escapes; an encoded one is decoded once.
         let string = raw.contains("://") ? raw : (raw.removingPercentEncoding ?? raw)
@@ -155,10 +155,10 @@ struct LinkActionParser {
         return url
     }
 
-    /// Links actions may act on: web links and sneakpeak:// screen links.
+    /// Links actions may act on: web links and sonicwave:// screen links.
     static func isAllowedTarget(_ url: URL) -> Bool {
         guard let scheme = url.scheme?.lowercased() else { return false }
-        return ["http", "https", "sneakpeak"].contains(scheme)
+        return ["http", "https", "sonicwave"].contains(scheme)
     }
 
     /// Splits the query on `&`, but keeps an unencoded `url=` value whole:

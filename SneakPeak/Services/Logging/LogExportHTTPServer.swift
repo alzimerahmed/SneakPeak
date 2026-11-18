@@ -40,7 +40,7 @@ final class LogExportHTTPServer {
     private var listener: NWListener?
     private var autoStopTask: Task<Void, Never>?
     private var countdownTask: Task<Void, Never>?
-    private let queue = DispatchQueue(label: "stream.sneakpeak.logexport", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "stream.sonicwave.logexport", qos: .userInitiated)
 
     /// Auto-stop timeout in seconds (5 minutes).
     let autoStopTimeout: Int = 300
@@ -248,7 +248,7 @@ final class LogExportHTTPServer {
         // Get build number
         let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "0"
 
-        return "sneakpeak-logs_\(deviceName)_b\(buildNumber)_\(timestamp).txt"
+        return "sonicwave-logs_\(deviceName)_b\(buildNumber)_\(timestamp).txt"
     }
 
     private func sendErrorResponse(on connection: NWConnection, code: Int, message: String) {

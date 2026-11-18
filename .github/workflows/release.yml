@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build & attach artifacts (macOS, unsigned)
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 26 (iOS 26 SDK required by source)
+        run: |
+          LATEST=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          echo "Selecting $LATEST"
+          sudo xcode-select -s "$LATEST"
+
+      - name: Show toolchain
+        run: xcodebuild -version && swift --version
+
+      - name: Resolve package dependencies
+        run: xcodebuild -resolvePackageDependencies -project SneakPeak.xcodeproj -scheme SneakPeak
+
+      # Secret-free by design: unsigned build (CODE_SIGNING_ALLOWED=NO).
+      # Signed/notarized Developer-ID artifacts are deferred until
+      # certificates are provisioned (ADR-005 / G12).
+      - name: Build macOS app (Release, unsigned)
+        run: >
+          xcodebuild -project SneakPeak.xcodeproj
+          -scheme SneakPeak
+          -configuration Release
+          -destination 'platform=macOS'
+          CODE_SIGN_IDENTITY=-
+          CODE_SIGNING_REQUIRED=NO
+          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGN_ENTITLEMENTS=
+          build
+
+      - name: Locate and zip the app bundle
+        run: |
+          APP=$(find ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Build/Products/Release -maxdepth 1 -name '*.app' | head -1)
+          echo "APP=$APP"
+          cd "$(dirname "$APP")"
+          zip -qry "SonicWave-${GITHUB_REF_NAME}-macOS.zip" "$(basename "$APP")"
+          mkdir -p "$GITHUB_WORKSPACE/artifacts"
+          cp "SonicWave-${GITHUB_REF_NAME}-macOS.zip" "$GITHUB_WORKSPACE/artifacts/"
+
+      - name: Create GitHub release and upload artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Sonic Wave $GITHUB_REF_NAME" \
+            --generate-notes \
+            artifacts/*

@@ -1585,12 +1585,12 @@ final class AccountsManager {
 }
 
 extension Notification.Name {
-    static let accountsDidChange = Notification.Name("stream.sneakpeak.accountsDidChange")
+    static let accountsDidChange = Notification.Name("stream.sonicwave.accountsDidChange")
     /// An account's usability changed — not the list of accounts.
-    static let accountStatusesDidChange = Notification.Name("stream.sneakpeak.accountStatusesDidChange")
+    static let accountStatusesDidChange = Notification.Name("stream.sonicwave.accountStatusesDidChange")
     /// An account's stored credential was replaced. The account itself is
     /// unchanged, so anything holding data fetched with the old one has to be
     /// told: it may belong to an entirely different person on that server.
-    static let accountCredentialDidChange = Notification.Name("stream.sneakpeak.accountCredentialDidChange")
-    static let dataContextDidChange = Notification.Name("stream.sneakpeak.dataContextDidChange")
+    static let accountCredentialDidChange = Notification.Name("stream.sonicwave.accountCredentialDidChange")
+    static let dataContextDidChange = Notification.Name("stream.sonicwave.dataContextDidChange")
 }
