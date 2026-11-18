@@ -65,20 +65,14 @@ jobs:
           test-without-building
           -only-testing:SneakPeakTests
 
-      - name: Collect diagnostics on failure
+      - name: Dump crash info on failure
         if: failure()
         run: |
-          mkdir -p diag
-          ls -t ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Logs/Test/*.xcresult 2>/dev/null | head -1 | xargs -I{} cp -R "{}" diag/test.xcresult 2>/dev/null || true
-          cp ~/Library/Logs/DiagnosticReports/SneakPeak*.ips diag/ 2>/dev/null || true
-          cp ~/Library/Logs/DiagnosticReports/*.ips diag/ 2>/dev/null | tail -3 || true
-          find /tmp -name 'SneakPeak*.ips' 2>/dev/null | head -5 | xargs -I{} cp {} diag/ || true
-          ls -la diag/
-
-      - name: Upload diagnostics on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ci-diagnostics
-          path: diag/
-          retention-days: 7
+          XC=$(ls -td ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Logs/Test/*.xcresult 2>/dev/null | head -1)
+          echo "XCRESULT=$XC"
+          xcrun xcresulttool get test-results summary --path "$XC" 2>/dev/null | head -100 || true
+          echo "=== crash .ips inside xcresult ==="
+          find "$XC" -name '*.ips' | head -5 | while read f; do echo "--- $f"; head -80 "$f"; done
+          echo "=== system DiagnosticReports ==="
+          ls -t ~/Library/Logs/DiagnosticReports/ | head -5
+          for f in ~/Library/Logs/DiagnosticReports/SneakPeak*; do echo "--- $f"; head -60 "$f"; done
