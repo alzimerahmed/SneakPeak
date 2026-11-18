@@ -1,6 +1,196 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "backup.error.schemaVersion %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This backup uses a newer format (version %lld) and cannot be imported."
+          }
+        }
+      }
+    },
+    "channel.menu.notificationRule" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification Rule"
+          }
+        }
+      }
+    },
+    "channel.notificationRule.all" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All videos"
+          }
+        }
+      }
+    },
+    "channel.notificationRule.digest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digest"
+          }
+        }
+      }
+    },
+    "channel.notificationRule.livestreamsOnly" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livestreams only"
+          }
+        }
+      }
+    },
+    "notification.digest %lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld new videos from %@"
+          }
+        }
+      }
+    },
+    "playlist.fileSourceWarning" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File-source videos can only be added to local playlists"
+          }
+        }
+      }
+    },
+    "settings.backup.export" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export All Data"
+          }
+        }
+      }
+    },
+    "settings.backup.export.error" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export failed"
+          }
+        }
+      }
+    },
+    "settings.backup.exporting" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preparing export…"
+          }
+        }
+      }
+    },
+    "settings.backup.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exports subscriptions, watch history, bookmarks, playlists, notification rules, media sources and settings as JSON. Passwords are never included."
+          }
+        }
+      }
+    },
+    "settings.backup.import" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from File"
+          }
+        }
+      }
+    },
+    "settings.backup.import.confirmation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import user data?"
+          }
+        }
+      }
+    },
+    "settings.backup.import.error" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import failed"
+          }
+        }
+      }
+    },
+    "settings.backup.import.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Existing data is kept; duplicates are skipped."
+          }
+        }
+      }
+    },
+    "settings.backup.import.success" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import complete"
+          }
+        }
+      }
+    },
+    "settings.backup.import.summary %lld %lld %lld %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions: %lld, History: %lld, Bookmarks: %lld, Playlists: %lld"
+          }
+        }
+      }
+    },
+    "settings.backup.sectionTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "User Data"
+          }
+        }
+      }
+    },
+    "settings.backup.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup & Restore"
+          }
+        }
+      }
+    },
     "" : {
 
     },

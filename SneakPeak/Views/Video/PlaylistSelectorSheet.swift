@@ -75,11 +75,12 @@ struct PlaylistSelectorSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                // Warning for local folder videos
-                if video.isFromLocalFolder {
+                // File-source videos can only live in local playlists — a
+                // server-side playlist has no way to reference a file (G5).
+                if video.isFromMediaSource {
                     Section {
                         Label {
-                            Text(String(localized: "playlist.localFileWarning"))
+                            Text(String(localized: "playlist.fileSourceWarning"))
                         } icon: {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.orange)
@@ -87,8 +88,7 @@ struct PlaylistSelectorSheet: View {
                     }
                 }
 
-                // Only show playlist options if not from local folder
-                if !video.isFromLocalFolder {
+                if !video.isFromMediaSource {
                     // One destination shown at a time, picked at the top. No
                     // picker while local playlists are the only destination
                     // there is.
@@ -103,6 +103,8 @@ struct PlaylistSelectorSheet: View {
                     } else {
                         localSection
                     }
+                } else {
+                    localSection
                 }
             }
             #if os(tvOS)

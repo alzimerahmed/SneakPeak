@@ -38,6 +38,7 @@ struct AdvancedSettingsView: View {
             settingsSection
             #if !os(tvOS)
             downloadsStorageSection
+            backupSection
             #endif
             developerSection
         }
@@ -333,6 +334,14 @@ struct AdvancedSettingsView: View {
         }
     }
     #endif
+
+    /// JSON export/import of all user data (G7).
+    @ViewBuilder
+    private var backupSection: some View {
+        SettingsNavigationRow("settings.backup.title", systemImage: "externaldrive.badge.timemachine") {
+            UserDataBackupView()
+        }
+    }
 
     @ViewBuilder
     private var deviceNameSection: some View {

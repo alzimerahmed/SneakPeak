@@ -173,6 +173,37 @@ final class NotificationManager: NSObject {
 
     // MARK: - Debug / Testing
 
+    /// Sends a single digest summary for a channel on the digest rule (G6):
+    /// a count, not titles — the channel's feed is the detail view.
+    func sendDigestNotification(channelName: String, count: Int) async {
+        await refreshAuthorizationStatus()
+
+        guard isAuthorized, count > 0 else { return }
+
+        let content = UNMutableNotificationContent()
+        content.sound = .default
+        content.categoryIdentifier = Self.notificationCategoryIdentifier
+        content.title = channelName
+        content.body = String(
+            format: NSLocalizedString("notification.digest %lld %@", comment: "Digest notification: count and channel"),
+            count,
+            channelName
+        )
+
+        let request = UNNotificationRequest(
+            identifier: "digest-\(channelName)-\(Date().timeIntervalSince1970)",
+            content: content,
+            trigger: nil
+        )
+
+        do {
+            try await UNUserNotificationCenter.current().add(request)
+            LoggingService.shared.info("Sent digest notification for \(count) videos from \(channelName)", category: .notifications)
+        } catch {
+            LoggingService.shared.logNotificationError("Failed to schedule digest notification", error: error)
+        }
+    }
+
     /// Sends a test notification to verify notification permissions and appearance.
     func sendTestNotification() async {
         await refreshAuthorizationStatus()

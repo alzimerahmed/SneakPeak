@@ -762,6 +762,7 @@ final class CloudKitRecordMapper {
 
         record["channelID"] = settings.channelID as CKRecordValue
         record["notificationsEnabled"] = (settings.notificationsEnabled ? 1 : 0) as CKRecordValue
+        record["ruleRawValue"] = settings.ruleRawValue as CKRecordValue
         record["updatedAt"] = settings.updatedAt as CKRecordValue
         record["sourceRawValue"] = settings.sourceRawValue as CKRecordValue
         record["instanceURLString"] = settings.instanceURLString as CKRecordValue?
@@ -802,6 +803,8 @@ final class CloudKitRecordMapper {
             globalProvider: record["globalProvider"] as? String
         )
         settings.updatedAt = updatedAt
+        // Optional for records written before rules existed.
+        settings.ruleRawValue = (record["ruleRawValue"] as? String) ?? ChannelNotificationRule.all.rawValue
 
         return settings
     }

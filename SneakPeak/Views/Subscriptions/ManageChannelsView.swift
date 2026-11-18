@@ -436,6 +436,8 @@ struct ManageChannelsView: View {
                 )
             }
 
+            notificationRulePicker(for: channel)
+
             Button(role: .destructive) {
                 unsubscribe(from: channel)
             } label: {
@@ -475,6 +477,8 @@ struct ManageChannelsView: View {
                                 systemImage: notificationsEnabled(for: channel) ? "bell.slash" : "bell"
                             )
                         }
+
+                        notificationRulePicker(for: channel)
 
                         Button(role: .destructive) {
                             unsubscribe(from: channel)
@@ -596,6 +600,21 @@ struct ManageChannelsView: View {
             return localState
         }
         return dataManager?.notificationsEnabled(for: channel.id.channelID) ?? false
+    }
+
+    /// Per-channel notification rule picker (G6). Rendered as a checkmarked
+    /// submenu by the system context menu on every platform.
+    private func notificationRulePicker(for channel: Channel) -> some View {
+        Picker(selection: Binding(
+            get: { dataManager?.notificationRule(for: channel.id.channelID) ?? .all },
+            set: { dataManager?.setNotificationRule($0, for: channel.id.channelID) }
+        )) {
+            ForEach(ChannelNotificationRule.allCases) { rule in
+                Label(rule.displayName, systemImage: rule.systemImage).tag(rule)
+            }
+        } label: {
+            Label(String(localized: "channel.menu.notificationRule"), systemImage: "bell.badge")
+        }
     }
 
     private func toggleNotifications(for channel: Channel) {

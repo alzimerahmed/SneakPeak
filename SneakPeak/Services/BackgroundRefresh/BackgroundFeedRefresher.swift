@@ -437,6 +437,39 @@ final class BackgroundFeedRefresher {
             }
         }
 
+        // Apply per-channel notification rules (G6): livestreams-only channels
+        // keep live videos only; digest channels are summarized separately.
+        if let appEnvironment {
+            let dataManager = appEnvironment.dataManager
+            let standard = videosToNotify.filter { item in
+                switch dataManager.notificationRule(for: item.video.author.id) {
+                case .all:
+                    true
+                case .livestreamsOnly:
+                    item.video.isLive
+                case .digest:
+                    false
+                }
+            }
+            let digestByChannel = Dictionary(grouping: videosToNotify.filter {
+                dataManager.notificationRule(for: $0.video.author.id) == .digest
+            }, by: \.channelName)
+
+            for (channelName, items) in digestByChannel {
+                await notificationManager.sendDigestNotification(
+                    channelName: channelName,
+                    count: items.count
+                )
+            }
+            if !digestByChannel.isEmpty {
+                LoggingService.shared.debug(
+                    "Sent \(digestByChannel.count) digest notifications",
+                    category: .notifications
+                )
+            }
+            videosToNotify = standard
+        }
+
         if !videosToNotify.isEmpty {
             await notificationManager.sendNotification(for: videosToNotify)
             LoggingService.shared.info(

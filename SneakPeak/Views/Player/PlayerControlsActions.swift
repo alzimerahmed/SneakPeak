@@ -236,10 +236,11 @@ struct PlayerControlsActions {
         return String(format: "%.2gx", rate.rawValue)
     }
 
-    /// Whether add to playlist is available
+    /// Whether add to playlist is available.
+    /// File-source videos go to local playlists only (G5); the selector sheet
+    /// handles the restriction, so any video qualifies here.
     var canAddToPlaylist: Bool {
-        guard let video = currentVideo else { return false }
-        return !video.isFromLocalFolder
+        currentVideo != nil
     }
 
     /// Whether captions are available (external files or embedded tracks)

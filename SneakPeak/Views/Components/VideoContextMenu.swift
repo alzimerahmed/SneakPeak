@@ -183,14 +183,16 @@ struct VideoContextMenuContent: View {
 
     // MARK: - Computed Properties (context-based, not observable)
 
-    /// Whether to show the bookmark toggle based on context
+    /// Whether to show the bookmark toggle based on context.
+    /// File-source videos (SMB/WebDAV/local) are bookmarkable like any other (G5).
     private var showBookmarkToggle: Bool {
-        !video.isFromLocalFolder && context != .bookmarks && context != .downloads && context != .mediaBrowser
+        context != .bookmarks && context != .downloads
     }
 
-    /// Whether to show add to playlist based on context
+    /// Whether to show add to playlist based on context.
+    /// File-source videos can be added to local playlists from the media browser (G5).
     private var showAddToPlaylist: Bool {
-        !video.isFromLocalFolder && context != .mediaBrowser
+        context != .downloads
     }
 
     /// Whether to show the download option based on context

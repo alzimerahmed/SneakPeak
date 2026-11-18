@@ -67,6 +67,52 @@ extension DataManager {
         }
     }
 
+    /// Sets the notification rule for a channel.
+    /// Creates the settings record if it doesn't exist (without enabling notifications).
+    func setNotificationRule(_ rule: ChannelNotificationRule, for channelID: String) {
+        let descriptor = FetchDescriptor<ChannelNotificationSettings>(
+            predicate: #Predicate { $0.channelID == channelID }
+        )
+
+        do {
+            let settings: ChannelNotificationSettings
+            if let existing = try modelContext.fetch(descriptor).first {
+                existing.setRule(rule)
+                settings = existing
+            } else {
+                let sub = subscription(for: channelID)
+                settings = ChannelNotificationSettings(
+                    channelID: channelID,
+                    notificationsEnabled: false,
+                    sourceRawValue: sub?.sourceRawValue ?? "global",
+                    instanceURLString: sub?.instanceURLString,
+                    globalProvider: sub?.providerName
+                )
+                settings.setRule(rule)
+                modelContext.insert(settings)
+            }
+            save()
+
+            cloudKitSync?.queueChannelNotificationSettingsSave(settings)
+        } catch {
+            LoggingService.shared.logCloudKitError("Failed to set notification rule", error: error)
+        }
+    }
+
+    /// Gets the notification rule for a channel. Defaults to `.all`.
+    func notificationRule(for channelID: String) -> ChannelNotificationRule {
+        let descriptor = FetchDescriptor<ChannelNotificationSettings>(
+            predicate: #Predicate { $0.channelID == channelID }
+        )
+
+        do {
+            return try modelContext.fetch(descriptor).first?.rule ?? .all
+        } catch {
+            LoggingService.shared.logCloudKitError("Failed to fetch notification rule", error: error)
+            return .all
+        }
+    }
+
     /// Gets the notification settings record for a channel.
     /// - Parameter channelID: The channel ID to get settings for.
     /// - Returns: The settings record, or nil if none exists.
@@ -146,6 +192,7 @@ extension DataManager {
                 // Update if incoming is newer
                 if settings.updatedAt > existingSettings.updatedAt {
                     existingSettings.notificationsEnabled = settings.notificationsEnabled
+                    existingSettings.ruleRawValue = settings.ruleRawValue
                     existingSettings.updatedAt = settings.updatedAt
                     existingSettings.sourceRawValue = settings.sourceRawValue
                     existingSettings.instanceURLString = settings.instanceURLString
