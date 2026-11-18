@@ -55,9 +55,19 @@ struct MediaFileThumbnailView: View {
 
     private var placeholder: some View {
         Image(systemName: file.systemImage)
-            .font(.title2)
+            // Mirror MediaFileRow's icon font so the 28-pt macOS frame is
+            // not oversized by a title2 glyph.
+            .font(Self.iconFont)
             .foregroundStyle(iconColor)
     }
+
+    private static let iconFont: Font = {
+        #if os(macOS)
+        .title3
+        #else
+        .title2
+        #endif
+    }()
 
     private var iconColor: Color {
         file.isDirectory ? .blue : file.isVideo ? .purple : .secondary

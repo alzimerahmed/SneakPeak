@@ -92,6 +92,30 @@ struct ChannelID: Codable, Hashable, Sendable {
     static func extracted(_ channelID: String, extractor: String, originalURL: URL) -> ChannelID {
         ChannelID(source: .extracted(extractor: extractor, originalURL: originalURL), channelID: channelID)
     }
+
+    /// Normalizes any channel identifier shape to the bare ID form stored in
+    /// `channelID` (and therefore in `ChannelNotificationSettings.channelID`).
+    ///
+    /// Backends emit different shapes for the same channel: a bare `UC…` id,
+    /// a `/channel/UC…` path, a full channel URL, or an `@handle`. Rule
+    /// lookups and dedup maps must compare both sides in this canonical
+    /// form or they silently miss.
+    static func canonical(_ raw: String) -> String {
+        var value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Channel URL or path: keep only the segment after /channel/
+        if let range = value.range(of: "/channel/") {
+            value = String(value[range.upperBound...])
+        }
+        // A leftover full URL (e.g. after a partial prefix strip): the bare
+        // ID is the last path component.
+        if let url = URL(string: value), url.scheme != nil {
+            let components = url.pathComponents.filter { $0 != "/" }
+            if let last = components.last {
+                value = last
+            }
+        }
+        return value
+    }
 }
 
 extension Channel {

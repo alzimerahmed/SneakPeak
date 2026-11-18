@@ -42,9 +42,18 @@ enum FormatFallback {
     ///
     /// Audio-only content falls back within audio-only streams; video never
     /// falls back to audio-only (that is the user's explicit Audio Mode).
+    /// - Parameter triedURLs: Stream URLs already attempted for this video —
+    ///   excluded from the pool so retry sequences cannot ping-pong between
+    ///   two failing streams.
     /// Returns `nil` when there is nothing else to try.
-    static func candidate(failed: Stream, in streams: [Stream]) -> Stream? {
-        let pool = streams.filter { $0.url != failed.url && !$0.url.isFileURL }
+    static func candidate(
+        failed: Stream,
+        in streams: [Stream],
+        triedURLs: Set<URL> = []
+    ) -> Stream? {
+        let pool = streams.filter {
+            $0.url != failed.url && !triedURLs.contains($0.url) && !$0.url.isFileURL
+        }
         let sameKind = pool.filter { $0.isAudioOnly == failed.isAudioOnly }
         guard !sameKind.isEmpty else { return nil }
 

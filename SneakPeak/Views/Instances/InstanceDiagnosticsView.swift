@@ -36,7 +36,10 @@ struct InstanceDiagnosticsView: View {
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
-        .task { await probeAll() }
+        // Re-probe when the instance set changes (added/removed instances get
+        // probed), keyed on the instance IDs. Re-appearing with an unchanged
+        // set still re-probes because the identity changes on each appearance.
+        .task(id: instances.map(\.id)) { await probeAll() }
     }
 
     // MARK: - List

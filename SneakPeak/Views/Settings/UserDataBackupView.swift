@@ -14,6 +14,10 @@ struct UserDataBackupView: View {
     @Environment(\.appEnvironment) private var appEnvironment
 
     @State private var exportURL: URL?
+    /// Work in progress (building + writing the backup file) — drives the
+    /// spinner and disables the buttons.
+    @State private var isPreparingExport = false
+    /// The file exporter sheet presentation.
     @State private var isExporting = false
     @State private var isImporting = false
     @State private var showingImportConfirmation = false
@@ -40,7 +44,7 @@ struct UserDataBackupView: View {
                 } label: {
                     Label(String(localized: "settings.backup.export"), systemImage: "square.and.arrow.up")
                 }
-                .disabled(isExporting)
+                .disabled(isPreparingExport || isExporting)
 
                 Button {
                     isImporting = true
@@ -48,7 +52,7 @@ struct UserDataBackupView: View {
                     Label(String(localized: "settings.backup.import"), systemImage: "square.and.arrow.down")
                 }
 
-                if isExporting {
+                if isPreparingExport {
                     HStack {
                         ProgressView()
                             .controlSize(.small)
@@ -103,8 +107,10 @@ struct UserDataBackupView: View {
     // MARK: - Actions
 
     private func exportBackup() {
-        guard let backupService else { return }
+        guard let backupService, !isPreparingExport else { return }
+        isPreparingExport = true
         Task {
+            defer { isPreparingExport = false }
             do {
                 let data = try backupService.exportData()
                 let url = FileManager.default.temporaryDirectory

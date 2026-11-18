@@ -19767,6 +19767,16 @@
         }
       }
     },
+    "subscriptions.error.noBackendConfigured" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No backend configured for local subscriptions"
+          }
+        }
+      }
+    },
     "subscriptions.error.yatteeServerRequired" : {
       "localizations" : {
         "en" : {
@@ -19817,6 +19827,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Go to Channel"
+          }
+        }
+      }
+    },
+    "subscriptions.noBackendConfigured.description" : {
+      "comment" : "Empty state when local subscriptions have no backend to fetch from",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add an Invidious or Piped instance, or a SneakPeak Server, in Settings to fetch your local subscriptions feed"
+          }
+        }
+      }
+    },
+    "subscriptions.noBackendConfigured.title" : {
+      "comment" : "Empty state when local subscriptions have no backend to fetch from",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Backend Configured"
           }
         }
       }

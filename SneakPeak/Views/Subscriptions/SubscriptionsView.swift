@@ -355,6 +355,8 @@ struct SubscriptionsView: View {
         switch error {
         case .yatteeServerRequired:
             return String(localized: "subscriptions.error.yatteeServerRequired")
+        case .noBackendConfigured:
+            return String(localized: "subscriptions.error.noBackendConfigured")
         case .notAuthenticated:
             return String(localized: "subscriptions.error.notAuthenticated")
         case .networkError(let message):
@@ -780,6 +782,8 @@ struct SubscriptionsView: View {
             switch feedError {
             case .yatteeServerRequired:
                 yatteeServerRequiredView
+            case .noBackendConfigured:
+                noBackendConfiguredView
             case .notAuthenticated:
                 notAuthenticatedView
             case .networkError(let message):
@@ -872,6 +876,8 @@ struct SubscriptionsView: View {
                     switch feedError {
                     case .yatteeServerRequired:
                         yatteeServerRequiredView
+                    case .noBackendConfigured:
+                        noBackendConfiguredView
                     case .notAuthenticated:
                         notAuthenticatedView
                     case .networkError(let message):
@@ -1590,6 +1596,18 @@ struct SubscriptionsView: View {
             Label(String(localized: "subscriptions.yatteeServerRequired.title"), systemImage: "server.rack")
         } description: {
             Text(String(localized: "subscriptions.yatteeServerRequired.description"))
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.vertical, 40)
+    }
+
+    /// Empty state shown when local subscriptions exist but no backend of any
+    /// kind (SneakPeak Server, Invidious or Piped) is configured.
+    private var noBackendConfiguredView: some View {
+        ContentUnavailableView {
+            Label(String(localized: "subscriptions.noBackendConfigured.title"), systemImage: "globe")
+        } description: {
+            Text(String(localized: "subscriptions.noBackendConfigured.description"))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.vertical, 40)

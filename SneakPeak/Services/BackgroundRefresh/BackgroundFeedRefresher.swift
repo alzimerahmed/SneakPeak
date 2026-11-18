@@ -89,11 +89,12 @@ final class BackgroundFeedRefresher {
         let lastCheckDate = appEnvironment.settingsManager.lastBackgroundCheck ?? Date.distantPast
 
         // Get channel IDs with notifications enabled from ChannelNotificationSettings
-        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled())
+        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled()
+            .map(ChannelID.canonical))
 
         // Filter subscriptions to only those with notifications enabled
         let notifiableSubscriptions = appEnvironment.dataManager.subscriptions().filter {
-            notifiableChannelIDs.contains($0.channelID)
+            notifiableChannelIDs.contains(ChannelID.canonical($0.channelID))
         }
 
         LoggingService.shared.info(
@@ -141,7 +142,7 @@ final class BackgroundFeedRefresher {
             // Filter to new videos - don't wait for ready, use whatever is available
             var dateFilteredCount = 0
             var dedupedCount = 0
-            let newVideos: [(video: Video, channelName: String)] = response.videos.compactMap { serverVideo in
+            let newVideos: [(video: Video, channelID: String, channelName: String)] = response.videos.compactMap { serverVideo in
                 guard let video = serverVideo.toVideo(),
                       let publishedAt = video.publishedAt,
                       publishedAt > lastCheckDate,
@@ -149,12 +150,13 @@ final class BackgroundFeedRefresher {
                     return nil
                 }
                 dateFilteredCount += 1
+                let channelID = ChannelID.canonical(video.author.id)
                 // Skip if this is the last video we notified about for this channel
-                if lastNotified[video.author.id] == video.id.videoID {
+                if lastNotified[channelID] == video.id.videoID {
                     dedupedCount += 1
                     return nil
                 }
-                return (video: video, channelName: serverVideo.author)
+                return (video: video, channelID: channelID, channelName: serverVideo.author)
             }
 
             LoggingService.shared.debug(
@@ -168,8 +170,8 @@ final class BackgroundFeedRefresher {
 
             // Update last notified video per channel (store newest video ID for each channel)
             var updatedLastNotified = lastNotified
-            for (video, _) in newVideos {
-                updatedLastNotified[video.author.id] = video.id.videoID
+            for (video, channelID, _) in newVideos {
+                updatedLastNotified[channelID] = video.id.videoID
             }
             appEnvironment.settingsManager.lastNotifiedVideoPerChannel = updatedLastNotified
 
@@ -202,7 +204,8 @@ final class BackgroundFeedRefresher {
         let lastCheckDate = appEnvironment.settingsManager.lastBackgroundCheck ?? Date.distantPast
 
         // Get channel IDs with notifications enabled from ChannelNotificationSettings
-        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled())
+        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled()
+            .map(ChannelID.canonical))
 
         LoggingService.shared.info(
             "Background refresh starting (Invidious account) | lastBackgroundCheck: \(lastCheckDate) | channels with notifications: \(notifiableChannelIDs.count)",
@@ -236,9 +239,10 @@ final class BackgroundFeedRefresher {
             var channelFilteredCount = 0
             var dateFilteredCount = 0
             var dedupedCount = 0
-            let newVideos: [(video: Video, channelName: String)] = feedResponse.videos.compactMap { video in
+            let newVideos: [(video: Video, channelID: String, channelName: String)] = feedResponse.videos.compactMap { video in
                 // Only include videos from channels with notifications enabled
-                guard notifiableChannelIDs.contains(video.author.id) else {
+                let channelID = ChannelID.canonical(video.author.id)
+                guard notifiableChannelIDs.contains(channelID) else {
                     return nil
                 }
                 channelFilteredCount += 1
@@ -252,12 +256,12 @@ final class BackgroundFeedRefresher {
                 dateFilteredCount += 1
 
                 // Skip if this is the last video we notified about for this channel
-                if lastNotified[video.author.id] == video.id.videoID {
+                if lastNotified[channelID] == video.id.videoID {
                     dedupedCount += 1
                     return nil
                 }
 
-                return (video: video, channelName: video.author.name)
+                return (video: video, channelID: channelID, channelName: video.author.name)
             }
 
             LoggingService.shared.debug(
@@ -275,8 +279,8 @@ final class BackgroundFeedRefresher {
 
             // Update last notified video per channel (store newest video ID for each channel)
             var updatedLastNotified = lastNotified
-            for (video, _) in newVideos {
-                updatedLastNotified[video.author.id] = video.id.videoID
+            for (video, channelID, _) in newVideos {
+                updatedLastNotified[channelID] = video.id.videoID
             }
             appEnvironment.settingsManager.lastNotifiedVideoPerChannel = updatedLastNotified
 
@@ -306,7 +310,8 @@ final class BackgroundFeedRefresher {
         let lastCheckDate = appEnvironment.settingsManager.lastBackgroundCheck ?? Date.distantPast
 
         // Get channel IDs with notifications enabled from ChannelNotificationSettings
-        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled())
+        let notifiableChannelIDs = Set(appEnvironment.dataManager.channelIDsWithNotificationsEnabled()
+            .map(ChannelID.canonical))
 
         LoggingService.shared.info(
             "Background refresh starting (Piped account) | lastBackgroundCheck: \(lastCheckDate) | channels with notifications: \(notifiableChannelIDs.count)",
@@ -337,9 +342,10 @@ final class BackgroundFeedRefresher {
             var channelFilteredCount = 0
             var dateFilteredCount = 0
             var dedupedCount = 0
-            let newVideos: [(video: Video, channelName: String)] = feedVideos.compactMap { video in
+            let newVideos: [(video: Video, channelID: String, channelName: String)] = feedVideos.compactMap { video in
                 // Only include videos from channels with notifications enabled
-                guard notifiableChannelIDs.contains(video.author.id) else {
+                let channelID = ChannelID.canonical(video.author.id)
+                guard notifiableChannelIDs.contains(channelID) else {
                     return nil
                 }
                 channelFilteredCount += 1
@@ -353,12 +359,12 @@ final class BackgroundFeedRefresher {
                 dateFilteredCount += 1
 
                 // Skip if this is the last video we notified about for this channel
-                if lastNotified[video.author.id] == video.id.videoID {
+                if lastNotified[channelID] == video.id.videoID {
                     dedupedCount += 1
                     return nil
                 }
 
-                return (video: video, channelName: video.author.name)
+                return (video: video, channelID: channelID, channelName: video.author.name)
             }
 
             LoggingService.shared.debug(
@@ -376,8 +382,8 @@ final class BackgroundFeedRefresher {
 
             // Update last notified video per channel (store newest video ID for each channel)
             var updatedLastNotified = lastNotified
-            for (video, _) in newVideos {
-                updatedLastNotified[video.author.id] = video.id.videoID
+            for (video, channelID, _) in newVideos {
+                updatedLastNotified[channelID] = video.id.videoID
             }
             appEnvironment.settingsManager.lastNotifiedVideoPerChannel = updatedLastNotified
 
@@ -394,8 +400,8 @@ final class BackgroundFeedRefresher {
 
     /// Sends notifications for new videos if any were found.
     /// Filters out videos the user has already started or finished watching.
-    /// - Parameter newVideos: Array of new videos with their channel names
-    private func sendNotificationsIfNeeded(newVideos: [(video: Video, channelName: String)]) async {
+    /// - Parameter newVideos: Array of new videos with their canonical channel IDs and names
+    private func sendNotificationsIfNeeded(newVideos: [(video: Video, channelID: String, channelName: String)]) async {
         #if !os(tvOS)
         guard !newVideos.isEmpty else {
             LoggingService.shared.debug("No new videos found", category: .notifications)
@@ -442,7 +448,7 @@ final class BackgroundFeedRefresher {
         if let appEnvironment {
             let dataManager = appEnvironment.dataManager
             let standard = videosToNotify.filter { item in
-                switch dataManager.notificationRule(for: item.video.author.id) {
+                switch dataManager.notificationRule(for: item.channelID) {
                 case .all:
                     true
                 case .livestreamsOnly:
@@ -451,13 +457,15 @@ final class BackgroundFeedRefresher {
                     false
                 }
             }
+            // Group digests by canonical channel ID (m7): channel names are
+            // not unique and can change between refreshes.
             let digestByChannel = Dictionary(grouping: videosToNotify.filter {
-                dataManager.notificationRule(for: $0.video.author.id) == .digest
-            }, by: \.channelName)
+                dataManager.notificationRule(for: $0.channelID) == .digest
+            }, by: \.channelID)
 
-            for (channelName, items) in digestByChannel {
+            for (channelID, items) in digestByChannel {
                 await notificationManager.sendDigestNotification(
-                    channelName: channelName,
+                    channelName: items.first?.channelName ?? channelID,
                     count: items.count
                 )
             }
@@ -471,7 +479,9 @@ final class BackgroundFeedRefresher {
         }
 
         if !videosToNotify.isEmpty {
-            await notificationManager.sendNotification(for: videosToNotify)
+            await notificationManager.sendNotification(
+                for: videosToNotify.map { (video: $0.video, channelName: $0.channelName) }
+            )
             LoggingService.shared.info(
                 "Background refresh complete | Found \(videosToNotify.count) new videos from \(Set(videosToNotify.map(\.channelName)).count) channels | Notification sent: true",
                 category: .notifications

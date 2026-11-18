@@ -26,9 +26,11 @@ enum JSONValue: Codable, Hashable, Sendable {
         case is NSNull:
             self = .null
         case let number as NSNumber:
-            // Distinguish Bool from other numbers: Bool bridging is exact.
-            if let bool = number as? Bool {
-                self = .bool(bool)
+            // Distinguish Bool from other numbers: CFBoolean is its own
+            // CoreFoundation type, so the type ID is exact (a bridged Int
+            // would also pass `as? Bool` for 0/1).
+            if CFGetTypeID(number) == CFBooleanGetTypeID() {
+                self = .bool(number.boolValue)
             } else if number.denominator == 1 {
                 self = .int(number.intValue)
             } else {
@@ -459,7 +461,30 @@ final class UserDataBackupService {
 
         var summary = ImportSummary()
 
+        // Snapshot existing keys up front so each record is a Set lookup
+        // instead of a per-record fetch + save (O(n) instead of O(n²) on the
+        // main actor). One save() per section.
+        let scopeSuffix: (String, String?, String?, String?) -> String = {
+            SourceScope.from(
+                sourceRawValue: $0,
+                globalProvider: $1,
+                instanceURLString: $2,
+                externalExtractor: $3
+            ).recordNameSuffix
+        }
+
+        let existingSubscriptionKeys = Set(
+            dataManager.subscriptions().map {
+                "\($0.channelID)|\(scopeSuffix($0.sourceRawValue, $0.providerName, $0.instanceURLString, nil))"
+            }
+        )
+        var insertedSubscriptions: [Subscription] = []
         for export in backup.subscriptions {
+            // Imported subscriptions have no providerName, so the scope key
+            // must match what the inserted entity will derive (nil provider).
+            let key = "\(export.channelID)|\(scopeSuffix(export.sourceRawValue, nil, export.instanceURLString, nil))"
+            guard !existingSubscriptionKeys.contains(key) else { continue }
+            existingSubscriptionKeys.insert(key)
             let subscription = Subscription(
                 channelID: export.channelID,
                 sourceRawValue: export.sourceRawValue,
@@ -472,35 +497,70 @@ final class UserDataBackupService {
                 isVerified: export.isVerified,
                 channelURLString: nil
             )
-            let before = dataManager.subscriptions().count
-            dataManager.insertSubscription(subscription)
-            if dataManager.subscriptions().count > before {
-                summary.subscriptions += 1
+            dataManager.modelContext.insert(subscription)
+            insertedSubscriptions.append(subscription)
+            summary.subscriptions += 1
+        }
+        if !insertedSubscriptions.isEmpty {
+            for subscription in insertedSubscriptions {
+                dataManager.cloudKitSync?.queueSubscriptionSave(subscription)
             }
+            dataManager.save()
         }
 
+        let existingWatchKeys = Set(
+            dataManager.allWatchEntries().map {
+                "\($0.videoID)|\(scopeSuffix($0.sourceRawValue, $0.globalProvider, $0.instanceURLString, $0.externalExtractor))"
+            }
+        )
+        var insertedWatchEntries: [WatchEntry] = []
         for export in backup.watchHistory {
+            let key = "\(export.videoID)|\(scopeSuffix(export.sourceRawValue, export.globalProvider, export.instanceURLString, export.externalExtractor))"
+            guard !existingWatchKeys.contains(key) else { continue }
+            existingWatchKeys.insert(key)
             let entry = export.toWatchEntry()
-            let before = dataManager.allWatchEntries().count
-            dataManager.insertWatchEntry(entry)
-            if dataManager.allWatchEntries().count > before {
-                summary.watchEntries += 1
+            dataManager.modelContext.insert(entry)
+            insertedWatchEntries.append(entry)
+            summary.watchEntries += 1
+        }
+        if !insertedWatchEntries.isEmpty {
+            for entry in insertedWatchEntries {
+                dataManager.cloudKitSync?.queueWatchEntrySave(entry)
             }
+            dataManager.save()
+            TopShelfSnapshotWriter.writeContinueWatching(dataManager: dataManager)
         }
 
+        let existingBookmarkKeys = Set(
+            dataManager.allBookmarks().map {
+                "\($0.videoID)|\(scopeSuffix($0.sourceRawValue, $0.globalProvider, $0.instanceURLString, $0.externalExtractor))"
+            }
+        )
+        var insertedBookmarks: [Bookmark] = []
         for export in backup.bookmarks {
+            let key = "\(export.videoID)|\(scopeSuffix(export.sourceRawValue, export.globalProvider, export.instanceURLString, export.externalExtractor))"
+            guard !existingBookmarkKeys.contains(key) else { continue }
+            existingBookmarkKeys.insert(key)
             let bookmark = export.toBookmark()
-            let before = dataManager.allBookmarks().count
-            dataManager.insertBookmark(bookmark)
-            if dataManager.allBookmarks().count > before {
-                summary.bookmarks += 1
+            dataManager.modelContext.insert(bookmark)
+            dataManager.cachedBookmarkedVideoIDs.insert(bookmark.videoID)
+            insertedBookmarks.append(bookmark)
+            summary.bookmarks += 1
+        }
+        if !insertedBookmarks.isEmpty {
+            for bookmark in insertedBookmarks {
+                dataManager.cloudKitSync?.queueBookmarkSave(bookmark)
             }
+            dataManager.save()
+            TopShelfSnapshotWriter.writeBookmarks(dataManager: dataManager)
         }
 
+        let existingPlaylistIDs = Set(dataManager.playlists().map(\.id))
         for export in backup.playlists {
             // Skip playlists that already exist (same id) so re-importing a
             // backup never duplicates playlists or their items.
-            guard dataManager.playlist(forID: export.id) == nil else { continue }
+            guard !existingPlaylistIDs.contains(export.id) else { continue }
+            existingPlaylistIDs.insert(export.id)
             let playlist = LocalPlaylist(
                 id: export.id,
                 title: export.title,
@@ -508,15 +568,18 @@ final class UserDataBackupService {
             )
             playlist.createdAt = export.createdAt
             playlist.updatedAt = export.updatedAt
-            dataManager.insertPlaylist(playlist)
-            if dataManager.playlist(forID: export.id) != nil {
-                summary.playlists += 1
-                for itemExport in export.items {
-                    let item = itemExport.toPlaylistItem()
-                    item.playlist = playlist
-                    dataManager.insertPlaylistItem(item)
-                }
+            dataManager.modelContext.insert(playlist)
+            summary.playlists += 1
+            for itemExport in export.items {
+                let item = itemExport.toPlaylistItem()
+                item.playlist = playlist
+                dataManager.modelContext.insert(item)
             }
+            dataManager.cloudKitSync?.queuePlaylistSave(playlist)
+        }
+        if summary.playlists > 0 {
+            dataManager.save()
+            NotificationCenter.default.post(name: .playlistsDidChange, object: nil)
         }
 
         for export in backup.channelNotificationSettings {

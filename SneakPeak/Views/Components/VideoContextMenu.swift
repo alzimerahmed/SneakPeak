@@ -244,10 +244,10 @@ struct VideoContextMenuContent: View {
                 }
             } label: {
                 Label {
-                Text(String(localized: "video.context.playIncognito"))
-            } icon: {
-                Image("incognito")
-            }
+                    Text(String(localized: "video.context.playIncognito"))
+                } icon: {
+                    Image("incognito")
+                }
             }
         }
 

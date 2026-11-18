@@ -32,9 +32,13 @@ actor FileThumbnailDiskCache {
     ///     Passing `0` disables eviction (used by tests that only check
     ///     hit/miss behavior).
     init(directory: URL? = nil, sizeLimitBytes: Int? = nil) {
-        let base = directory ?? FileManager.default
-            .urls(for: .cachesDirectory, in: .userDomainMask).first!
-            .appendingPathComponent("FileThumbnails", isDirectory: true)
+        // Fall back to the temporary directory if the caches directory
+        // cannot be resolved (never crash init over a cache location).
+        let base = directory
+            ?? FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first?
+                .appendingPathComponent("FileThumbnails", isDirectory: true)
+            ?? URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+                .appendingPathComponent("FileThumbnails", isDirectory: true)
 
         #if os(tvOS)
         let defaultLimit = 100 * 1024 * 1024 // 100 MB
@@ -78,7 +82,11 @@ actor FileThumbnailDiskCache {
         }
 
         if let total = totalSize {
-            totalSize = total + data.count
+            // A same-key rewrite replaces the old file, so subtract its
+            // previous size before adding the new one or the running total
+            // double-counts rewritten entries.
+            let previousSize = fileSize(at: url) ?? 0
+            totalSize = total - previousSize + data.count
         }
 
         guard sizeLimitBytes > 0 else { return }

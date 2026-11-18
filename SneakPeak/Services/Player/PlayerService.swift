@@ -143,10 +143,13 @@ final class PlayerService {
     private(set) var isIncognitoSession = false
 
     /// Format fallback (G4) bookkeeping: the video a fallback was last
-    /// attempted for and how many retries it has consumed. Reset when a
-    /// different video fails, so each video gets its own retry budget.
+    /// attempted for, how many retries it has consumed, and the stream URLs
+    /// already tried for it. Reset when a different video fails, so each
+    /// video gets its own retry budget. Tracking every tried URL (not just
+    /// the last failure) makes an A→B→A ping-pong impossible.
     private var formatFallbackVideoID: VideoID?
     private var formatFallbackAttempts = 0
+    private var formatFallbackTriedURLs: Set<URL> = []
     private let maxFormatFallbackAttempts = 2
 
     /// Whether the current playback should leave no trace: the global
@@ -3188,6 +3191,7 @@ extension PlayerService: PlayerBackendDelegate {
         // later failure on the same video gets a fresh set of retries.
         formatFallbackAttempts = 0
         formatFallbackVideoID = nil
+        formatFallbackTriedURLs = []
     }
 
     func backendDidFallBackToSoftwareDecoding(_ backend: any PlayerBackend) {
@@ -3314,10 +3318,16 @@ extension PlayerService: PlayerBackendDelegate {
         if formatFallbackVideoID != video.id {
             formatFallbackVideoID = video.id
             formatFallbackAttempts = 0
+            formatFallbackTriedURLs = []
         }
         guard formatFallbackAttempts < maxFormatFallbackAttempts else { return false }
 
-        guard let candidate = FormatFallback.candidate(failed: failed, in: availableStreams) else {
+        formatFallbackTriedURLs.insert(failed.url)
+        guard let candidate = FormatFallback.candidate(
+            failed: failed,
+            in: availableStreams,
+            triedURLs: formatFallbackTriedURLs
+        ) else {
             LoggingService.shared.logPlayer("Format fallback: no alternative stream for \(video.id.id)")
             return false
         }
@@ -3340,6 +3350,14 @@ extension PlayerService: PlayerBackendDelegate {
         let audioStream = candidate.isVideoOnly
             ? bestAudioStream(from: availableStreams.filter { $0.isAudioOnly })
             : nil
+        if candidate.isVideoOnly && audioStream == nil {
+            // A video-only stream with no audio companion would play silent;
+            // surface the original error instead of starting muted playback.
+            LoggingService.shared.logPlayer(
+                "Format fallback: video-only candidate has no audio stream for \(video.id.id)"
+            )
+            return false
+        }
 
         // startTime is nil so play() re-derives the resume position — at
         // initial-load failure time currentTime is still 0 and must not

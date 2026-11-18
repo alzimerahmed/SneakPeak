@@ -65,6 +65,7 @@ enum FeedLoadState: Equatable {
     /// Specific error types for feed loading.
     enum FeedLoadError: Equatable {
         case yatteeServerRequired
+        case noBackendConfigured
         case notAuthenticated
         case networkError(String)
 
@@ -81,7 +82,7 @@ enum FeedLoadState: Equatable {
             switch self {
             case .yatteeServerRequired, .notAuthenticated:
                 return true
-            case .networkError:
+            case .noBackendConfigured, .networkError:
                 return false
             }
         }
@@ -450,6 +451,7 @@ final class SubscriptionFeedCache {
     private func refreshLocalFeedFromAnyBackend(using appEnvironment: AppEnvironment, generation: Int) async {
         let subscriptions = appEnvironment.dataManager.subscriptions()
         guard !subscriptions.isEmpty else {
+            guard isCurrentAccountsResult(generation) else { return }
             videos = []
             isLoading = false
             hasLoadedOnce = true
@@ -467,7 +469,7 @@ final class SubscriptionFeedCache {
                 "Local subscriptions have no backend to fetch from (no SneakPeak Server, Invidious or Piped instance)",
                 category: .general
             )
-            feedLoadState = .error(.yatteeServerRequired)
+            feedLoadState = .error(.noBackendConfigured)
             isLoading = false
             return
         }

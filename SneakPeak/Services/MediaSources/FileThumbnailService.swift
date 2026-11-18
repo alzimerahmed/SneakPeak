@@ -24,13 +24,18 @@ import ImageIO
 ///   download, which is far too expensive for a thumbnail. Returns nil and
 ///   the row keeps its SF Symbol icon (see ADR in docs/research.md).
 ///
-/// Failures are negatively cached in memory for the session so scrolling a
-/// folder does not re-attempt generation for the same file repeatedly.
+/// Failures are negatively cached in memory with a TTL so scrolling a
+/// folder does not re-attempt generation for the same file repeatedly,
+/// while transient failures (network hiccups, server restarts) get a
+/// retry after the TTL expires.
 actor FileThumbnailService {
     static let shared = FileThumbnailService()
 
     /// Bytes fetched from a WebDAV server before attempting frame extraction.
     private static let webdavFetchLimit = 1_500_000
+
+    /// How long a failed generation stays negatively cached before retry.
+    private static let failureTTL: TimeInterval = 10 * 60
 
     private let cache: FileThumbnailDiskCache
     private let session: URLSession
@@ -38,8 +43,8 @@ actor FileThumbnailService {
     /// In-flight generation, deduplicated per cache key.
     private var inFlight: [String: Task<Data?, Never>] = [:]
 
-    /// Keys that failed to generate this session — never retried.
-    private var failedKeys: Set<String> = []
+    /// Keys that failed to generate, with the time they may be retried.
+    private var failedKeys: [String: Date] = [:]
 
     init(cache: FileThumbnailDiskCache = .shared, session: URLSession = .shared) {
         self.cache = cache
@@ -58,7 +63,12 @@ actor FileThumbnailService {
             return cached
         }
 
-        guard !failedKeys.contains(key) else { return nil }
+        // Negative cache with TTL: a key whose retry time has passed is
+        // attempted again.
+        if let retryAfter = failedKeys[key] {
+            if retryAfter > Date() { return nil }
+            failedKeys[key] = nil
+        }
 
         if let running = inFlight[key] {
             return await running.value
@@ -95,7 +105,7 @@ actor FileThumbnailService {
         if let data {
             await cache.store(data, forKey: key)
         } else {
-            failedKeys.insert(key)
+            failedKeys[key] = Date().addingTimeInterval(Self.failureTTL)
         }
         return data
     }
