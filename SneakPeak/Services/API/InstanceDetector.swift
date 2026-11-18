@@ -279,6 +279,86 @@ actor InstanceDetector {
     }
 }
 
+// MARK: - Health Probe (G3 Diagnostics)
+
+/// Result of a per-instance health probe: round-trip latency of the type's
+/// health endpoint, or the error that made the instance unreachable.
+struct InstanceHealthProbeResult: Sendable {
+    /// Measured latency in seconds. `nil` when the probe failed.
+    let latency: TimeInterval?
+    /// The failure, classified. `nil` when the probe succeeded.
+    let error: DetectionError?
+}
+
+/// Health state of an instance, derived from a probe result.
+/// Drives the Connection Diagnostics screen (G3).
+enum InstanceHealthState: Equatable, Sendable {
+    case unknown
+    case probing
+    case healthy(latency: TimeInterval)
+    case degraded(latency: TimeInterval)
+    case unreachable(String)
+
+    /// Latency above which a reachable instance is considered degraded (seconds).
+    static let degradedThreshold: TimeInterval = 1.5
+
+    /// Classifies a probe result into a health state.
+    static func classify(_ probe: InstanceHealthProbeResult) -> InstanceHealthState {
+        if let error = probe.error {
+            return .unreachable(error.localizedDescription)
+        }
+        let latency = probe.latency ?? 0
+        return latency > degradedThreshold
+            ? .degraded(latency: latency)
+            : .healthy(latency: latency)
+    }
+}
+
+extension InstanceDetector {
+    /// The cheapest endpoint that proves the instance type is alive.
+    /// Same endpoints the type detection probes, so a healthy probe implies
+    /// the API surface the app actually uses responds.
+    static func healthPath(for type: InstanceType) -> String {
+        switch type {
+        case .invidious: return "/api/v1/stats"
+        case .piped: return "/healthcheck"
+        case .peertube: return "/api/v1/config"
+        case .yatteeServer: return "/info"
+        }
+    }
+
+    /// Probes an instance's health endpoint, measuring round-trip latency.
+    /// Uses a short timeout so a dead instance reports quickly instead of
+    /// hanging the diagnostics screen for the default 30s request timeout.
+    func probeHealth(
+        url: URL,
+        type: InstanceType,
+        timeout: TimeInterval = 10
+    ) async -> InstanceHealthProbeResult {
+        let endpoint = GenericEndpoint(path: Self.healthPath(for: type), timeout: timeout)
+        let start = Date()
+        do {
+            _ = try await httpClient.fetchData(endpoint, baseURL: url)
+            return InstanceHealthProbeResult(latency: Date().timeIntervalSince(start), error: nil)
+        } catch let urlError as URLError {
+            switch urlError.code {
+            case .timedOut:
+                return InstanceHealthProbeResult(latency: nil, error: .timeout)
+            case .serverCertificateUntrusted,
+                 .serverCertificateHasBadDate,
+                 .serverCertificateHasUnknownRoot,
+                 .serverCertificateNotYetValid,
+                 .clientCertificateRejected:
+                return InstanceHealthProbeResult(latency: nil, error: .sslCertificateError)
+            default:
+                return InstanceHealthProbeResult(latency: nil, error: .networkError(urlError.localizedDescription))
+            }
+        } catch {
+            return InstanceHealthProbeResult(latency: nil, error: .networkError(error.localizedDescription))
+        }
+    }
+}
+
 // MARK: - Detection Response Models
 
 /// Namespace for instance detection response models.

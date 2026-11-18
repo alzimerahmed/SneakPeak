@@ -11,6 +11,7 @@ struct SourcesListView: View {
     @Environment(\.appEnvironment) private var appEnvironment
     @State private var showingAddSheet = false
     @State private var sourceToEdit: UnifiedSource?
+    @State private var showingDiagnostics = false
 
     // Delete confirmation state
     @State private var showingDeleteConfirmation = false
@@ -116,6 +117,20 @@ struct SourcesListView: View {
             EditSourceView(source: source)
         }
         #endif
+        #if os(tvOS)
+        .navigationDestination(isPresented: $showingDiagnostics) {
+            TVSidebarDetailContainer(
+                systemImage: "stethoscope",
+                title: String(localized: "diagnostics.title")
+            ) {
+                InstanceDiagnosticsView()
+            }
+        }
+        #else
+        .navigationDestination(isPresented: $showingDiagnostics) {
+            InstanceDiagnosticsView()
+        }
+        #endif
         .confirmationDialog(
             deleteConfirmationMessage,
             isPresented: $showingDeleteConfirmation,
@@ -217,6 +232,7 @@ struct SourcesListView: View {
                     LazyVStack(spacing: 0) {
                         remoteServersSection
                         fileSourcesSection
+                        diagnosticsSection
                     }
                 }
             )
@@ -579,6 +595,68 @@ struct SourcesListView: View {
             #endif
         }
         .contentShape(Rectangle())
+    }
+
+    // MARK: - Diagnostics Entry (G3)
+
+    /// Settings entry for the Connection Diagnostics screen. Only shown when
+    /// at least one remote server is configured — file sources have nothing
+    /// to probe.
+    @ViewBuilder
+    private var diagnosticsSection: some View {
+        if let instancesManager, !instancesManager.instances.isEmpty {
+            sectionHeader(String(localized: "diagnostics.section"))
+            sectionCard {
+                #if os(tvOS)
+                SourceListRow(isLast: true, listStyle: listStyle) {
+                    Button {
+                        showingDiagnostics = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "stethoscope")
+                                .font(.title2)
+                                .foregroundStyle(.tint)
+                                .frame(width: 32)
+                            Text(String(localized: "diagnostics.title"))
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .foregroundStyle(.primary)
+                }
+                #else
+                Button {
+                    showingDiagnostics = true
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "stethoscope")
+                            .font(.title2)
+                            .foregroundStyle(.tint)
+                            .frame(width: 32)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(String(localized: "diagnostics.title"))
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            Text(String(localized: "diagnostics.section.subtitle"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("sources.diagnostics")
+                #endif
+            }
+        }
     }
 
     // MARK: - Disabled Badge
