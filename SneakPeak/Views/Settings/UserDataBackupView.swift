@@ -175,11 +175,11 @@ private struct BackupDocument: FileDocument {
     }
 
     init(configuration: ReadConfiguration) throws {
-        throw CocoaError(.fileReadUnsupported)
+        throw CocoaError(.fileReadUnknown)
     }
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        try FileWrapper(contentsOf: url, options: .immediate)
+        try FileWrapper(url: url, options: .immediate)
     }
 }
 #endif
