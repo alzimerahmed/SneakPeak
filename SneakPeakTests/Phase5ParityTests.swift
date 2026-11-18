@@ -45,6 +45,7 @@ struct Phase5ParityTests {
     // MARK: - G5: File-source playlists & watch-later
 
     @Suite("File-Source Playlists")
+    @MainActor
     struct FileSourcePlaylistTests {
 
         @Test("File-source video round-trips through a local playlist item")
@@ -108,6 +109,7 @@ struct Phase5ParityTests {
     // MARK: - G6: Per-channel notification rules
 
     @Suite("Notification Rules")
+    @MainActor
     struct NotificationRuleTests {
 
         private func video(isLive: Bool) -> Video {
@@ -173,6 +175,7 @@ struct Phase5ParityTests {
     // MARK: - G7: JSON export/import round-trip
 
     @Suite("Data Export/Import")
+    @MainActor
     struct DataExportTests {
 
         @Test("Export/import round-trips subscriptions, history, bookmarks, playlists and rules")
