@@ -14,7 +14,7 @@ struct InstanceDiagnosticsView: View {
     @State private var isProbing = false
 
     private var instances: [Instance] {
-        (appEnvironment?.instancesManager?.instances ?? [])
+        appEnvironment.instancesManager.instances
             .sorted { $0.dateAdded < $1.dateAdded }
     }
 
@@ -32,6 +32,8 @@ struct InstanceDiagnosticsView: View {
         }
         #if !os(tvOS)
         .navigationTitle(String(localized: "diagnostics.title"))
+        #endif
+        #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
         #endif
         .task { await probeAll() }
