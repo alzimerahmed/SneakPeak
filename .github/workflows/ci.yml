@@ -56,11 +56,20 @@ jobs:
           test-without-building
           -only-testing:SneakPeakTests
 
-      - name: Upload result bundle on failure
+      - name: Collect diagnostics on failure
+        if: failure()
+        run: |
+          mkdir -p diag
+          ls -t ~/Library/Developer/Xcode/DerivedData/SneakPeak-*/Logs/Test/*.xcresult 2>/dev/null | head -1 | xargs -I{} cp -R "{}" diag/test.xcresult 2>/dev/null || true
+          cp ~/Library/Logs/DiagnosticReports/SneakPeak*.ips diag/ 2>/dev/null || true
+          cp ~/Library/Logs/DiagnosticReports/*.ips diag/ 2>/dev/null | tail -3 || true
+          find /tmp -name 'SneakPeak*.ips' 2>/dev/null | head -5 | xargs -I{} cp {} diag/ || true
+          ls -la diag/
+
+      - name: Upload diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: xcodebuild-results
-          path: |
-            *.xcresult
+          name: ci-diagnostics
+          path: diag/
           retention-days: 7
