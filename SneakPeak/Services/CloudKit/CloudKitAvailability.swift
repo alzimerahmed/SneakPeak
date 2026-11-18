@@ -40,9 +40,9 @@ enum CloudKitAvailability {
                   task,
                   ["com.apple.developer.icloud-container-identifiers"] as CFArray,
                   &error
-              )
+              ) as? [String: Any]
         else { return [] }
-        return value["com.apple.developer.icloud-container-identifiers" as CFString] as? [String] ?? []
+        return value["com.apple.developer.icloud-container-identifiers"] as? [String] ?? []
     }
 
     /// Extracts the entitlements dictionary from the embedded provisioning
