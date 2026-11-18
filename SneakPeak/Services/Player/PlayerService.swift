@@ -3183,6 +3183,11 @@ extension PlayerService: PlayerBackendDelegate {
     func backendDidBecomeReady(_ backend: any PlayerBackend) {
         // First frame of new video has been rendered - thumbnail can now hide
         state.isFirstFrameReady = true
+
+        // Playback succeeded — clear the per-video format fallback budget so a
+        // later failure on the same video gets a fresh set of retries.
+        formatFallbackAttempts = 0
+        formatFallbackVideoID = nil
     }
 
     func backendDidFallBackToSoftwareDecoding(_ backend: any PlayerBackend) {
@@ -3283,16 +3288,24 @@ extension PlayerService: PlayerBackendDelegate {
         }
     }
 
-    /// G4 format fallback: after a stream load failure, retry once on an
-    /// alternative stream (different container/codec or lower quality) and
-    /// toast the switch. Returns whether a fallback was started — when it
+    /// G4 format fallback: after a stream load failure, retry on an
+    /// alternative stream (different container/codec or lower quality), up to
+    /// `maxFormatFallbackAttempts` times, and toast the switch. Returns
+    /// whether a fallback was started — when it
     /// returns `true` the caller must not surface the error, because a new
     /// `play()` is already in flight.
     private func attemptFormatFallbackAfterFailure(video: Video, error: Error) async -> Bool {
         // Only stream load failures qualify: codec/container problems surface
-        // as BackendError.loadFailed from the backend. Network, cancellation
-        // and API errors are not format problems.
-        guard error is BackendError else { return false }
+        // as BackendError.loadFailed (or .unsupportedFormat) from the backend.
+        // Seek/switch failures, not-ready states and unavailable backends are
+        // not format problems and are handled elsewhere.
+        guard let backendError = error as? BackendError else { return false }
+        switch backendError {
+        case .loadFailed, .unsupportedFormat:
+            break  // genuine stream load / format failures — eligible for fallback
+        case .seekFailed, .notReady, .switchFailed, .backendUnavailable:
+            return false
+        }
 
         // Downloaded/local content has exactly one stream — nothing to fall back to.
         guard let failed = state.currentStream, !failed.url.isFileURL else { return false }
