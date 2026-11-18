@@ -2,10 +2,10 @@
 
 <div align="center">
 
-[![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20iPadOS%20%7C%20macOS%20%7C%20tvOS-black?logo=apple)](https://github.com/alzimerahmed/SonicWave)
+[![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20iPadOS%20%7C%20macOS%20%7C%20tvOS-black?logo=apple)](https://github.com/alzimerahmed/SneakPeak)
 [![Swift](https://img.shields.io/badge/Swift%206-SwiftUI-orange?logo=swift)](https://www.swift.org)
-[![CI](https://github.com/alzimerahmed/SonicWave/actions/workflows/ci.yml/badge.svg)](https://github.com/alzimerahmed/SonicWave/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/alzimerahmed/SonicWave?include_prereleases)](https://github.com/alzimerahmed/SonicWave/releases)
+[![CI](https://github.com/alzimerahmed/SneakPeak/actions/workflows/ci.yml/badge.svg)](https://github.com/alzimerahmed/SneakPeak/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/alzimerahmed/SonicWave?include_prereleases)](https://github.com/alzimerahmed/SneakPeak/releases)
 [![AGPL v3](https://shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.en.html)
 
 *Watch from your own sources — Invidious, Piped, PeerTube, self-hosted servers, SMB, WebDAV and local files — without an account.*
@@ -36,14 +36,14 @@
 
 ## Releases
 
-Download signed-off, CI-built artifacts from the [Releases page](https://github.com/alzimerahmed/SonicWave/releases). Every release is built and tested by GitHub Actions on a macOS runner — see `.github/workflows/release.yml`.
+Download signed-off, CI-built artifacts from the [Releases page](https://github.com/alzimerahmed/SneakPeak/releases). Every release is built and tested by GitHub Actions on a macOS runner — see `.github/workflows/release.yml`.
 
 ## Building
 
 Requires Xcode 26 or newer on macOS (the source uses iOS 26 APIs).
 
 ```bash
-git clone https://github.com/alzimerahmed/SonicWave.git
+git clone https://github.com/alzimerahmed/SneakPeak.git
 open SonicWave.xcodeproj
 # select the SneakPeak scheme and run
 ```
