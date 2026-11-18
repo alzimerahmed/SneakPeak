@@ -260,7 +260,7 @@ struct VideoInfoView: View {
     private var playButtonLabel: String {
         guard let video = displayedVideo,
               !video.isLive,
-              let savedProgress = dataManager?.watchProgress(for: video.id.videoID),
+              let savedProgress = dataManager?.watchProgress(for: video),
               savedProgress >= 5,
               video.duration > 0,
               savedProgress < video.duration * 0.9 else {
@@ -2606,7 +2606,7 @@ struct VideoInfoView: View {
         }
 
         // Get saved watch progress from database
-        let savedProgress = env.dataManager.watchProgress(for: video.id.videoID)
+        let savedProgress = env.dataManager.watchProgress(for: video)
         let videoDuration = video.duration
         // When duration is 0 (not yet loaded), use a large threshold to avoid false "completed" detection
         let completionThreshold = videoDuration > 0 ? videoDuration * 0.9 : Double.greatestFiniteMagnitude

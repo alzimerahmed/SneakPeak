@@ -443,7 +443,7 @@ final class PlayerService {
             // Use state.duration as fallback for quality switching when video.duration might be 0
             let effectiveDuration = video.duration > 0 ? video.duration : state.duration
             let completionThreshold = effectiveDuration * 0.9
-            let savedProgress = dataManager.watchProgress(for: video.id.videoID)
+            let savedProgress = dataManager.watchProgress(for: video)
             LoggingService.shared.logPlayer("Replay check: savedProgress=\(savedProgress ?? -1), startTime=\(startTime ?? -1), duration=\(video.duration), threshold=\(completionThreshold)")
 
             if video.isLive || selectedStream.isLive {

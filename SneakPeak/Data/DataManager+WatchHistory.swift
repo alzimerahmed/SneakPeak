@@ -118,6 +118,20 @@ extension DataManager {
         }
     }
 
+    /// Gets the watch progress for a video, preferring the entry recorded
+    /// under the video's own source scope.
+    ///
+    /// The same video ID can exist under several scopes (a file source entry
+    /// and a global entry can collide on an ID), and the first row fetched is
+    /// not necessarily the one this video belongs to — resuming from another
+    /// scope's position would jump a file to a stranger's timestamp.
+    func watchProgress(for video: Video) -> TimeInterval? {
+        let entries = watchEntries(forVideoID: video.id.videoID)
+        guard !entries.isEmpty else { return nil }
+        let entry = entries.first { $0.videoIdentifier == video.id } ?? entries[0]
+        return entry.watchedSeconds
+    }
+
     /// Gets all watch history entries, most recent first.
     func watchHistory(limit: Int = 100) -> [WatchEntry] {
         var descriptor = FetchDescriptor<WatchEntry>(
