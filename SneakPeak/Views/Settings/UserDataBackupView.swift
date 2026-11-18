@@ -104,7 +104,6 @@ struct UserDataBackupView: View {
 
     private func exportBackup() {
         guard let backupService else { return }
-        isExporting = true
         Task {
             do {
                 let data = try backupService.exportData()
@@ -112,13 +111,15 @@ struct UserDataBackupView: View {
                     .appendingPathComponent("SneakPeak-backup-\(Self.dateStamp()).json")
                 try data.write(to: url, options: .atomic)
                 exportURL = url
+                // Present the exporter only once the file exists — presenting
+                // earlier would show a dialog with no document.
+                isExporting = true
             } catch {
                 toastManager?.showError(
                     String(localized: "settings.backup.export.error"),
                     subtitle: error.localizedDescription
                 )
             }
-            isExporting = false
         }
     }
 

@@ -498,6 +498,9 @@ final class UserDataBackupService {
         }
 
         for export in backup.playlists {
+            // Skip playlists that already exist (same id) so re-importing a
+            // backup never duplicates playlists or their items.
+            guard dataManager.playlist(forID: export.id) == nil else { continue }
             let playlist = LocalPlaylist(
                 id: export.id,
                 title: export.title,
