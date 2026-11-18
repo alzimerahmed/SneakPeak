@@ -75,6 +75,9 @@ actor FileThumbnailDiskCache {
     /// just written.
     func store(_ data: Data, forKey key: String) {
         let url = entryURL(forKey: key)
+        // Capture the previous entry's size before the atomic write
+        // replaces it, so the running total can be adjusted exactly.
+        let previousSize = fileSize(at: url)
         do {
             try data.write(to: url, options: .atomic)
         } catch {
@@ -85,9 +88,9 @@ actor FileThumbnailDiskCache {
             // A same-key rewrite replaces the old file, so subtract its
             // previous size before adding the new one or the running total
             // double-counts rewritten entries.
-            let previousSize = fileSize(at: url) ?? 0
-            totalSize = total - previousSize + data.count
+            totalSize = total - (previousSize ?? 0) + data.count
         }
+        // totalSize == nil: evictIfNeeded recomputes it from disk.
 
         guard sizeLimitBytes > 0 else { return }
         evictIfNeeded(keeping: key)
