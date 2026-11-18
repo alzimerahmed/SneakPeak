@@ -22,8 +22,8 @@ struct FormatFallbackTests {
         videoCodec: String? = nil,
         audioCodec: String? = nil,
         isAudioOnly: Bool = false
-    ) -> Stream {
-        Stream(
+    ) -> SneakPeak.Stream {
+        SneakPeak.Stream(
             url: url,
             resolution: resolution,
             format: format,
@@ -37,7 +37,7 @@ struct FormatFallbackTests {
         height: Int,
         format: String,
         codec: String
-    ) -> Stream {
+    ) -> SneakPeak.Stream {
         stream(
             url: URL(string: "https://cdn.example.com/\(format)-\(height)-\(codec)")!,
             resolution: StreamResolution(width: height * 16 / 9, height: height),
