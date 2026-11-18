@@ -241,7 +241,11 @@ struct VideoContextMenuContent: View {
                     appEnvironment?.playerService.openVideo(video, incognito: true)
                 }
             } label: {
-                Label(String(localized: "video.context.playIncognito"), systemImage: "incognito")
+                Label {
+                Text(String(localized: "video.context.playIncognito"))
+            } icon: {
+                Image("incognito")
+            }
             }
         }
 
