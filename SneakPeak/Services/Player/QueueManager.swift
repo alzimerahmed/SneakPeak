@@ -180,7 +180,9 @@ final class QueueManager {
         clearQueue()
 
         // 2. Populate history with preceding videos (skip if incognito or history disabled)
-        if index > 0, settingsManager?.incognitoModeEnabled != true, settingsManager?.saveWatchHistory != false {
+        if index > 0, settingsManager?.incognitoModeEnabled != true,
+            playerService?.isIncognitoSession != true,
+            settingsManager?.saveWatchHistory != false {
             playerState?.clearHistory()
 
             for i in 0..<index {
@@ -258,7 +260,9 @@ final class QueueManager {
         )
 
         // 3. Populate history with preceding files (skip if incognito or history disabled)
-        if index > 0, settingsManager?.incognitoModeEnabled != true, settingsManager?.saveWatchHistory != false {
+        if index > 0, settingsManager?.incognitoModeEnabled != true,
+            playerService?.isIncognitoSession != true,
+            settingsManager?.saveWatchHistory != false {
             playerState?.clearHistory()
             for i in 0..<index {
                 let video = files[i].toVideo()

@@ -134,6 +134,20 @@ final class PlayerService {
     /// Last position written by the periodic progress save.
     private var lastSavedProgress: (videoID: String, seconds: TimeInterval)?
 
+    /// One-off incognito for the current playback session.
+    ///
+    /// Set when a video is opened with `incognito: true` (e.g. "Play in
+    /// Incognito" from a context menu) and cleared when the player stops.
+    /// Unlike the global setting, it suppresses history writes for this
+    /// playback only — the setting is untouched.
+    private(set) var isIncognitoSession = false
+
+    /// Whether the current playback should leave no trace: the global
+    /// incognito setting or a one-off incognito session.
+    var isIncognito: Bool {
+        settingsManager?.incognitoModeEnabled == true || isIncognitoSession
+    }
+
     /// Now Playing service for Control Center/Lock Screen.
     private let nowPlayingService = NowPlayingService()
 
@@ -743,6 +757,10 @@ final class PlayerService {
         watchHistorySyncService?.endSession()
         cleanup()
 
+        // The session is over — a one-off incognito flag must not leak into
+        // the next playback.
+        isIncognitoSession = false
+
         // Clear Handoff activity
         handoffManager?.invalidateCurrentActivity()
 
@@ -897,7 +915,7 @@ final class PlayerService {
     /// Pushes current video to history if not in incognito mode.
     private func pushCurrentToHistoryIfNeeded() {
         guard let currentVideo = state.currentVideo,
-              settingsManager?.incognitoModeEnabled != true,
+              !isIncognito,
               settingsManager?.saveWatchHistory != false else { return }
         let historyItem = QueuedVideo(
             video: currentVideo,
@@ -1121,10 +1139,14 @@ final class PlayerService {
     ///   - startTime: Optional start time in seconds (used for continue watching)
     ///   - forceStartTime: When true, startTime is an explicit user request (timed link,
     ///     chapter tap) and is honored even past the completion threshold
-    func openVideo(_ video: Video, startTime: TimeInterval? = nil, forceStartTime: Bool = false) {
+    func openVideo(_ video: Video, startTime: TimeInterval? = nil, forceStartTime: Bool = false, incognito: Bool = false) {
         // Live streams have no meaningful resume position - drop any passed one
         // so callers with a stale watch entry cannot seek into the live window.
         let startTime = video.isLive ? nil : startTime
+
+        // A one-off incognito request applies to this playback session; a
+        // normal open clears any session flag a previous incognito watch left.
+        isIncognitoSession = incognito
 
         // Check if MPV PiP is active - if so, don't expand the player
         #if os(iOS) || os(macOS)
@@ -1181,7 +1203,10 @@ final class PlayerService {
     ///   - audioStream: Optional separate audio stream (for video-only streams)
     ///   - download: Optional download to load local storyboards and captions from
     ///   - captions: Optional array of external captions (e.g., from WebDAV subtitle files)
-    func openVideo(_ video: Video, stream: Stream, audioStream: Stream? = nil, download: Download? = nil, captions: [Caption] = []) {
+    func openVideo(_ video: Video, stream: Stream, audioStream: Stream? = nil, download: Download? = nil, captions: [Caption] = [], incognito: Bool = false) {
+        // A one-off incognito request applies to this playback session; a
+        // normal open clears any session flag a previous incognito watch left.
+        isIncognitoSession = incognito
         // Check if MPV PiP is active - if so, don't expand the player
         #if os(iOS) || os(macOS)
         let mpvPiPActive = (currentBackend as? MPVBackend)?.isPiPActive ?? false
@@ -2802,7 +2827,7 @@ final class PlayerService {
 
     private func saveProgress() {
         PerfCounter.count("player.progressSave")
-        guard settingsManager?.incognitoModeEnabled != true,
+        guard !isIncognito,
               settingsManager?.saveWatchHistory != false else { return }
 
         guard let video = state.currentVideo,
@@ -2842,7 +2867,7 @@ final class PlayerService {
     /// Saves progress as 100% completed when video finishes naturally.
     /// This ensures the watch history shows full completion instead of ~99%.
     private func saveProgressAsCompleted() {
-        guard settingsManager?.incognitoModeEnabled != true,
+        guard !isIncognito,
               settingsManager?.saveWatchHistory != false,
               let video = state.currentVideo else { return }
 
@@ -2869,7 +2894,7 @@ final class PlayerService {
     /// Saves progress and triggers iCloud sync for watch history.
     /// Call this when video playback ends or switches to a different video.
     private func saveProgressAndSync() {
-        guard settingsManager?.incognitoModeEnabled != true,
+        guard !isIncognito,
               settingsManager?.saveWatchHistory != false else { return }
 
         guard let video = state.currentVideo,

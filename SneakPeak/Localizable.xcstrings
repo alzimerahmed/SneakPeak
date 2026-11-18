@@ -19766,7 +19766,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add a subscriptions account in Settings"
+            "value" : "Add an Invidious or Piped instance, or a SneakPeak Server, in Settings to fetch your local subscriptions feed"
           }
         }
       }
@@ -20350,6 +20350,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Play"
+          }
+        }
+      }
+    },
+    "video.context.playIncognito" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play in Incognito"
           }
         }
       }

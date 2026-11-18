@@ -231,6 +231,18 @@ struct VideoContextMenuContent: View {
             } label: {
                 Label(String(localized: "video.context.play"), systemImage: "play.fill")
             }
+
+            // One-off incognito playback: this watch writes no history and
+            // stores no resume position, without touching the global setting.
+            Button {
+                if let startTime {
+                    appEnvironment?.playerService.openVideo(video, startTime: startTime, incognito: true)
+                } else {
+                    appEnvironment?.playerService.openVideo(video, incognito: true)
+                }
+            } label: {
+                Label(String(localized: "video.context.playIncognito"), systemImage: "incognito")
+            }
         }
 
         #if !os(tvOS)
