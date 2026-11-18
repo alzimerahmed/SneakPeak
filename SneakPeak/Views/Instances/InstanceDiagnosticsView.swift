@@ -14,7 +14,7 @@ struct InstanceDiagnosticsView: View {
     @State private var isProbing = false
 
     private var instances: [Instance] {
-        appEnvironment?.instancesManager.instances
+        appEnvironment?.instancesManager.instances ?? []
             .sorted { $0.dateAdded < $1.dateAdded }
     }
 
