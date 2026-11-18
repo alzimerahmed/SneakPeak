@@ -488,28 +488,38 @@ final class SubscriptionFeedCache {
         var pages: [[Video]] = []
         var failures = 0
 
-        await withTaskGroup(of: Result<[Video], Error>.self) { group in
-            for subscription in subscriptions {
-                group.addTask {
-                    do {
-                        return .success(try await self.channelVideos(for: subscription, instance: instance, appEnvironment: appEnvironment))
-                    } catch {
-                        return .failure(error)
+        // Bounded concurrency: fetch channels in small batches instead of one
+        // task per subscription, so a large subscription list cannot open
+        // hundreds of simultaneous connections against the instance.
+        let batchSize = 4
+        var index = 0
+        while index < subscriptions.count {
+            let batch = Array(subscriptions[index..<min(index + batchSize, subscriptions.count)])
+            index += batch.count
+
+            await withTaskGroup(of: Result<[Video], Error>.self) { group in
+                for subscription in batch {
+                    group.addTask {
+                        do {
+                            return .success(try await self.channelVideos(for: subscription, instance: instance, appEnvironment: appEnvironment))
+                        } catch {
+                            return .failure(error)
+                        }
                     }
                 }
-            }
-            for await result in group {
-                switch result {
-                case .success(let page):
-                    pages.append(page)
-                case .failure(let error):
-                    failures += 1
-                    LoggingService.shared.debug(
-                        "Local feed channel fetch failed: \(error.localizedDescription)",
-                        category: .general
-                    )
+                for await result in group {
+                    switch result {
+                    case .success(let page):
+                        pages.append(page)
+                    case .failure(let error):
+                        failures += 1
+                        LoggingService.shared.debug(
+                            "Local feed channel fetch failed: \(error.localizedDescription)",
+                            category: .general
+                        )
+                    }
+                    loadingProgress = (loaded: pages.count + failures, total: total)
                 }
-                loadingProgress = (loaded: pages.count + failures, total: total)
             }
         }
 
