@@ -428,19 +428,134 @@ final class SubscriptionFeedCache {
     }
 
     /// Refreshes feed for local account using SneakPeak Server.
+    /// Falls back to any configured Invidious or Piped instance when no server
+    /// is set up: both serve channel videos without a login, so local
+    /// subscriptions work with no account at all (G1).
     private func refreshLocalAccount(using appEnvironment: AppEnvironment, generation: Int) async {
-        // Require SneakPeak Server for local accounts
-        guard let serverInstance = appEnvironment.instancesManager.instances.first(where: {
+        if let serverInstance = appEnvironment.instancesManager.instances.first(where: {
             $0.type == .yatteeServer && $0.isEnabled
+        }) {
+            LoggingService.shared.info("Refreshing feed using SneakPeak Server: \(serverInstance.url.absoluteString)", category: .general)
+            await refreshFromStatelessServer(instance: serverInstance, using: appEnvironment, generation: generation)
+            return
+        }
+
+        await refreshLocalFeedFromAnyBackend(using: appEnvironment, generation: generation)
+    }
+
+    /// Builds the local feed from the first enabled Invidious or Piped
+    /// instance, fetching each subscribed channel's latest videos without any
+    /// account. Only when no backend of any kind is configured does the local
+    /// feed report that it cannot be fetched.
+    private func refreshLocalFeedFromAnyBackend(using appEnvironment: AppEnvironment, generation: Int) async {
+        let subscriptions = appEnvironment.dataManager.subscriptions()
+        guard !subscriptions.isEmpty else {
+            videos = []
+            isLoading = false
+            hasLoadedOnce = true
+            feedLoadState = .ready
+            LoggingService.shared.debug("No local subscriptions, clearing feed", category: .general)
+            return
+        }
+
+        guard let instance = appEnvironment.instancesManager.instances.first(where: {
+            $0.type == .invidious && $0.isEnabled
+        }) ?? appEnvironment.instancesManager.instances.first(where: {
+            $0.type == .piped && $0.isEnabled
         }) else {
-            LoggingService.shared.warning("Local subscriptions require SneakPeak Server, but none is configured", category: .general)
+            LoggingService.shared.warning(
+                "Local subscriptions have no backend to fetch from (no SneakPeak Server, Invidious or Piped instance)",
+                category: .general
+            )
             feedLoadState = .error(.yatteeServerRequired)
             isLoading = false
             return
         }
 
-        LoggingService.shared.info("Refreshing feed using SneakPeak Server: \(serverInstance.url.absoluteString)", category: .general)
-        await refreshFromStatelessServer(instance: serverInstance, using: appEnvironment, generation: generation)
+        LoggingService.shared.info(
+            "Refreshing local feed from \(instance.type.rawValue) instance: \(instance.url.absoluteString)",
+            category: .general
+        )
+
+        isLoading = true
+        feedLoadState = .loading
+        loadingProgress = nil
+        hasMorePages = false
+
+        let total = subscriptions.count
+        loadingProgress = (loaded: 0, total: total)
+
+        var pages: [[Video]] = []
+        var failures = 0
+
+        await withTaskGroup(of: Result<[Video], Error>.self) { group in
+            for subscription in subscriptions {
+                group.addTask {
+                    do {
+                        return .success(try await self.channelVideos(for: subscription, instance: instance, appEnvironment: appEnvironment))
+                    } catch {
+                        return .failure(error)
+                    }
+                }
+            }
+            for await result in group {
+                switch result {
+                case .success(let page):
+                    pages.append(page)
+                case .failure(let error):
+                    failures += 1
+                    LoggingService.shared.debug(
+                        "Local feed channel fetch failed: \(error.localizedDescription)",
+                        category: .general
+                    )
+                }
+                loadingProgress = (loaded: pages.count + failures, total: total)
+            }
+        }
+
+        guard isCurrentAccountsResult(generation) else { return }
+
+        // Every channel failing is a network problem worth a retry; some
+        // channels simply having no videos is a ready, empty feed.
+        if failures == total {
+            feedLoadState = .error(.networkError("All \(total) channel fetches failed"))
+            isLoading = false
+            return
+        }
+
+        let merged = Self.mergedChannelVideos(pages)
+        update(videos: merged, generation: generation)
+        appEnvironment.dataManager.updateLastVideoPublishedDates(from: merged)
+        prefetchDeArrow(for: merged, using: appEnvironment)
+        feedLoadState = .ready
+        isLoading = false
+    }
+
+    /// Fetches a subscription channel's latest videos from an unauthenticated
+    /// Invidious or Piped instance.
+    private func channelVideos(for subscription: Subscription, instance: Instance, appEnvironment: AppEnvironment) async throws -> [Video] {
+        let page = try await appEnvironment.contentService.channelVideos(
+            id: subscription.channelID, instance: instance, continuation: nil
+        )
+        return page.videos
+    }
+
+    /// Merges per-channel latest-video pages into a single feed:
+    /// deduplicated by video ID, newest first, capped so a long subscription
+    /// list cannot balloon the cache.
+    static func mergedChannelVideos(_ pages: [[Video]], totalLimit: Int = 200) -> [Video] {
+        let sorted = pages.flatMap { $0 }.sorted {
+            ($0.publishedAt ?? .distantPast) > ($1.publishedAt ?? .distantPast)
+        }
+
+        var seen = Set<VideoID>()
+        var merged: [Video] = []
+        for video in sorted where !seen.contains(video.id) {
+            seen.insert(video.id)
+            merged.append(video)
+            if merged.count >= totalLimit { break }
+        }
+        return merged
     }
 
     /// Refreshes feed for Invidious account using authenticated feed endpoint.
