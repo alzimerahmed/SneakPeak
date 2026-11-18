@@ -142,6 +142,13 @@ final class PlayerService {
     /// playback only — the setting is untouched.
     private(set) var isIncognitoSession = false
 
+    /// Format fallback (G4) bookkeeping: the video a fallback was last
+    /// attempted for and how many retries it has consumed. Reset when a
+    /// different video fails, so each video gets its own retry budget.
+    private var formatFallbackVideoID: VideoID?
+    private var formatFallbackAttempts = 0
+    private let maxFormatFallbackAttempts = 2
+
     /// Whether the current playback should leave no trace: the global
     /// incognito setting or a one-off incognito session.
     var isIncognito: Bool {
@@ -640,6 +647,14 @@ final class PlayerService {
             }
 
             LoggingService.shared.logPlayerError("Playback failed: \(video.id.id)", error: error)
+
+            // G4 format fallback: a stream load failure (codec/container, e.g.
+            // AV1 without a decoder) gets one retry on an alternative stream
+            // before the error is surfaced.
+            if await attemptFormatFallbackAfterFailure(video: video, error: error) {
+                return
+            }
+
             sleepPreventionService.allowSleep()
             state.videoDetailsState = .error
             state.setPlaybackState(.failed(error))
@@ -3266,5 +3281,57 @@ extension PlayerService: PlayerBackendDelegate {
 
             await playNext()
         }
+    }
+
+    /// G4 format fallback: after a stream load failure, retry once on an
+    /// alternative stream (different container/codec or lower quality) and
+    /// toast the switch. Returns whether a fallback was started — when it
+    /// returns `true` the caller must not surface the error, because a new
+    /// `play()` is already in flight.
+    private func attemptFormatFallbackAfterFailure(video: Video, error: Error) async -> Bool {
+        // Only stream load failures qualify: codec/container problems surface
+        // as BackendError.loadFailed from the backend. Network, cancellation
+        // and API errors are not format problems.
+        guard error is BackendError else { return false }
+
+        // Downloaded/local content has exactly one stream — nothing to fall back to.
+        guard let failed = state.currentStream, !failed.url.isFileURL else { return false }
+
+        // Per-video retry budget, so a persistently failing video cannot loop.
+        if formatFallbackVideoID != video.id {
+            formatFallbackVideoID = video.id
+            formatFallbackAttempts = 0
+        }
+        guard formatFallbackAttempts < maxFormatFallbackAttempts else { return false }
+
+        guard let candidate = FormatFallback.candidate(failed: failed, in: availableStreams) else {
+            LoggingService.shared.logPlayer("Format fallback: no alternative stream for \(video.id.id)")
+            return false
+        }
+        formatFallbackAttempts += 1
+
+        LoggingService.shared.logPlayer(
+            "Format fallback: switching \(failed.qualityLabel) → \(candidate.qualityLabel) for \(video.id.id)",
+            details: "error: \(error.localizedDescription)"
+        )
+
+        toastManager?.show(
+            category: .playerStatus,
+            title: String(localized: "toast.player.formatFallback.title"),
+            subtitle: String(localized: "toast.player.formatFallback.subtitle \(candidate.qualityLabel)"),
+            icon: "arrow.triangle.2.circlepath",
+            iconColor: .orange,
+            autoDismissDelay: 4.0
+        )
+
+        let audioStream = candidate.isVideoOnly
+            ? bestAudioStream(from: availableStreams.filter { $0.isAudioOnly })
+            : nil
+
+        // startTime is nil so play() re-derives the resume position — at
+        // initial-load failure time currentTime is still 0 and must not
+        // override the saved progress.
+        await play(video: video, stream: candidate, audioStream: audioStream, startTime: nil)
+        return true
     }
 }
